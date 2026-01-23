@@ -1,6 +1,6 @@
 import { createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-node";
-import { MonitorService } from "./openstatus/monitor/v1/service_pb.ts";
+import { MonitorService } from "./gen/openstatus/monitor/v1/service_pb.ts";
 
 
 const transport = createConnectTransport({

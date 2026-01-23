@@ -4,7 +4,7 @@
     "generate": "buf generate buf.build/openstatus/api"
   },
   "exports":{
-    ".":"./src/main.ts"
+    ".":"./src/mod.ts"
   },
   "imports": {
     "@bufbuild/buf": "npm:@bufbuild/buf@^1.64.0",
