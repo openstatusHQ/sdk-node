@@ -1,0 +1,17 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "generate": "buf generate buf.build/openstatus/api"
+  },
+  "exports":{
+    ".":"./src/main.ts"
+  },
+  "imports": {
+    "@bufbuild/buf": "npm:@bufbuild/buf@^1.64.0",
+    "@bufbuild/protobuf": "npm:@bufbuild/protobuf@^2.11.0",
+    "@bufbuild/protoc-gen-es": "npm:@bufbuild/protoc-gen-es@^2.11.0",
+    "@connectrpc/connect": "npm:@connectrpc/connect@^2.1.1",
+    "@connectrpc/connect-node": "npm:@connectrpc/connect-node@^2.1.1",
+    "@std/assert": "jsr:@std/assert@1"
+  }
+}

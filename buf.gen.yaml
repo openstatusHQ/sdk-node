@@ -1,0 +1,10 @@
+version: v2
+plugins:
+  - remote: buf.build/bufbuild/es:v2.11.0
+    out: src/gen
+    include_imports: true
+    opt:
+      - target=ts
+      - import_extension=ts
+inputs:
+  - module: buf.build/openstatus/api:main
