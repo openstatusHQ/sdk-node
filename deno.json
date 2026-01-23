@@ -1,10 +1,10 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts",
+    "dev": "deno run  --env-file --allow-env --allow-net --watch example.ts",
     "generate": "buf generate buf.build/openstatus/api"
   },
-  "exports":{
-    ".":"./src/mod.ts"
+  "exports": {
+    ".": "./src/mod.ts"
   },
   "imports": {
     "@bufbuild/buf": "npm:@bufbuild/buf@^1.64.0",

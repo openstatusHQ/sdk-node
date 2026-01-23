@@ -2,10 +2,18 @@
 // @generated from file openstatus/monitor/v1/http_monitor.proto (package openstatus.monitor.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import type {
+  GenEnum,
+  GenFile,
+  GenMessage,
+} from "@bufbuild/protobuf/codegenv2";
 import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import { file_buf_validate_validate } from "../../../buf/validate/validate_pb.ts";
-import type { BodyAssertion, HeaderAssertion, StatusCodeAssertion } from "./assertions_pb.ts";
+import type {
+  BodyAssertion,
+  HeaderAssertion,
+  StatusCodeAssertion,
+} from "./assertions_pb.ts";
 import { file_openstatus_monitor_v1_assertions } from "./assertions_pb.ts";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -13,7 +21,10 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file openstatus/monitor/v1/http_monitor.proto.
  */
 export const file_openstatus_monitor_v1_http_monitor: GenFile = /*@__PURE__*/
-  fileDesc("CihvcGVuc3RhdHVzL21vbml0b3IvdjEvaHR0cF9tb25pdG9yLnByb3RvEhVvcGVuc3RhdHVzLm1vbml0b3IudjEiLgoHSGVhZGVycxIUCgNrZXkYASABKAlCB7pIBHICEAESDQoFdmFsdWUYAiABKAkibAoTT3BlblRlbGVtZXRyeUNvbmZpZxIaCghlbmRwb2ludBgBIAEoCUIIukgFcgMYgBASOQoHaGVhZGVycxgCIAMoCzIeLm9wZW5zdGF0dXMubW9uaXRvci52MS5IZWFkZXJzQgi6SAWSAQIQFCLICAoLSFRUUE1vbml0b3ISCgoCaWQYASABKAkSGAoEbmFtZRgCIAEoCUIKukgHcgUQARiAAhIaCgN1cmwYAyABKAlCDbpICnIIEAEYgBCIAQESNQoLcGVyaW9kaWNpdHkYBCABKAlCILpIHXIbUgMzMHNSAjFtUgI1bVIDMTBtUgMzMG1SAjFoElUKBm1ldGhvZBgFIAEoCUJFukhCckBSAFIDR0VUUgRQT1NUUgRIRUFEUgNQVVRSBVBBVENIUgZERUxFVEVSBVRSQUNFUgdDT05ORUNUUgdPUFRJT05TEgwKBGJvZHkYBiABKAkSHAoHdGltZW91dBgHIAEoA0ILukgIIgYYwKkHKAASJQoLZGVncmFkZWRfYXQYCCABKANCC7pICCIGGMCpBygASACIAQESGAoFcmV0cnkYCSABKANCCbpIBiIEGAooABIYChBmb2xsb3dfcmVkaXJlY3RzGAogASgIEjkKB2hlYWRlcnMYCyADKAsyHi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyc0IIukgFkgECEBQSVAoWc3RhdHVzX2NvZGVfYXNzZXJ0aW9ucxgMIAMoCzIqLm9wZW5zdGF0dXMubW9uaXRvci52MS5TdGF0dXNDb2RlQXNzZXJ0aW9uQgi6SAWSAQIQChJHCg9ib2R5X2Fzc2VydGlvbnMYDSADKAsyJC5vcGVuc3RhdHVzLm1vbml0b3IudjEuQm9keUFzc2VydGlvbkIIukgFkgECEAoSSwoRaGVhZGVyX2Fzc2VydGlvbnMYDiADKAsyJi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyQXNzZXJ0aW9uQgi6SAWSAQIQChIdCgtkZXNjcmlwdGlvbhgPIAEoCUIIukgFcgMYgAgSDgoGYWN0aXZlGBAgASgIEg4KBnB1YmxpYxgRIAEoCBKnAgoHcmVnaW9ucxgSIAMoCUKVArpIkQKSAY0CEBwiiAJyhQJSA2Ftc1IDYXJuUgNib21SA2NkZ1IDZGZ3UgNld3JSA2ZyYVIDZ3J1UgNpYWRSA2puYlIDbGF4UgNsaHJSA25ydFIDb3JkUgNzamNSA3NpblIDc3lkUgN5eXpSCWtveWViX2ZyYVIJa295ZWJfcGFyUglrb3llYl9zZm9SCWtveWViX3NpblIJa295ZWJfdHlvUglrb3llYl93YXNSEHJhaWx3YXlfdXMtd2VzdDJSF3JhaWx3YXlfdXMtZWFzdDQtZXFkYzRhUhxyYWlsd2F5X2V1cm9wZS13ZXN0NC1kcmFtczNhUh5yYWlsd2F5X2FzaWEtc291dGhlYXN0MS1lcXNnM2ESQgoOb3Blbl90ZWxlbWV0cnkYEyABKAsyKi5vcGVuc3RhdHVzLm1vbml0b3IudjEuT3BlblRlbGVtZXRyeUNvbmZpZ0IOCgxfZGVncmFkZWRfYXQq9wEKCkhUVFBNZXRob2QSGwoXSFRUUF9NRVRIT0RfVU5TUEVDSUZJRUQQABITCg9IVFRQX01FVEhPRF9HRVQQARIUChBIVFRQX01FVEhPRF9QT1NUEAISFAoQSFRUUF9NRVRIT0RfSEVBRBADEhMKD0hUVFBfTUVUSE9EX1BVVBAEEhUKEUhUVFBfTUVUSE9EX1BBVENIEAUSFgoSSFRUUF9NRVRIT0RfREVMRVRFEAYSFQoRSFRUUF9NRVRIT0RfVFJBQ0UQBxIXChNIVFRQX01FVEhPRF9DT05ORUNUEAgSFwoTSFRUUF9NRVRIT0RfT1BUSU9OUxAJKqUBCgtQZXJpb2RpY2l0eRIbChdQRVJJT0RJQ0lUWV9VTlNQRUNJRklFRBAAEhMKD1BFUklPRElDSVRZXzMwUxABEhIKDlBFUklPRElDSVRZXzFNEAISEgoOUEVSSU9ESUNJVFlfNU0QAxITCg9QRVJJT0RJQ0lUWV8xME0QBBITCg9QRVJJT0RJQ0lUWV8zME0QBRISCg5QRVJJT0RJQ0lUWV8xSBAGQlNaUWdpdGh1Yi5jb20vb3BlbnN0YXR1c2hxL29wZW5zdGF0dXMvcGFja2FnZXMvcHJvdG8vb3BlbnN0YXR1cy9tb25pdG9yL3YxO21vbml0b3J2MWIGcHJvdG8z", [file_buf_validate_validate, file_openstatus_monitor_v1_assertions]);
+  fileDesc(
+    "CihvcGVuc3RhdHVzL21vbml0b3IvdjEvaHR0cF9tb25pdG9yLnByb3RvEhVvcGVuc3RhdHVzLm1vbml0b3IudjEiLgoHSGVhZGVycxIUCgNrZXkYASABKAlCB7pIBHICEAESDQoFdmFsdWUYAiABKAkibAoTT3BlblRlbGVtZXRyeUNvbmZpZxIaCghlbmRwb2ludBgBIAEoCUIIukgFcgMYgBASOQoHaGVhZGVycxgCIAMoCzIeLm9wZW5zdGF0dXMubW9uaXRvci52MS5IZWFkZXJzQgi6SAWSAQIQFCLICAoLSFRUUE1vbml0b3ISCgoCaWQYASABKAkSGAoEbmFtZRgCIAEoCUIKukgHcgUQARiAAhIaCgN1cmwYAyABKAlCDbpICnIIEAEYgBCIAQESNQoLcGVyaW9kaWNpdHkYBCABKAlCILpIHXIbUgMzMHNSAjFtUgI1bVIDMTBtUgMzMG1SAjFoElUKBm1ldGhvZBgFIAEoCUJFukhCckBSAFIDR0VUUgRQT1NUUgRIRUFEUgNQVVRSBVBBVENIUgZERUxFVEVSBVRSQUNFUgdDT05ORUNUUgdPUFRJT05TEgwKBGJvZHkYBiABKAkSHAoHdGltZW91dBgHIAEoA0ILukgIIgYYwKkHKAASJQoLZGVncmFkZWRfYXQYCCABKANCC7pICCIGGMCpBygASACIAQESGAoFcmV0cnkYCSABKANCCbpIBiIEGAooABIYChBmb2xsb3dfcmVkaXJlY3RzGAogASgIEjkKB2hlYWRlcnMYCyADKAsyHi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyc0IIukgFkgECEBQSVAoWc3RhdHVzX2NvZGVfYXNzZXJ0aW9ucxgMIAMoCzIqLm9wZW5zdGF0dXMubW9uaXRvci52MS5TdGF0dXNDb2RlQXNzZXJ0aW9uQgi6SAWSAQIQChJHCg9ib2R5X2Fzc2VydGlvbnMYDSADKAsyJC5vcGVuc3RhdHVzLm1vbml0b3IudjEuQm9keUFzc2VydGlvbkIIukgFkgECEAoSSwoRaGVhZGVyX2Fzc2VydGlvbnMYDiADKAsyJi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyQXNzZXJ0aW9uQgi6SAWSAQIQChIdCgtkZXNjcmlwdGlvbhgPIAEoCUIIukgFcgMYgAgSDgoGYWN0aXZlGBAgASgIEg4KBnB1YmxpYxgRIAEoCBKnAgoHcmVnaW9ucxgSIAMoCUKVArpIkQKSAY0CEBwiiAJyhQJSA2Ftc1IDYXJuUgNib21SA2NkZ1IDZGZ3UgNld3JSA2ZyYVIDZ3J1UgNpYWRSA2puYlIDbGF4UgNsaHJSA25ydFIDb3JkUgNzamNSA3NpblIDc3lkUgN5eXpSCWtveWViX2ZyYVIJa295ZWJfcGFyUglrb3llYl9zZm9SCWtveWViX3NpblIJa295ZWJfdHlvUglrb3llYl93YXNSEHJhaWx3YXlfdXMtd2VzdDJSF3JhaWx3YXlfdXMtZWFzdDQtZXFkYzRhUhxyYWlsd2F5X2V1cm9wZS13ZXN0NC1kcmFtczNhUh5yYWlsd2F5X2FzaWEtc291dGhlYXN0MS1lcXNnM2ESQgoOb3Blbl90ZWxlbWV0cnkYEyABKAsyKi5vcGVuc3RhdHVzLm1vbml0b3IudjEuT3BlblRlbGVtZXRyeUNvbmZpZ0IOCgxfZGVncmFkZWRfYXQq9wEKCkhUVFBNZXRob2QSGwoXSFRUUF9NRVRIT0RfVU5TUEVDSUZJRUQQABITCg9IVFRQX01FVEhPRF9HRVQQARIUChBIVFRQX01FVEhPRF9QT1NUEAISFAoQSFRUUF9NRVRIT0RfSEVBRBADEhMKD0hUVFBfTUVUSE9EX1BVVBAEEhUKEUhUVFBfTUVUSE9EX1BBVENIEAUSFgoSSFRUUF9NRVRIT0RfREVMRVRFEAYSFQoRSFRUUF9NRVRIT0RfVFJBQ0UQBxIXChNIVFRQX01FVEhPRF9DT05ORUNUEAgSFwoTSFRUUF9NRVRIT0RfT1BUSU9OUxAJKqUBCgtQZXJpb2RpY2l0eRIbChdQRVJJT0RJQ0lUWV9VTlNQRUNJRklFRBAAEhMKD1BFUklPRElDSVRZXzMwUxABEhIKDlBFUklPRElDSVRZXzFNEAISEgoOUEVSSU9ESUNJVFlfNU0QAxITCg9QRVJJT0RJQ0lUWV8xME0QBBITCg9QRVJJT0RJQ0lUWV8zME0QBRISCg5QRVJJT0RJQ0lUWV8xSBAGQlNaUWdpdGh1Yi5jb20vb3BlbnN0YXR1c2hxL29wZW5zdGF0dXMvcGFja2FnZXMvcHJvdG8vb3BlbnN0YXR1cy9tb25pdG9yL3YxO21vbml0b3J2MWIGcHJvdG8z",
+    [file_buf_validate_validate, file_openstatus_monitor_v1_assertions],
+  );
 
 /**
  * Headers represents a key-value pair for HTTP headers.
@@ -44,27 +55,31 @@ export const HeadersSchema: GenMessage<Headers> = /*@__PURE__*/
  *
  * @generated from message openstatus.monitor.v1.OpenTelemetryConfig
  */
-export type OpenTelemetryConfig = Message<"openstatus.monitor.v1.OpenTelemetryConfig"> & {
-  /**
-   * OTEL endpoint URL.
-   *
-   * @generated from field: string endpoint = 1;
-   */
-  endpoint: string;
+export type OpenTelemetryConfig =
+  & Message<"openstatus.monitor.v1.OpenTelemetryConfig">
+  & {
+    /**
+     * OTEL endpoint URL.
+     *
+     * @generated from field: string endpoint = 1;
+     */
+    endpoint: string;
 
-  /**
-   * Custom headers for OTEL requests.
-   *
-   * @generated from field: repeated openstatus.monitor.v1.Headers headers = 2;
-   */
-  headers: Headers[];
-};
+    /**
+     * Custom headers for OTEL requests.
+     *
+     * @generated from field: repeated openstatus.monitor.v1.Headers headers = 2;
+     */
+    headers: Headers[];
+  };
 
 /**
  * Describes the message openstatus.monitor.v1.OpenTelemetryConfig.
  * Use `create(OpenTelemetryConfigSchema)` to create a new message.
  */
-export const OpenTelemetryConfigSchema: GenMessage<OpenTelemetryConfig> = /*@__PURE__*/
+export const OpenTelemetryConfigSchema: GenMessage<
+  OpenTelemetryConfig
+> = /*@__PURE__*/
   messageDesc(file_openstatus_monitor_v1_http_monitor, 1);
 
 /**
@@ -324,4 +339,3 @@ export enum Periodicity {
  */
 export const PeriodicitySchema: GenEnum<Periodicity> = /*@__PURE__*/
   enumDesc(file_openstatus_monitor_v1_http_monitor, 1);
-

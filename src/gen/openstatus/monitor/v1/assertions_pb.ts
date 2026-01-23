@@ -2,7 +2,11 @@
 // @generated from file openstatus/monitor/v1/assertions.proto (package openstatus.monitor.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import type {
+  GenEnum,
+  GenFile,
+  GenMessage,
+} from "@bufbuild/protobuf/codegenv2";
 import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import { file_buf_validate_validate } from "../../../buf/validate/validate_pb.ts";
 import type { Message } from "@bufbuild/protobuf";
@@ -11,34 +15,41 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file openstatus/monitor/v1/assertions.proto.
  */
 export const file_openstatus_monitor_v1_assertions: GenFile = /*@__PURE__*/
-  fileDesc("CiZvcGVuc3RhdHVzL21vbml0b3IvdjEvYXNzZXJ0aW9ucy5wcm90bxIVb3BlbnN0YXR1cy5tb25pdG9yLnYxIngKE1N0YXR1c0NvZGVBc3NlcnRpb24SGgoGdGFyZ2V0GAEgASgDQgq6SAciBRjXBChkEkUKCmNvbXBhcmF0b3IYAiABKA4yJy5vcGVuc3RhdHVzLm1vbml0b3IudjEuTnVtYmVyQ29tcGFyYXRvckIIukgFggECIAAiZgoNQm9keUFzc2VydGlvbhIOCgZ0YXJnZXQYASABKAkSRQoKY29tcGFyYXRvchgCIAEoDjInLm9wZW5zdGF0dXMubW9uaXRvci52MS5TdHJpbmdDb21wYXJhdG9yQgi6SAWCAQIgACJ+Cg9IZWFkZXJBc3NlcnRpb24SDgoGdGFyZ2V0GAEgASgJEkUKCmNvbXBhcmF0b3IYAiABKA4yJy5vcGVuc3RhdHVzLm1vbml0b3IudjEuU3RyaW5nQ29tcGFyYXRvckIIukgFggECIAASFAoDa2V5GAMgASgJQge6SARyAhABIpgBCg9SZWNvcmRBc3NlcnRpb24SLgoGcmVjb3JkGAEgASgJQh66SBtyGVIBQVIEQUFBQVIFQ05BTUVSAk1YUgNUWFQSRQoKY29tcGFyYXRvchgCIAEoDjInLm9wZW5zdGF0dXMubW9uaXRvci52MS5SZWNvcmRDb21wYXJhdG9yQgi6SAWCAQIgABIOCgZ0YXJnZXQYAyABKAkqjwIKEE51bWJlckNvbXBhcmF0b3ISIQodTlVNQkVSX0NPTVBBUkFUT1JfVU5TUEVDSUZJRUQQABIbChdOVU1CRVJfQ09NUEFSQVRPUl9FUVVBTBABEh8KG05VTUJFUl9DT01QQVJBVE9SX05PVF9FUVVBTBACEiIKHk5VTUJFUl9DT01QQVJBVE9SX0dSRUFURVJfVEhBThADEisKJ05VTUJFUl9DT01QQVJBVE9SX0dSRUFURVJfVEhBTl9PUl9FUVVBTBAEEh8KG05VTUJFUl9DT01QQVJBVE9SX0xFU1NfVEhBThAFEigKJE5VTUJFUl9DT01QQVJBVE9SX0xFU1NfVEhBTl9PUl9FUVVBTBAGKpEDChBTdHJpbmdDb21wYXJhdG9yEiEKHVNUUklOR19DT01QQVJBVE9SX1VOU1BFQ0lGSUVEEAASHgoaU1RSSU5HX0NPTVBBUkFUT1JfQ09OVEFJTlMQARIiCh5TVFJJTkdfQ09NUEFSQVRPUl9OT1RfQ09OVEFJTlMQAhIbChdTVFJJTkdfQ09NUEFSQVRPUl9FUVVBTBADEh8KG1NUUklOR19DT01QQVJBVE9SX05PVF9FUVVBTBAEEhsKF1NUUklOR19DT01QQVJBVE9SX0VNUFRZEAUSHwobU1RSSU5HX0NPTVBBUkFUT1JfTk9UX0VNUFRZEAYSIgoeU1RSSU5HX0NPTVBBUkFUT1JfR1JFQVRFUl9USEFOEAcSKwonU1RSSU5HX0NPTVBBUkFUT1JfR1JFQVRFUl9USEFOX09SX0VRVUFMEAgSHwobU1RSSU5HX0NPTVBBUkFUT1JfTEVTU19USEFOEAkSKAokU1RSSU5HX0NPTVBBUkFUT1JfTEVTU19USEFOX09SX0VRVUFMEAoqtwEKEFJlY29yZENvbXBhcmF0b3ISIQodUkVDT1JEX0NPTVBBUkFUT1JfVU5TUEVDSUZJRUQQABIbChdSRUNPUkRfQ09NUEFSQVRPUl9FUVVBTBABEh8KG1JFQ09SRF9DT01QQVJBVE9SX05PVF9FUVVBTBACEh4KGlJFQ09SRF9DT01QQVJBVE9SX0NPTlRBSU5TEAMSIgoeUkVDT1JEX0NPTVBBUkFUT1JfTk9UX0NPTlRBSU5TEARCU1pRZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL21vbml0b3IvdjE7bW9uaXRvcnYxYgZwcm90bzM", [file_buf_validate_validate]);
+  fileDesc(
+    "CiZvcGVuc3RhdHVzL21vbml0b3IvdjEvYXNzZXJ0aW9ucy5wcm90bxIVb3BlbnN0YXR1cy5tb25pdG9yLnYxIngKE1N0YXR1c0NvZGVBc3NlcnRpb24SGgoGdGFyZ2V0GAEgASgDQgq6SAciBRjXBChkEkUKCmNvbXBhcmF0b3IYAiABKA4yJy5vcGVuc3RhdHVzLm1vbml0b3IudjEuTnVtYmVyQ29tcGFyYXRvckIIukgFggECIAAiZgoNQm9keUFzc2VydGlvbhIOCgZ0YXJnZXQYASABKAkSRQoKY29tcGFyYXRvchgCIAEoDjInLm9wZW5zdGF0dXMubW9uaXRvci52MS5TdHJpbmdDb21wYXJhdG9yQgi6SAWCAQIgACJ+Cg9IZWFkZXJBc3NlcnRpb24SDgoGdGFyZ2V0GAEgASgJEkUKCmNvbXBhcmF0b3IYAiABKA4yJy5vcGVuc3RhdHVzLm1vbml0b3IudjEuU3RyaW5nQ29tcGFyYXRvckIIukgFggECIAASFAoDa2V5GAMgASgJQge6SARyAhABIpgBCg9SZWNvcmRBc3NlcnRpb24SLgoGcmVjb3JkGAEgASgJQh66SBtyGVIBQVIEQUFBQVIFQ05BTUVSAk1YUgNUWFQSRQoKY29tcGFyYXRvchgCIAEoDjInLm9wZW5zdGF0dXMubW9uaXRvci52MS5SZWNvcmRDb21wYXJhdG9yQgi6SAWCAQIgABIOCgZ0YXJnZXQYAyABKAkqjwIKEE51bWJlckNvbXBhcmF0b3ISIQodTlVNQkVSX0NPTVBBUkFUT1JfVU5TUEVDSUZJRUQQABIbChdOVU1CRVJfQ09NUEFSQVRPUl9FUVVBTBABEh8KG05VTUJFUl9DT01QQVJBVE9SX05PVF9FUVVBTBACEiIKHk5VTUJFUl9DT01QQVJBVE9SX0dSRUFURVJfVEhBThADEisKJ05VTUJFUl9DT01QQVJBVE9SX0dSRUFURVJfVEhBTl9PUl9FUVVBTBAEEh8KG05VTUJFUl9DT01QQVJBVE9SX0xFU1NfVEhBThAFEigKJE5VTUJFUl9DT01QQVJBVE9SX0xFU1NfVEhBTl9PUl9FUVVBTBAGKpEDChBTdHJpbmdDb21wYXJhdG9yEiEKHVNUUklOR19DT01QQVJBVE9SX1VOU1BFQ0lGSUVEEAASHgoaU1RSSU5HX0NPTVBBUkFUT1JfQ09OVEFJTlMQARIiCh5TVFJJTkdfQ09NUEFSQVRPUl9OT1RfQ09OVEFJTlMQAhIbChdTVFJJTkdfQ09NUEFSQVRPUl9FUVVBTBADEh8KG1NUUklOR19DT01QQVJBVE9SX05PVF9FUVVBTBAEEhsKF1NUUklOR19DT01QQVJBVE9SX0VNUFRZEAUSHwobU1RSSU5HX0NPTVBBUkFUT1JfTk9UX0VNUFRZEAYSIgoeU1RSSU5HX0NPTVBBUkFUT1JfR1JFQVRFUl9USEFOEAcSKwonU1RSSU5HX0NPTVBBUkFUT1JfR1JFQVRFUl9USEFOX09SX0VRVUFMEAgSHwobU1RSSU5HX0NPTVBBUkFUT1JfTEVTU19USEFOEAkSKAokU1RSSU5HX0NPTVBBUkFUT1JfTEVTU19USEFOX09SX0VRVUFMEAoqtwEKEFJlY29yZENvbXBhcmF0b3ISIQodUkVDT1JEX0NPTVBBUkFUT1JfVU5TUEVDSUZJRUQQABIbChdSRUNPUkRfQ09NUEFSQVRPUl9FUVVBTBABEh8KG1JFQ09SRF9DT01QQVJBVE9SX05PVF9FUVVBTBACEh4KGlJFQ09SRF9DT01QQVJBVE9SX0NPTlRBSU5TEAMSIgoeUkVDT1JEX0NPTVBBUkFUT1JfTk9UX0NPTlRBSU5TEARCU1pRZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL21vbml0b3IvdjE7bW9uaXRvcnYxYgZwcm90bzM",
+    [file_buf_validate_validate],
+  );
 
 /**
  * StatusCodeAssertion defines an assertion for HTTP status codes.
  *
  * @generated from message openstatus.monitor.v1.StatusCodeAssertion
  */
-export type StatusCodeAssertion = Message<"openstatus.monitor.v1.StatusCodeAssertion"> & {
-  /**
-   * Target status code to compare against (100-599).
-   *
-   * @generated from field: int64 target = 1;
-   */
-  target: bigint;
+export type StatusCodeAssertion =
+  & Message<"openstatus.monitor.v1.StatusCodeAssertion">
+  & {
+    /**
+     * Target status code to compare against (100-599).
+     *
+     * @generated from field: int64 target = 1;
+     */
+    target: bigint;
 
-  /**
-   * Comparison operation (required, must not be UNSPECIFIED).
-   *
-   * @generated from field: openstatus.monitor.v1.NumberComparator comparator = 2;
-   */
-  comparator: NumberComparator;
-};
+    /**
+     * Comparison operation (required, must not be UNSPECIFIED).
+     *
+     * @generated from field: openstatus.monitor.v1.NumberComparator comparator = 2;
+     */
+    comparator: NumberComparator;
+  };
 
 /**
  * Describes the message openstatus.monitor.v1.StatusCodeAssertion.
  * Use `create(StatusCodeAssertionSchema)` to create a new message.
  */
-export const StatusCodeAssertionSchema: GenMessage<StatusCodeAssertion> = /*@__PURE__*/
+export const StatusCodeAssertionSchema: GenMessage<
+  StatusCodeAssertion
+> = /*@__PURE__*/
   messageDesc(file_openstatus_monitor_v1_assertions, 0);
 
 /**
@@ -74,28 +85,30 @@ export const BodyAssertionSchema: GenMessage<BodyAssertion> = /*@__PURE__*/
  *
  * @generated from message openstatus.monitor.v1.HeaderAssertion
  */
-export type HeaderAssertion = Message<"openstatus.monitor.v1.HeaderAssertion"> & {
-  /**
-   * Target value to compare against.
-   *
-   * @generated from field: string target = 1;
-   */
-  target: string;
+export type HeaderAssertion =
+  & Message<"openstatus.monitor.v1.HeaderAssertion">
+  & {
+    /**
+     * Target value to compare against.
+     *
+     * @generated from field: string target = 1;
+     */
+    target: string;
 
-  /**
-   * Comparison operation (required, must not be UNSPECIFIED).
-   *
-   * @generated from field: openstatus.monitor.v1.StringComparator comparator = 2;
-   */
-  comparator: StringComparator;
+    /**
+     * Comparison operation (required, must not be UNSPECIFIED).
+     *
+     * @generated from field: openstatus.monitor.v1.StringComparator comparator = 2;
+     */
+    comparator: StringComparator;
 
-  /**
-   * Header key to check (required).
-   *
-   * @generated from field: string key = 3;
-   */
-  key: string;
-};
+    /**
+     * Header key to check (required).
+     *
+     * @generated from field: string key = 3;
+     */
+    key: string;
+  };
 
 /**
  * Describes the message openstatus.monitor.v1.HeaderAssertion.
@@ -109,28 +122,30 @@ export const HeaderAssertionSchema: GenMessage<HeaderAssertion> = /*@__PURE__*/
  *
  * @generated from message openstatus.monitor.v1.RecordAssertion
  */
-export type RecordAssertion = Message<"openstatus.monitor.v1.RecordAssertion"> & {
-  /**
-   * DNS record type (e.g., "A", "AAAA", "CNAME", "MX", "TXT").
-   *
-   * @generated from field: string record = 1;
-   */
-  record: string;
+export type RecordAssertion =
+  & Message<"openstatus.monitor.v1.RecordAssertion">
+  & {
+    /**
+     * DNS record type (e.g., "A", "AAAA", "CNAME", "MX", "TXT").
+     *
+     * @generated from field: string record = 1;
+     */
+    record: string;
 
-  /**
-   * Comparison operation (required, must not be UNSPECIFIED).
-   *
-   * @generated from field: openstatus.monitor.v1.RecordComparator comparator = 2;
-   */
-  comparator: RecordComparator;
+    /**
+     * Comparison operation (required, must not be UNSPECIFIED).
+     *
+     * @generated from field: openstatus.monitor.v1.RecordComparator comparator = 2;
+     */
+    comparator: RecordComparator;
 
-  /**
-   * Target value to compare against.
-   *
-   * @generated from field: string target = 3;
-   */
-  target: string;
-};
+    /**
+     * Target value to compare against.
+     *
+     * @generated from field: string target = 3;
+     */
+    target: string;
+  };
 
 /**
  * Describes the message openstatus.monitor.v1.RecordAssertion.
@@ -292,4 +307,3 @@ export enum RecordComparator {
  */
 export const RecordComparatorSchema: GenEnum<RecordComparator> = /*@__PURE__*/
   enumDesc(file_openstatus_monitor_v1_assertions, 2);
-
