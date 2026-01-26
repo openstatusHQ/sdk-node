@@ -5,7 +5,7 @@
  *
  * @example Basic usage
  * ```typescript
- * import { openstatus } from "@openstatus/node-sdk";
+ * import { openstatus, Periodicity, Region } from "@openstatus/sdk-node";
  *
  * const headers = {
  *   "x-openstatus-key": `Bearer ${process.env.OPENSTATUS_API_KEY}`,
@@ -17,11 +17,13 @@
  *
  * // Create an HTTP monitor
  * const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor({
- *   name: "My API",
- *   url: "https://api.example.com/health",
- *   periodicity: "1m",
- *   regions: ["ams", "iad", "syd"],
- *   active: true,
+ *   monitor: {
+ *     name: "My API",
+ *     url: "https://api.example.com/health",
+ *     periodicity: Periodicity.PERIODICITY_1M,
+ *     regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
+ *     active: true,
+ *   },
  * }, { headers });
  * ```
  */
@@ -51,6 +53,13 @@ export type {
   StatusCodeAssertion,
 } from "./gen/openstatus/monitor/v1/assertions_pb.ts";
 
+// Re-export assertion comparator enums
+export {
+  NumberComparator,
+  StringComparator,
+  RecordComparator,
+} from "./gen/openstatus/monitor/v1/assertions_pb.ts";
+
 // Re-export enums
 export { HTTPMethod } from "./gen/openstatus/monitor/v1/http_monitor_pb.ts";
 
@@ -66,6 +75,12 @@ export type {
   CreateHTTPMonitorResponse,
   CreateTCPMonitorRequest,
   CreateTCPMonitorResponse,
+  UpdateDNSMonitorRequest,
+  UpdateDNSMonitorResponse,
+  UpdateHTTPMonitorRequest,
+  UpdateHTTPMonitorResponse,
+  UpdateTCPMonitorRequest,
+  UpdateTCPMonitorResponse,
   DeleteMonitorRequest,
   DeleteMonitorResponse,
   GetMonitorStatusRequest,
@@ -120,6 +135,9 @@ export interface OpenStatusClient {
        * - `createHTTPMonitor` - Create a new HTTP monitor
        * - `createTCPMonitor` - Create a new TCP monitor
        * - `createDNSMonitor` - Create a new DNS monitor
+       * - `updateHTTPMonitor` - Update an existing HTTP monitor
+       * - `updateTCPMonitor` - Update an existing TCP monitor
+       * - `updateDNSMonitor` - Update an existing DNS monitor
        * - `listMonitors` - List all monitors
        * - `triggerMonitor` - Trigger an immediate check
        * - `deleteMonitor` - Delete a monitor
@@ -152,7 +170,7 @@ export interface OpenStatusClient {
  *
  * @example
  * ```typescript
- * import { openstatus } from "@openstatus/node-sdk";
+ * import { openstatus, Periodicity } from "@openstatus/sdk-node";
  *
  * // Check API health (no auth required)
  * const { status } = await openstatus.health.v1.HealthService.check({});
@@ -160,10 +178,12 @@ export interface OpenStatusClient {
  * // Create a monitor (auth required)
  * const headers = { "x-openstatus-key": `Bearer ${process.env.OPENSTATUS_API_KEY}` };
  * const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor({
- *   name: "My Website",
- *   url: "https://example.com",
- *   periodicity: "1m",
- *   active: true,
+ *   monitor: {
+ *     name: "My Website",
+ *     url: "https://example.com",
+ *     periodicity: Periodicity.PERIODICITY_1M,
+ *     active: true,
+ *   },
  * }, { headers });
  * ```
  */
