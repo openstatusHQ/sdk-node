@@ -7,6 +7,8 @@ import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import { file_buf_validate_validate } from "../../../buf/validate/validate_pb.ts";
 import type { OpenTelemetryConfig } from "./http_monitor_pb.ts";
 import { file_openstatus_monitor_v1_http_monitor } from "./http_monitor_pb.ts";
+import type { MonitorStatus, Periodicity, Region } from "./monitor_pb.ts";
+import { file_openstatus_monitor_v1_monitor } from "./monitor_pb.ts";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
@@ -14,8 +16,12 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export const file_openstatus_monitor_v1_tcp_monitor: GenFile = /*@__PURE__*/
   fileDesc(
-    "CidvcGVuc3RhdHVzL21vbml0b3IvdjEvdGNwX21vbml0b3IucHJvdG8SFW9wZW5zdGF0dXMubW9uaXRvci52MSKeBQoKVENQTW9uaXRvchIKCgJpZBgBIAEoCRIYCgRuYW1lGAIgASgJQgq6SAdyBRABGIACEhcKA3VyaRgDIAEoCUIKukgHcgUQARiAEBI1CgtwZXJpb2RpY2l0eRgEIAEoCUIgukgdchtSAzMwc1ICMW1SAjVtUgMxMG1SAzMwbVICMWgSHAoHdGltZW91dBgFIAEoA0ILukgIIgYYwKkHKAASJQoLZGVncmFkZWRfYXQYBiABKANCC7pICCIGGMCpBygASACIAQESGAoFcmV0cnkYByABKANCCbpIBiIEGAooABIdCgtkZXNjcmlwdGlvbhgIIAEoCUIIukgFcgMYgAgSDgoGYWN0aXZlGAkgASgIEg4KBnB1YmxpYxgKIAEoCBKnAgoHcmVnaW9ucxgLIAMoCUKVArpIkQKSAY0CEBwiiAJyhQJSA2Ftc1IDYXJuUgNib21SA2NkZ1IDZGZ3UgNld3JSA2ZyYVIDZ3J1UgNpYWRSA2puYlIDbGF4UgNsaHJSA25ydFIDb3JkUgNzamNSA3NpblIDc3lkUgN5eXpSCWtveWViX2ZyYVIJa295ZWJfcGFyUglrb3llYl9zZm9SCWtveWViX3NpblIJa295ZWJfdHlvUglrb3llYl93YXNSEHJhaWx3YXlfdXMtd2VzdDJSF3JhaWx3YXlfdXMtZWFzdDQtZXFkYzRhUhxyYWlsd2F5X2V1cm9wZS13ZXN0NC1kcmFtczNhUh5yYWlsd2F5X2FzaWEtc291dGhlYXN0MS1lcXNnM2ESQgoOb3Blbl90ZWxlbWV0cnkYDCABKAsyKi5vcGVuc3RhdHVzLm1vbml0b3IudjEuT3BlblRlbGVtZXRyeUNvbmZpZ0IOCgxfZGVncmFkZWRfYXRCU1pRZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL21vbml0b3IvdjE7bW9uaXRvcnYxYgZwcm90bzM",
-    [file_buf_validate_validate, file_openstatus_monitor_v1_http_monitor],
+    "CidvcGVuc3RhdHVzL21vbml0b3IvdjEvdGNwX21vbml0b3IucHJvdG8SFW9wZW5zdGF0dXMubW9uaXRvci52MSL3AwoKVENQTW9uaXRvchIKCgJpZBgBIAEoCRIYCgRuYW1lGAIgASgJQgq6SAdyBRABGIACEhcKA3VyaRgDIAEoCUIKukgHcgUQARiAEBJBCgtwZXJpb2RpY2l0eRgEIAEoDjIiLm9wZW5zdGF0dXMubW9uaXRvci52MS5QZXJpb2RpY2l0eUIIukgFggECIAASHAoHdGltZW91dBgFIAEoA0ILukgIIgYYwKkHKAASJQoLZGVncmFkZWRfYXQYBiABKANCC7pICCIGGMCpBygASACIAQESGAoFcmV0cnkYByABKANCCbpIBiIEGAooABIdCgtkZXNjcmlwdGlvbhgIIAEoCUIIukgFcgMYgAgSDgoGYWN0aXZlGAkgASgIEg4KBnB1YmxpYxgKIAEoCBI/CgdyZWdpb25zGAsgAygOMh0ub3BlbnN0YXR1cy5tb25pdG9yLnYxLlJlZ2lvbkIPukgMkgEJEBwiBYIBAiAAEkIKDm9wZW5fdGVsZW1ldHJ5GAwgASgLMioub3BlbnN0YXR1cy5tb25pdG9yLnYxLk9wZW5UZWxlbWV0cnlDb25maWcSNAoGc3RhdHVzGA0gASgOMiQub3BlbnN0YXR1cy5tb25pdG9yLnYxLk1vbml0b3JTdGF0dXNCDgoMX2RlZ3JhZGVkX2F0QlNaUWdpdGh1Yi5jb20vb3BlbnN0YXR1c2hxL29wZW5zdGF0dXMvcGFja2FnZXMvcHJvdG8vb3BlbnN0YXR1cy9tb25pdG9yL3YxO21vbml0b3J2MWIGcHJvdG8z",
+    [
+      file_buf_validate_validate,
+      file_openstatus_monitor_v1_http_monitor,
+      file_openstatus_monitor_v1_monitor,
+    ],
   );
 
 /**
@@ -48,9 +54,9 @@ export type TCPMonitor = Message<"openstatus.monitor.v1.TCPMonitor"> & {
   /**
    * Check periodicity (required).
    *
-   * @generated from field: string periodicity = 4;
+   * @generated from field: openstatus.monitor.v1.Periodicity periodicity = 4;
    */
-  periodicity: string;
+  periodicity: Periodicity;
 
   /**
    * Timeout in milliseconds (0-120000, defaults to 45000).
@@ -97,9 +103,9 @@ export type TCPMonitor = Message<"openstatus.monitor.v1.TCPMonitor"> & {
   /**
    * Geographic regions to run checks from.
    *
-   * @generated from field: repeated string regions = 11;
+   * @generated from field: repeated openstatus.monitor.v1.Region regions = 11;
    */
-  regions: string[];
+  regions: Region[];
 
   /**
    * OpenTelemetry configuration for exporting metrics.
@@ -107,6 +113,13 @@ export type TCPMonitor = Message<"openstatus.monitor.v1.TCPMonitor"> & {
    * @generated from field: openstatus.monitor.v1.OpenTelemetryConfig open_telemetry = 12;
    */
   openTelemetry?: OpenTelemetryConfig;
+
+  /**
+   * Current operational status of the monitor.
+   *
+   * @generated from field: openstatus.monitor.v1.MonitorStatus status = 13;
+   */
+  status: MonitorStatus;
 };
 
 /**

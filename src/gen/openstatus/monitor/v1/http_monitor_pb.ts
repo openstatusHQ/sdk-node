@@ -15,6 +15,8 @@ import type {
   StatusCodeAssertion,
 } from "./assertions_pb.ts";
 import { file_openstatus_monitor_v1_assertions } from "./assertions_pb.ts";
+import type { MonitorStatus, Periodicity, Region } from "./monitor_pb.ts";
+import { file_openstatus_monitor_v1_monitor } from "./monitor_pb.ts";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
@@ -22,8 +24,12 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export const file_openstatus_monitor_v1_http_monitor: GenFile = /*@__PURE__*/
   fileDesc(
-    "CihvcGVuc3RhdHVzL21vbml0b3IvdjEvaHR0cF9tb25pdG9yLnByb3RvEhVvcGVuc3RhdHVzLm1vbml0b3IudjEiLgoHSGVhZGVycxIUCgNrZXkYASABKAlCB7pIBHICEAESDQoFdmFsdWUYAiABKAkibAoTT3BlblRlbGVtZXRyeUNvbmZpZxIaCghlbmRwb2ludBgBIAEoCUIIukgFcgMYgBASOQoHaGVhZGVycxgCIAMoCzIeLm9wZW5zdGF0dXMubW9uaXRvci52MS5IZWFkZXJzQgi6SAWSAQIQFCLICAoLSFRUUE1vbml0b3ISCgoCaWQYASABKAkSGAoEbmFtZRgCIAEoCUIKukgHcgUQARiAAhIaCgN1cmwYAyABKAlCDbpICnIIEAEYgBCIAQESNQoLcGVyaW9kaWNpdHkYBCABKAlCILpIHXIbUgMzMHNSAjFtUgI1bVIDMTBtUgMzMG1SAjFoElUKBm1ldGhvZBgFIAEoCUJFukhCckBSAFIDR0VUUgRQT1NUUgRIRUFEUgNQVVRSBVBBVENIUgZERUxFVEVSBVRSQUNFUgdDT05ORUNUUgdPUFRJT05TEgwKBGJvZHkYBiABKAkSHAoHdGltZW91dBgHIAEoA0ILukgIIgYYwKkHKAASJQoLZGVncmFkZWRfYXQYCCABKANCC7pICCIGGMCpBygASACIAQESGAoFcmV0cnkYCSABKANCCbpIBiIEGAooABIYChBmb2xsb3dfcmVkaXJlY3RzGAogASgIEjkKB2hlYWRlcnMYCyADKAsyHi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyc0IIukgFkgECEBQSVAoWc3RhdHVzX2NvZGVfYXNzZXJ0aW9ucxgMIAMoCzIqLm9wZW5zdGF0dXMubW9uaXRvci52MS5TdGF0dXNDb2RlQXNzZXJ0aW9uQgi6SAWSAQIQChJHCg9ib2R5X2Fzc2VydGlvbnMYDSADKAsyJC5vcGVuc3RhdHVzLm1vbml0b3IudjEuQm9keUFzc2VydGlvbkIIukgFkgECEAoSSwoRaGVhZGVyX2Fzc2VydGlvbnMYDiADKAsyJi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyQXNzZXJ0aW9uQgi6SAWSAQIQChIdCgtkZXNjcmlwdGlvbhgPIAEoCUIIukgFcgMYgAgSDgoGYWN0aXZlGBAgASgIEg4KBnB1YmxpYxgRIAEoCBKnAgoHcmVnaW9ucxgSIAMoCUKVArpIkQKSAY0CEBwiiAJyhQJSA2Ftc1IDYXJuUgNib21SA2NkZ1IDZGZ3UgNld3JSA2ZyYVIDZ3J1UgNpYWRSA2puYlIDbGF4UgNsaHJSA25ydFIDb3JkUgNzamNSA3NpblIDc3lkUgN5eXpSCWtveWViX2ZyYVIJa295ZWJfcGFyUglrb3llYl9zZm9SCWtveWViX3NpblIJa295ZWJfdHlvUglrb3llYl93YXNSEHJhaWx3YXlfdXMtd2VzdDJSF3JhaWx3YXlfdXMtZWFzdDQtZXFkYzRhUhxyYWlsd2F5X2V1cm9wZS13ZXN0NC1kcmFtczNhUh5yYWlsd2F5X2FzaWEtc291dGhlYXN0MS1lcXNnM2ESQgoOb3Blbl90ZWxlbWV0cnkYEyABKAsyKi5vcGVuc3RhdHVzLm1vbml0b3IudjEuT3BlblRlbGVtZXRyeUNvbmZpZ0IOCgxfZGVncmFkZWRfYXQq9wEKCkhUVFBNZXRob2QSGwoXSFRUUF9NRVRIT0RfVU5TUEVDSUZJRUQQABITCg9IVFRQX01FVEhPRF9HRVQQARIUChBIVFRQX01FVEhPRF9QT1NUEAISFAoQSFRUUF9NRVRIT0RfSEVBRBADEhMKD0hUVFBfTUVUSE9EX1BVVBAEEhUKEUhUVFBfTUVUSE9EX1BBVENIEAUSFgoSSFRUUF9NRVRIT0RfREVMRVRFEAYSFQoRSFRUUF9NRVRIT0RfVFJBQ0UQBxIXChNIVFRQX01FVEhPRF9DT05ORUNUEAgSFwoTSFRUUF9NRVRIT0RfT1BUSU9OUxAJKqUBCgtQZXJpb2RpY2l0eRIbChdQRVJJT0RJQ0lUWV9VTlNQRUNJRklFRBAAEhMKD1BFUklPRElDSVRZXzMwUxABEhIKDlBFUklPRElDSVRZXzFNEAISEgoOUEVSSU9ESUNJVFlfNU0QAxITCg9QRVJJT0RJQ0lUWV8xME0QBBITCg9QRVJJT0RJQ0lUWV8zME0QBRISCg5QRVJJT0RJQ0lUWV8xSBAGQlNaUWdpdGh1Yi5jb20vb3BlbnN0YXR1c2hxL29wZW5zdGF0dXMvcGFja2FnZXMvcHJvdG8vb3BlbnN0YXR1cy9tb25pdG9yL3YxO21vbml0b3J2MWIGcHJvdG8z",
-    [file_buf_validate_validate, file_openstatus_monitor_v1_assertions],
+    "CihvcGVuc3RhdHVzL21vbml0b3IvdjEvaHR0cF9tb25pdG9yLnByb3RvEhVvcGVuc3RhdHVzLm1vbml0b3IudjEiLgoHSGVhZGVycxIUCgNrZXkYASABKAlCB7pIBHICEAESDQoFdmFsdWUYAiABKAkibAoTT3BlblRlbGVtZXRyeUNvbmZpZxIaCghlbmRwb2ludBgBIAEoCUIIukgFcgMYgBASOQoHaGVhZGVycxgCIAMoCzIeLm9wZW5zdGF0dXMubW9uaXRvci52MS5IZWFkZXJzQgi6SAWSAQIQFCKhBwoLSFRUUE1vbml0b3ISCgoCaWQYASABKAkSGAoEbmFtZRgCIAEoCUIKukgHcgUQARiAAhIaCgN1cmwYAyABKAlCDbpICnIIEAEYgBCIAQESQQoLcGVyaW9kaWNpdHkYBCABKA4yIi5vcGVuc3RhdHVzLm1vbml0b3IudjEuUGVyaW9kaWNpdHlCCLpIBYIBAiAAEjsKBm1ldGhvZBgFIAEoDjIhLm9wZW5zdGF0dXMubW9uaXRvci52MS5IVFRQTWV0aG9kQgi6SAWCAQIgABIMCgRib2R5GAYgASgJEhwKB3RpbWVvdXQYByABKANCC7pICCIGGMCpBygAEiUKC2RlZ3JhZGVkX2F0GAggASgDQgu6SAgiBhjAqQcoAEgAiAEBEhgKBXJldHJ5GAkgASgDQgm6SAYiBBgKKAASHQoQZm9sbG93X3JlZGlyZWN0cxgKIAEoCEgBiAEBEjkKB2hlYWRlcnMYCyADKAsyHi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyc0IIukgFkgECEBQSVAoWc3RhdHVzX2NvZGVfYXNzZXJ0aW9ucxgMIAMoCzIqLm9wZW5zdGF0dXMubW9uaXRvci52MS5TdGF0dXNDb2RlQXNzZXJ0aW9uQgi6SAWSAQIQChJHCg9ib2R5X2Fzc2VydGlvbnMYDSADKAsyJC5vcGVuc3RhdHVzLm1vbml0b3IudjEuQm9keUFzc2VydGlvbkIIukgFkgECEAoSSwoRaGVhZGVyX2Fzc2VydGlvbnMYDiADKAsyJi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyQXNzZXJ0aW9uQgi6SAWSAQIQChIdCgtkZXNjcmlwdGlvbhgPIAEoCUIIukgFcgMYgAgSDgoGYWN0aXZlGBAgASgIEg4KBnB1YmxpYxgRIAEoCBI/CgdyZWdpb25zGBIgAygOMh0ub3BlbnN0YXR1cy5tb25pdG9yLnYxLlJlZ2lvbkIPukgMkgEJEBwiBYIBAiAAEkIKDm9wZW5fdGVsZW1ldHJ5GBMgASgLMioub3BlbnN0YXR1cy5tb25pdG9yLnYxLk9wZW5UZWxlbWV0cnlDb25maWcSNAoGc3RhdHVzGBQgASgOMiQub3BlbnN0YXR1cy5tb25pdG9yLnYxLk1vbml0b3JTdGF0dXNCDgoMX2RlZ3JhZGVkX2F0QhMKEV9mb2xsb3dfcmVkaXJlY3RzKvcBCgpIVFRQTWV0aG9kEhsKF0hUVFBfTUVUSE9EX1VOU1BFQ0lGSUVEEAASEwoPSFRUUF9NRVRIT0RfR0VUEAESFAoQSFRUUF9NRVRIT0RfUE9TVBACEhQKEEhUVFBfTUVUSE9EX0hFQUQQAxITCg9IVFRQX01FVEhPRF9QVVQQBBIVChFIVFRQX01FVEhPRF9QQVRDSBAFEhYKEkhUVFBfTUVUSE9EX0RFTEVURRAGEhUKEUhUVFBfTUVUSE9EX1RSQUNFEAcSFwoTSFRUUF9NRVRIT0RfQ09OTkVDVBAIEhcKE0hUVFBfTUVUSE9EX09QVElPTlMQCUJTWlFnaXRodWIuY29tL29wZW5zdGF0dXNocS9vcGVuc3RhdHVzL3BhY2thZ2VzL3Byb3RvL29wZW5zdGF0dXMvbW9uaXRvci92MTttb25pdG9ydjFiBnByb3RvMw",
+    [
+      file_buf_validate_validate,
+      file_openstatus_monitor_v1_assertions,
+      file_openstatus_monitor_v1_monitor,
+    ],
   );
 
 /**
@@ -112,16 +118,16 @@ export type HTTPMonitor = Message<"openstatus.monitor.v1.HTTPMonitor"> & {
   /**
    * Check periodicity (required).
    *
-   * @generated from field: string periodicity = 4;
+   * @generated from field: openstatus.monitor.v1.Periodicity periodicity = 4;
    */
-  periodicity: string;
+  periodicity: Periodicity;
 
   /**
    * HTTP method to use (defaults to GET).
    *
-   * @generated from field: string method = 5;
+   * @generated from field: openstatus.monitor.v1.HTTPMethod method = 5;
    */
-  method: string;
+  method: HTTPMethod;
 
   /**
    * Request body (optional).
@@ -152,11 +158,11 @@ export type HTTPMonitor = Message<"openstatus.monitor.v1.HTTPMonitor"> & {
   retry: bigint;
 
   /**
-   * Whether to follow HTTP redirects (defaults to true).
+   * Whether to follow HTTP redirects (defaults to true when not specified).
    *
-   * @generated from field: bool follow_redirects = 10;
+   * @generated from field: optional bool follow_redirects = 10;
    */
-  followRedirects: boolean;
+  followRedirects?: boolean;
 
   /**
    * Custom headers for the request.
@@ -210,9 +216,9 @@ export type HTTPMonitor = Message<"openstatus.monitor.v1.HTTPMonitor"> & {
   /**
    * Geographic regions to run checks from.
    *
-   * @generated from field: repeated string regions = 18;
+   * @generated from field: repeated openstatus.monitor.v1.Region regions = 18;
    */
-  regions: string[];
+  regions: Region[];
 
   /**
    * OpenTelemetry configuration for exporting metrics.
@@ -220,6 +226,13 @@ export type HTTPMonitor = Message<"openstatus.monitor.v1.HTTPMonitor"> & {
    * @generated from field: openstatus.monitor.v1.OpenTelemetryConfig open_telemetry = 19;
    */
   openTelemetry?: OpenTelemetryConfig;
+
+  /**
+   * Current operational status of the monitor.
+   *
+   * @generated from field: openstatus.monitor.v1.MonitorStatus status = 20;
+   */
+  status: MonitorStatus;
 };
 
 /**
@@ -291,51 +304,3 @@ export enum HTTPMethod {
  */
 export const HTTPMethodSchema: GenEnum<HTTPMethod> = /*@__PURE__*/
   enumDesc(file_openstatus_monitor_v1_http_monitor, 0);
-
-/**
- * Monitor periodicity options.
- *
- * @generated from enum openstatus.monitor.v1.Periodicity
- */
-export enum Periodicity {
-  /**
-   * @generated from enum value: PERIODICITY_UNSPECIFIED = 0;
-   */
-  PERIODICITY_UNSPECIFIED = 0,
-
-  /**
-   * @generated from enum value: PERIODICITY_30S = 1;
-   */
-  PERIODICITY_30S = 1,
-
-  /**
-   * @generated from enum value: PERIODICITY_1M = 2;
-   */
-  PERIODICITY_1M = 2,
-
-  /**
-   * @generated from enum value: PERIODICITY_5M = 3;
-   */
-  PERIODICITY_5M = 3,
-
-  /**
-   * @generated from enum value: PERIODICITY_10M = 4;
-   */
-  PERIODICITY_10M = 4,
-
-  /**
-   * @generated from enum value: PERIODICITY_30M = 5;
-   */
-  PERIODICITY_30M = 5,
-
-  /**
-   * @generated from enum value: PERIODICITY_1H = 6;
-   */
-  PERIODICITY_1H = 6,
-}
-
-/**
- * Describes the enum openstatus.monitor.v1.Periodicity.
- */
-export const PeriodicitySchema: GenEnum<Periodicity> = /*@__PURE__*/
-  enumDesc(file_openstatus_monitor_v1_http_monitor, 1);
