@@ -12,7 +12,7 @@ await build({
   package: {
     // package.json properties
     name: "@openstatus/sdk-node",
-    version: Deno.args[0],
+    version: "0.0.1",
     description: "SDK for openstatus.",
     license: "MIT",
     repository: {
