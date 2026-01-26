@@ -3,7 +3,7 @@
  *
  * Run with: deno task dev
  */
-import { openstatus, type HTTPMonitor } from "./src/mod.ts";
+import { type HTTPMonitor, openstatus } from "./src/mod.ts";
 
 async function main(): Promise<void> {
   console.log("OpenStatus SDK Example\n");
@@ -17,15 +17,17 @@ async function main(): Promise<void> {
   const apiKey = process.env.OPENSTATUS_API_KEY;
   if (!apiKey) {
     console.log("2. Skipping monitor operations (OPENSTATUS_API_KEY not set)");
-    console.log("   Set OPENSTATUS_API_KEY environment variable to test monitor operations.");
+    console.log(
+      "   Set OPENSTATUS_API_KEY environment variable to test monitor operations.",
+    );
     return;
   }
 
-  const headers = { "x-openstatus-key": `Bearer ${apiKey}` };
+  const headers = { "x-openstatus-key": `${apiKey}` };
 
   console.log("2. Listing monitors...");
-  const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } =
-    await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
+  const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } = await openstatus
+    .monitor.v1.MonitorService.listMonitors({}, { headers });
 
   console.log(`   Found ${totalSize} monitors:`);
   console.log(`   - HTTP: ${httpMonitors.length}`);
@@ -36,7 +38,11 @@ async function main(): Promise<void> {
   if (httpMonitors.length > 0) {
     console.log("\n3. HTTP Monitors:");
     httpMonitors.forEach((monitor: HTTPMonitor) => {
-      console.log(`   - ${monitor.name}: ${monitor.url} (${monitor.active ? "active" : "paused"})`);
+      console.log(
+        `   - ${monitor.name}: ${monitor.url} (${
+          monitor.active ? "active" : "paused"
+        })`,
+      );
     });
   }
 }

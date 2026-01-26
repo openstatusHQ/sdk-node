@@ -3,11 +3,13 @@
 /* eslint-disable */
 
 import type {
+  GenEnum,
   GenFile,
   GenMessage,
   GenService,
 } from "@bufbuild/protobuf/codegenv2";
 import {
+  enumDesc,
   fileDesc,
   messageDesc,
   serviceDesc,
@@ -17,6 +19,8 @@ import type { DNSMonitor } from "./dns_monitor_pb.ts";
 import { file_openstatus_monitor_v1_dns_monitor } from "./dns_monitor_pb.ts";
 import type { HTTPMonitor } from "./http_monitor_pb.ts";
 import { file_openstatus_monitor_v1_http_monitor } from "./http_monitor_pb.ts";
+import type { MonitorStatus, Region } from "./monitor_pb.ts";
+import { file_openstatus_monitor_v1_monitor } from "./monitor_pb.ts";
 import type { TCPMonitor } from "./tcp_monitor_pb.ts";
 import { file_openstatus_monitor_v1_tcp_monitor } from "./tcp_monitor_pb.ts";
 import type { Message } from "@bufbuild/protobuf";
@@ -26,11 +30,12 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export const file_openstatus_monitor_v1_service: GenFile = /*@__PURE__*/
   fileDesc(
-    "CiNvcGVuc3RhdHVzL21vbml0b3IvdjEvc2VydmljZS5wcm90bxIVb3BlbnN0YXR1cy5tb25pdG9yLnYxIlcKGENyZWF0ZUhUVFBNb25pdG9yUmVxdWVzdBI7Cgdtb25pdG9yGAEgASgLMiIub3BlbnN0YXR1cy5tb25pdG9yLnYxLkhUVFBNb25pdG9yQga6SAPIAQEiUAoZQ3JlYXRlSFRUUE1vbml0b3JSZXNwb25zZRIzCgdtb25pdG9yGAEgASgLMiIub3BlbnN0YXR1cy5tb25pdG9yLnYxLkhUVFBNb25pdG9yIlUKF0NyZWF0ZVRDUE1vbml0b3JSZXF1ZXN0EjoKB21vbml0b3IYASABKAsyIS5vcGVuc3RhdHVzLm1vbml0b3IudjEuVENQTW9uaXRvckIGukgDyAEBIk4KGENyZWF0ZVRDUE1vbml0b3JSZXNwb25zZRIyCgdtb25pdG9yGAEgASgLMiEub3BlbnN0YXR1cy5tb25pdG9yLnYxLlRDUE1vbml0b3IiVQoXQ3JlYXRlRE5TTW9uaXRvclJlcXVlc3QSOgoHbW9uaXRvchgBIAEoCzIhLm9wZW5zdGF0dXMubW9uaXRvci52MS5ETlNNb25pdG9yQga6SAPIAQEiTgoYQ3JlYXRlRE5TTW9uaXRvclJlc3BvbnNlEjIKB21vbml0b3IYASABKAsyIS5vcGVuc3RhdHVzLm1vbml0b3IudjEuRE5TTW9uaXRvciIsChVUcmlnZ2VyTW9uaXRvclJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAEiKQoWVHJpZ2dlck1vbml0b3JSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIisKFERlbGV0ZU1vbml0b3JSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABIigKFURlbGV0ZU1vbml0b3JSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIm4KE0xpc3RNb25pdG9yc1JlcXVlc3QSIQoJcGFnZV9zaXplGAEgASgFQgm6SAYaBBhkKAFIAIgBARIXCgpwYWdlX3Rva2VuGAIgASgJSAGIAQFCDAoKX3BhZ2Vfc2l6ZUINCgtfcGFnZV90b2tlbiLwAQoUTGlzdE1vbml0b3JzUmVzcG9uc2USOQoNaHR0cF9tb25pdG9ycxgBIAMoCzIiLm9wZW5zdGF0dXMubW9uaXRvci52MS5IVFRQTW9uaXRvchI3Cgx0Y3BfbW9uaXRvcnMYAiADKAsyIS5vcGVuc3RhdHVzLm1vbml0b3IudjEuVENQTW9uaXRvchI3CgxkbnNfbW9uaXRvcnMYAyADKAsyIS5vcGVuc3RhdHVzLm1vbml0b3IudjEuRE5TTW9uaXRvchIXCg9uZXh0X3BhZ2VfdG9rZW4YBCABKAkSEgoKdG90YWxfc2l6ZRgFIAEoBTK2BQoOTW9uaXRvclNlcnZpY2USdgoRQ3JlYXRlSFRUUE1vbml0b3ISLy5vcGVuc3RhdHVzLm1vbml0b3IudjEuQ3JlYXRlSFRUUE1vbml0b3JSZXF1ZXN0GjAub3BlbnN0YXR1cy5tb25pdG9yLnYxLkNyZWF0ZUhUVFBNb25pdG9yUmVzcG9uc2UScwoQQ3JlYXRlVENQTW9uaXRvchIuLm9wZW5zdGF0dXMubW9uaXRvci52MS5DcmVhdGVUQ1BNb25pdG9yUmVxdWVzdBovLm9wZW5zdGF0dXMubW9uaXRvci52MS5DcmVhdGVUQ1BNb25pdG9yUmVzcG9uc2UScwoQQ3JlYXRlRE5TTW9uaXRvchIuLm9wZW5zdGF0dXMubW9uaXRvci52MS5DcmVhdGVETlNNb25pdG9yUmVxdWVzdBovLm9wZW5zdGF0dXMubW9uaXRvci52MS5DcmVhdGVETlNNb25pdG9yUmVzcG9uc2USbQoOVHJpZ2dlck1vbml0b3ISLC5vcGVuc3RhdHVzLm1vbml0b3IudjEuVHJpZ2dlck1vbml0b3JSZXF1ZXN0Gi0ub3BlbnN0YXR1cy5tb25pdG9yLnYxLlRyaWdnZXJNb25pdG9yUmVzcG9uc2USagoNRGVsZXRlTW9uaXRvchIrLm9wZW5zdGF0dXMubW9uaXRvci52MS5EZWxldGVNb25pdG9yUmVxdWVzdBosLm9wZW5zdGF0dXMubW9uaXRvci52MS5EZWxldGVNb25pdG9yUmVzcG9uc2USZwoMTGlzdE1vbml0b3JzEioub3BlbnN0YXR1cy5tb25pdG9yLnYxLkxpc3RNb25pdG9yc1JlcXVlc3QaKy5vcGVuc3RhdHVzLm1vbml0b3IudjEuTGlzdE1vbml0b3JzUmVzcG9uc2VCU1pRZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL21vbml0b3IvdjE7bW9uaXRvcnYxYgZwcm90bzM",
+    "CiNvcGVuc3RhdHVzL21vbml0b3IvdjEvc2VydmljZS5wcm90bxIVb3BlbnN0YXR1cy5tb25pdG9yLnYxIlcKGENyZWF0ZUhUVFBNb25pdG9yUmVxdWVzdBI7Cgdtb25pdG9yGAEgASgLMiIub3BlbnN0YXR1cy5tb25pdG9yLnYxLkhUVFBNb25pdG9yQga6SAPIAQEiUAoZQ3JlYXRlSFRUUE1vbml0b3JSZXNwb25zZRIzCgdtb25pdG9yGAEgASgLMiIub3BlbnN0YXR1cy5tb25pdG9yLnYxLkhUVFBNb25pdG9yIlUKF0NyZWF0ZVRDUE1vbml0b3JSZXF1ZXN0EjoKB21vbml0b3IYASABKAsyIS5vcGVuc3RhdHVzLm1vbml0b3IudjEuVENQTW9uaXRvckIGukgDyAEBIk4KGENyZWF0ZVRDUE1vbml0b3JSZXNwb25zZRIyCgdtb25pdG9yGAEgASgLMiEub3BlbnN0YXR1cy5tb25pdG9yLnYxLlRDUE1vbml0b3IiVQoXQ3JlYXRlRE5TTW9uaXRvclJlcXVlc3QSOgoHbW9uaXRvchgBIAEoCzIhLm9wZW5zdGF0dXMubW9uaXRvci52MS5ETlNNb25pdG9yQga6SAPIAQEiTgoYQ3JlYXRlRE5TTW9uaXRvclJlc3BvbnNlEjIKB21vbml0b3IYASABKAsyIS5vcGVuc3RhdHVzLm1vbml0b3IudjEuRE5TTW9uaXRvciIsChVUcmlnZ2VyTW9uaXRvclJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAEiKQoWVHJpZ2dlck1vbml0b3JSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIisKFERlbGV0ZU1vbml0b3JSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABIigKFURlbGV0ZU1vbml0b3JSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIm4KE0xpc3RNb25pdG9yc1JlcXVlc3QSIQoJcGFnZV9zaXplGAEgASgFQgm6SAYaBBhkKAFIAIgBARIXCgpwYWdlX3Rva2VuGAIgASgJSAGIAQFCDAoKX3BhZ2Vfc2l6ZUINCgtfcGFnZV90b2tlbiLwAQoUTGlzdE1vbml0b3JzUmVzcG9uc2USOQoNaHR0cF9tb25pdG9ycxgBIAMoCzIiLm9wZW5zdGF0dXMubW9uaXRvci52MS5IVFRQTW9uaXRvchI3Cgx0Y3BfbW9uaXRvcnMYAiADKAsyIS5vcGVuc3RhdHVzLm1vbml0b3IudjEuVENQTW9uaXRvchI3CgxkbnNfbW9uaXRvcnMYAyADKAsyIS5vcGVuc3RhdHVzLm1vbml0b3IudjEuRE5TTW9uaXRvchIXCg9uZXh0X3BhZ2VfdG9rZW4YBCABKAkSEgoKdG90YWxfc2l6ZRgFIAEoBSIuChdHZXRNb25pdG9yU3RhdHVzUmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASJzCgxSZWdpb25TdGF0dXMSLQoGcmVnaW9uGAEgASgOMh0ub3BlbnN0YXR1cy5tb25pdG9yLnYxLlJlZ2lvbhI0CgZzdGF0dXMYAiABKA4yJC5vcGVuc3RhdHVzLm1vbml0b3IudjEuTW9uaXRvclN0YXR1cyJcChhHZXRNb25pdG9yU3RhdHVzUmVzcG9uc2USCgoCaWQYASABKAkSNAoHcmVnaW9ucxgCIAMoCzIjLm9wZW5zdGF0dXMubW9uaXRvci52MS5SZWdpb25TdGF0dXMisQEKDU1vbml0b3JDb25maWcSMgoEaHR0cBgBIAEoCzIiLm9wZW5zdGF0dXMubW9uaXRvci52MS5IVFRQTW9uaXRvckgAEjAKA3RjcBgCIAEoCzIhLm9wZW5zdGF0dXMubW9uaXRvci52MS5UQ1BNb25pdG9ySAASMAoDZG5zGAMgASgLMiEub3BlbnN0YXR1cy5tb25pdG9yLnYxLkROU01vbml0b3JIAEIICgZjb25maWcinwEKGEdldE1vbml0b3JTdW1tYXJ5UmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQARI0Cgp0aW1lX3JhbmdlGAIgASgOMiAub3BlbnN0YXR1cy5tb25pdG9yLnYxLlRpbWVSYW5nZRI4CgdyZWdpb25zGAMgAygOMh0ub3BlbnN0YXR1cy5tb25pdG9yLnYxLlJlZ2lvbkIIukgFkgECEBwirAIKGUdldE1vbml0b3JTdW1tYXJ5UmVzcG9uc2USCgoCaWQYASABKAkSFAoMbGFzdF9waW5nX2F0GAIgASgJEhgKEHRvdGFsX3N1Y2Nlc3NmdWwYAyABKAMSFgoOdG90YWxfZGVncmFkZWQYBCABKAMSFAoMdG90YWxfZmFpbGVkGAUgASgDEgsKA3A1MBgGIAEoAxILCgNwNzUYByABKAMSCwoDcDkwGAggASgDEgsKA3A5NRgJIAEoAxILCgNwOTkYCiABKAMSNAoKdGltZV9yYW5nZRgLIAEoDjIgLm9wZW5zdGF0dXMubW9uaXRvci52MS5UaW1lUmFuZ2USLgoHcmVnaW9ucxgMIAMoDjIdLm9wZW5zdGF0dXMubW9uaXRvci52MS5SZWdpb24qYQoJVGltZVJhbmdlEhoKFlRJTUVfUkFOR0VfVU5TUEVDSUZJRUQQABIRCg1USU1FX1JBTkdFXzFEEAESEQoNVElNRV9SQU5HRV83RBACEhIKDlRJTUVfUkFOR0VfMTREEAMyowcKDk1vbml0b3JTZXJ2aWNlEnYKEUNyZWF0ZUhUVFBNb25pdG9yEi8ub3BlbnN0YXR1cy5tb25pdG9yLnYxLkNyZWF0ZUhUVFBNb25pdG9yUmVxdWVzdBowLm9wZW5zdGF0dXMubW9uaXRvci52MS5DcmVhdGVIVFRQTW9uaXRvclJlc3BvbnNlEnMKEENyZWF0ZVRDUE1vbml0b3ISLi5vcGVuc3RhdHVzLm1vbml0b3IudjEuQ3JlYXRlVENQTW9uaXRvclJlcXVlc3QaLy5vcGVuc3RhdHVzLm1vbml0b3IudjEuQ3JlYXRlVENQTW9uaXRvclJlc3BvbnNlEnMKEENyZWF0ZUROU01vbml0b3ISLi5vcGVuc3RhdHVzLm1vbml0b3IudjEuQ3JlYXRlRE5TTW9uaXRvclJlcXVlc3QaLy5vcGVuc3RhdHVzLm1vbml0b3IudjEuQ3JlYXRlRE5TTW9uaXRvclJlc3BvbnNlEm0KDlRyaWdnZXJNb25pdG9yEiwub3BlbnN0YXR1cy5tb25pdG9yLnYxLlRyaWdnZXJNb25pdG9yUmVxdWVzdBotLm9wZW5zdGF0dXMubW9uaXRvci52MS5UcmlnZ2VyTW9uaXRvclJlc3BvbnNlEmoKDURlbGV0ZU1vbml0b3ISKy5vcGVuc3RhdHVzLm1vbml0b3IudjEuRGVsZXRlTW9uaXRvclJlcXVlc3QaLC5vcGVuc3RhdHVzLm1vbml0b3IudjEuRGVsZXRlTW9uaXRvclJlc3BvbnNlEmcKDExpc3RNb25pdG9ycxIqLm9wZW5zdGF0dXMubW9uaXRvci52MS5MaXN0TW9uaXRvcnNSZXF1ZXN0Gisub3BlbnN0YXR1cy5tb25pdG9yLnYxLkxpc3RNb25pdG9yc1Jlc3BvbnNlEnMKEEdldE1vbml0b3JTdGF0dXMSLi5vcGVuc3RhdHVzLm1vbml0b3IudjEuR2V0TW9uaXRvclN0YXR1c1JlcXVlc3QaLy5vcGVuc3RhdHVzLm1vbml0b3IudjEuR2V0TW9uaXRvclN0YXR1c1Jlc3BvbnNlEnYKEUdldE1vbml0b3JTdW1tYXJ5Ei8ub3BlbnN0YXR1cy5tb25pdG9yLnYxLkdldE1vbml0b3JTdW1tYXJ5UmVxdWVzdBowLm9wZW5zdGF0dXMubW9uaXRvci52MS5HZXRNb25pdG9yU3VtbWFyeVJlc3BvbnNlQlNaUWdpdGh1Yi5jb20vb3BlbnN0YXR1c2hxL29wZW5zdGF0dXMvcGFja2FnZXMvcHJvdG8vb3BlbnN0YXR1cy9tb25pdG9yL3YxO21vbml0b3J2MWIGcHJvdG8z",
     [
       file_buf_validate_validate,
       file_openstatus_monitor_v1_dns_monitor,
       file_openstatus_monitor_v1_http_monitor,
+      file_openstatus_monitor_v1_monitor,
       file_openstatus_monitor_v1_tcp_monitor,
     ],
   );
@@ -371,6 +376,316 @@ export const ListMonitorsResponseSchema: GenMessage<
   messageDesc(file_openstatus_monitor_v1_service, 11);
 
 /**
+ * GetMonitorStatusRequest is the request to get the status of all regions for a monitor.
+ *
+ * @generated from message openstatus.monitor.v1.GetMonitorStatusRequest
+ */
+export type GetMonitorStatusRequest =
+  & Message<"openstatus.monitor.v1.GetMonitorStatusRequest">
+  & {
+    /**
+     * Monitor ID to get status for (required).
+     *
+     * @generated from field: string id = 1;
+     */
+    id: string;
+  };
+
+/**
+ * Describes the message openstatus.monitor.v1.GetMonitorStatusRequest.
+ * Use `create(GetMonitorStatusRequestSchema)` to create a new message.
+ */
+export const GetMonitorStatusRequestSchema: GenMessage<
+  GetMonitorStatusRequest
+> = /*@__PURE__*/
+  messageDesc(file_openstatus_monitor_v1_service, 12);
+
+/**
+ * RegionStatus represents the status of a monitor in a specific region.
+ *
+ * @generated from message openstatus.monitor.v1.RegionStatus
+ */
+export type RegionStatus = Message<"openstatus.monitor.v1.RegionStatus"> & {
+  /**
+   * The region identifier.
+   *
+   * @generated from field: openstatus.monitor.v1.Region region = 1;
+   */
+  region: Region;
+
+  /**
+   * The status of the monitor in this region.
+   *
+   * @generated from field: openstatus.monitor.v1.MonitorStatus status = 2;
+   */
+  status: MonitorStatus;
+};
+
+/**
+ * Describes the message openstatus.monitor.v1.RegionStatus.
+ * Use `create(RegionStatusSchema)` to create a new message.
+ */
+export const RegionStatusSchema: GenMessage<RegionStatus> = /*@__PURE__*/
+  messageDesc(file_openstatus_monitor_v1_service, 13);
+
+/**
+ * GetMonitorStatusResponse is the response containing the status of all regions for a monitor.
+ *
+ * @generated from message openstatus.monitor.v1.GetMonitorStatusResponse
+ */
+export type GetMonitorStatusResponse =
+  & Message<"openstatus.monitor.v1.GetMonitorStatusResponse">
+  & {
+    /**
+     * Monitor ID.
+     *
+     * @generated from field: string id = 1;
+     */
+    id: string;
+
+    /**
+     * Status for each region.
+     *
+     * @generated from field: repeated openstatus.monitor.v1.RegionStatus regions = 2;
+     */
+    regions: RegionStatus[];
+  };
+
+/**
+ * Describes the message openstatus.monitor.v1.GetMonitorStatusResponse.
+ * Use `create(GetMonitorStatusResponseSchema)` to create a new message.
+ */
+export const GetMonitorStatusResponseSchema: GenMessage<
+  GetMonitorStatusResponse
+> = /*@__PURE__*/
+  messageDesc(file_openstatus_monitor_v1_service, 14);
+
+/**
+ * MonitorConfig represents the type-specific configuration for a monitor.
+ *
+ * @generated from message openstatus.monitor.v1.MonitorConfig
+ */
+export type MonitorConfig = Message<"openstatus.monitor.v1.MonitorConfig"> & {
+  /**
+   * @generated from oneof openstatus.monitor.v1.MonitorConfig.config
+   */
+  config: {
+    /**
+     * HTTP monitor configuration.
+     *
+     * @generated from field: openstatus.monitor.v1.HTTPMonitor http = 1;
+     */
+    value: HTTPMonitor;
+    case: "http";
+  } | {
+    /**
+     * TCP monitor configuration.
+     *
+     * @generated from field: openstatus.monitor.v1.TCPMonitor tcp = 2;
+     */
+    value: TCPMonitor;
+    case: "tcp";
+  } | {
+    /**
+     * DNS monitor configuration.
+     *
+     * @generated from field: openstatus.monitor.v1.DNSMonitor dns = 3;
+     */
+    value: DNSMonitor;
+    case: "dns";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message openstatus.monitor.v1.MonitorConfig.
+ * Use `create(MonitorConfigSchema)` to create a new message.
+ */
+export const MonitorConfigSchema: GenMessage<MonitorConfig> = /*@__PURE__*/
+  messageDesc(file_openstatus_monitor_v1_service, 15);
+
+/**
+ * GetMonitorSummaryRequest is the request to get aggregated metrics for a monitor.
+ *
+ * @generated from message openstatus.monitor.v1.GetMonitorSummaryRequest
+ */
+export type GetMonitorSummaryRequest =
+  & Message<"openstatus.monitor.v1.GetMonitorSummaryRequest">
+  & {
+    /**
+     * Monitor ID to get summary for (required).
+     *
+     * @generated from field: string id = 1;
+     */
+    id: string;
+
+    /**
+     * Time range for metrics aggregation (defaults to 1 day if unspecified).
+     *
+     * @generated from field: openstatus.monitor.v1.TimeRange time_range = 2;
+     */
+    timeRange: TimeRange;
+
+    /**
+     * Optional filter by regions. If empty, returns metrics for all regions.
+     *
+     * @generated from field: repeated openstatus.monitor.v1.Region regions = 3;
+     */
+    regions: Region[];
+  };
+
+/**
+ * Describes the message openstatus.monitor.v1.GetMonitorSummaryRequest.
+ * Use `create(GetMonitorSummaryRequestSchema)` to create a new message.
+ */
+export const GetMonitorSummaryRequestSchema: GenMessage<
+  GetMonitorSummaryRequest
+> = /*@__PURE__*/
+  messageDesc(file_openstatus_monitor_v1_service, 16);
+
+/**
+ * GetMonitorSummaryResponse is the response containing aggregated metrics for a monitor.
+ *
+ * @generated from message openstatus.monitor.v1.GetMonitorSummaryResponse
+ */
+export type GetMonitorSummaryResponse =
+  & Message<"openstatus.monitor.v1.GetMonitorSummaryResponse">
+  & {
+    /**
+     * Monitor ID.
+     *
+     * @generated from field: string id = 1;
+     */
+    id: string;
+
+    /**
+     * Timestamp of the last check in RFC 3339 format.
+     *
+     * @generated from field: string last_ping_at = 2;
+     */
+    lastPingAt: string;
+
+    /**
+     * Total number of successful requests.
+     *
+     * @generated from field: int64 total_successful = 3;
+     */
+    totalSuccessful: bigint;
+
+    /**
+     * Total number of degraded requests.
+     *
+     * @generated from field: int64 total_degraded = 4;
+     */
+    totalDegraded: bigint;
+
+    /**
+     * Total number of failed requests.
+     *
+     * @generated from field: int64 total_failed = 5;
+     */
+    totalFailed: bigint;
+
+    /**
+     * 50th percentile (median) latency in milliseconds.
+     *
+     * @generated from field: int64 p50 = 6;
+     */
+    p50: bigint;
+
+    /**
+     * 75th percentile latency in milliseconds.
+     *
+     * @generated from field: int64 p75 = 7;
+     */
+    p75: bigint;
+
+    /**
+     * 90th percentile latency in milliseconds.
+     *
+     * @generated from field: int64 p90 = 8;
+     */
+    p90: bigint;
+
+    /**
+     * 95th percentile latency in milliseconds.
+     *
+     * @generated from field: int64 p95 = 9;
+     */
+    p95: bigint;
+
+    /**
+     * 99th percentile latency in milliseconds.
+     *
+     * @generated from field: int64 p99 = 10;
+     */
+    p99: bigint;
+
+    /**
+     * Time range used for the metrics.
+     *
+     * @generated from field: openstatus.monitor.v1.TimeRange time_range = 11;
+     */
+    timeRange: TimeRange;
+
+    /**
+     * Regions included in the metrics.
+     *
+     * @generated from field: repeated openstatus.monitor.v1.Region regions = 12;
+     */
+    regions: Region[];
+  };
+
+/**
+ * Describes the message openstatus.monitor.v1.GetMonitorSummaryResponse.
+ * Use `create(GetMonitorSummaryResponseSchema)` to create a new message.
+ */
+export const GetMonitorSummaryResponseSchema: GenMessage<
+  GetMonitorSummaryResponse
+> = /*@__PURE__*/
+  messageDesc(file_openstatus_monitor_v1_service, 17);
+
+/**
+ * TimeRange represents the time period for metrics aggregation.
+ *
+ * @generated from enum openstatus.monitor.v1.TimeRange
+ */
+export enum TimeRange {
+  /**
+   * Unspecified time range.
+   *
+   * @generated from enum value: TIME_RANGE_UNSPECIFIED = 0;
+   */
+  TIME_RANGE_UNSPECIFIED = 0,
+
+  /**
+   * Last 24 hours.
+   *
+   * @generated from enum value: TIME_RANGE_1D = 1;
+   */
+  TIME_RANGE_1D = 1,
+
+  /**
+   * Last 7 days.
+   *
+   * @generated from enum value: TIME_RANGE_7D = 2;
+   */
+  TIME_RANGE_7D = 2,
+
+  /**
+   * Last 14 days.
+   *
+   * @generated from enum value: TIME_RANGE_14D = 3;
+   */
+  TIME_RANGE_14D = 3,
+}
+
+/**
+ * Describes the enum openstatus.monitor.v1.TimeRange.
+ */
+export const TimeRangeSchema: GenEnum<TimeRange> = /*@__PURE__*/
+  enumDesc(file_openstatus_monitor_v1_service, 0);
+
+/**
  * MonitorService provides CRUD and operational commands for monitors.
  *
  * @generated from service openstatus.monitor.v1.MonitorService
@@ -435,6 +750,26 @@ export const MonitorService: GenService<{
     methodKind: "unary";
     input: typeof ListMonitorsRequestSchema;
     output: typeof ListMonitorsResponseSchema;
+  };
+  /**
+   * GetMonitorStatus returns the status of all regions for a monitor.
+   *
+   * @generated from rpc openstatus.monitor.v1.MonitorService.GetMonitorStatus
+   */
+  getMonitorStatus: {
+    methodKind: "unary";
+    input: typeof GetMonitorStatusRequestSchema;
+    output: typeof GetMonitorStatusResponseSchema;
+  };
+  /**
+   * GetMonitorSummary returns aggregated metrics and statistics for a monitor.
+   *
+   * @generated from rpc openstatus.monitor.v1.MonitorService.GetMonitorSummary
+   */
+  getMonitorSummary: {
+    methodKind: "unary";
+    input: typeof GetMonitorSummaryRequestSchema;
+    output: typeof GetMonitorSummaryResponseSchema;
   };
 }> = /*@__PURE__*/
   serviceDesc(file_openstatus_monitor_v1_service, 0);

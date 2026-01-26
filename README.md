@@ -99,17 +99,18 @@ await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
 Create an HTTP/HTTPS monitor.
 
 ```typescript
-const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor(
-  {
-    name: "My Website",
-    url: "https://example.com",
-    periodicity: "1m",
-    method: "GET",
-    regions: ["ams", "iad", "syd"],
-    active: true,
-  },
-  { headers },
-);
+const { monitor } = await openstatus.monitor.v1.MonitorService
+  .createHTTPMonitor(
+    {
+      name: "My Website",
+      url: "https://example.com",
+      periodicity: "1m",
+      method: "GET",
+      regions: ["ams", "iad", "syd"],
+      active: true,
+    },
+    { headers },
+  );
 ```
 
 #### `createTCPMonitor(request, options)`
@@ -141,7 +142,11 @@ const { monitor } = await openstatus.monitor.v1.MonitorService.createDNSMonitor(
     periodicity: "10m",
     regions: ["ams"],
     active: true,
-    recordAssertions: [{ recordType: "A", comparator: "EQUAL", target: "93.184.216.34" }],
+    recordAssertions: [{
+      recordType: "A",
+      comparator: "EQUAL",
+      target: "93.184.216.34",
+    }],
   },
   { headers },
 );
@@ -152,8 +157,8 @@ const { monitor } = await openstatus.monitor.v1.MonitorService.createDNSMonitor(
 List all monitors with pagination.
 
 ```typescript
-const { monitors, nextPageToken } =
-  await openstatus.monitor.v1.MonitorService.listMonitors(
+const { monitors, nextPageToken } = await openstatus.monitor.v1.MonitorService
+  .listMonitors(
     { pageSize: 10, pageToken: "" },
     { headers },
   );
@@ -194,47 +199,47 @@ console.log(status); // "SERVING"
 
 ### HTTP Monitor
 
-| Option                 | Type     | Required | Description                                           |
-| ---------------------- | -------- | -------- | ----------------------------------------------------- |
-| `name`                 | string   | Yes      | Monitor name (max 256 chars)                          |
-| `url`                  | string   | Yes      | URL to monitor                                        |
-| `periodicity`          | string   | No       | `30s`, `1m`, `5m`, `10m`, `30m`, `1h`                 |
-| `method`               | string   | No       | `GET`, `POST`, `HEAD`, `PUT`, `PATCH`, `DELETE`       |
-| `body`                 | string   | No       | Request body                                          |
-| `headers`              | object   | No       | Custom headers                                        |
-| `timeout`              | number   | No       | Timeout in ms (default: 45000, max: 120000)           |
-| `retry`                | number   | No       | Retry attempts (default: 3, max: 10)                  |
-| `followRedirects`      | boolean  | No       | Follow redirects (default: true)                      |
-| `regions`              | string[] | No       | [Regions](#regions) for checks                        |
-| `active`               | boolean  | No       | Enable monitoring (default: false)                    |
-| `public`               | boolean  | No       | Public visibility (default: false)                    |
-| `degradedAt`           | number   | No       | Latency threshold (ms) for degraded status            |
-| `statusCodeAssertions` | array    | No       | [Status code assertions](#status-code-assertions)     |
-| `bodyAssertions`       | array    | No       | [Body assertions](#body-assertions)                   |
-| `headerAssertions`     | array    | No       | [Header assertions](#header-assertions)               |
+| Option                 | Type     | Required | Description                                       |
+| ---------------------- | -------- | -------- | ------------------------------------------------- |
+| `name`                 | string   | Yes      | Monitor name (max 256 chars)                      |
+| `url`                  | string   | Yes      | URL to monitor                                    |
+| `periodicity`          | string   | No       | `30s`, `1m`, `5m`, `10m`, `30m`, `1h`             |
+| `method`               | string   | No       | `GET`, `POST`, `HEAD`, `PUT`, `PATCH`, `DELETE`   |
+| `body`                 | string   | No       | Request body                                      |
+| `headers`              | object   | No       | Custom headers                                    |
+| `timeout`              | number   | No       | Timeout in ms (default: 45000, max: 120000)       |
+| `retry`                | number   | No       | Retry attempts (default: 3, max: 10)              |
+| `followRedirects`      | boolean  | No       | Follow redirects (default: true)                  |
+| `regions`              | string[] | No       | [Regions](#regions) for checks                    |
+| `active`               | boolean  | No       | Enable monitoring (default: false)                |
+| `public`               | boolean  | No       | Public visibility (default: false)                |
+| `degradedAt`           | number   | No       | Latency threshold (ms) for degraded status        |
+| `statusCodeAssertions` | array    | No       | [Status code assertions](#status-code-assertions) |
+| `bodyAssertions`       | array    | No       | [Body assertions](#body-assertions)               |
+| `headerAssertions`     | array    | No       | [Header assertions](#header-assertions)           |
 
 ### TCP Monitor
 
-| Option        | Type     | Required | Description                     |
-| ------------- | -------- | -------- | ------------------------------- |
-| `name`        | string   | Yes      | Monitor name                    |
-| `uri`         | string   | Yes      | `host:port` to monitor          |
-| `periodicity` | string   | No       | Check interval                  |
-| `timeout`     | number   | No       | Timeout in ms (default: 45000)  |
-| `retry`       | number   | No       | Retry attempts (default: 3)     |
-| `regions`     | string[] | No       | [Regions](#regions) for checks  |
-| `active`      | boolean  | No       | Enable monitoring               |
+| Option        | Type     | Required | Description                    |
+| ------------- | -------- | -------- | ------------------------------ |
+| `name`        | string   | Yes      | Monitor name                   |
+| `uri`         | string   | Yes      | `host:port` to monitor         |
+| `periodicity` | string   | No       | Check interval                 |
+| `timeout`     | number   | No       | Timeout in ms (default: 45000) |
+| `retry`       | number   | No       | Retry attempts (default: 3)    |
+| `regions`     | string[] | No       | [Regions](#regions) for checks |
+| `active`      | boolean  | No       | Enable monitoring              |
 
 ### DNS Monitor
 
-| Option             | Type     | Required | Description                                   |
-| ------------------ | -------- | -------- | --------------------------------------------- |
-| `name`             | string   | Yes      | Monitor name                                  |
-| `uri`              | string   | Yes      | Domain to resolve                             |
-| `periodicity`      | string   | No       | Check interval                                |
-| `timeout`          | number   | No       | Timeout in ms (default: 45000)                |
-| `retry`            | number   | No       | Retry attempts (default: 3)                   |
-| `regions`          | string[] | No       | [Regions](#regions) for checks                |
+| Option             | Type     | Required | Description                                     |
+| ------------------ | -------- | -------- | ----------------------------------------------- |
+| `name`             | string   | Yes      | Monitor name                                    |
+| `uri`              | string   | Yes      | Domain to resolve                               |
+| `periodicity`      | string   | No       | Check interval                                  |
+| `timeout`          | number   | No       | Timeout in ms (default: 45000)                  |
+| `retry`            | number   | No       | Retry attempts (default: 3)                     |
+| `regions`          | string[] | No       | [Regions](#regions) for checks                  |
 | `recordAssertions` | array    | No       | [DNS record assertions](#dns-record-assertions) |
 
 ## Assertions
@@ -262,7 +267,7 @@ Validate response body content.
 ```typescript
 {
   bodyAssertions: [
-    { comparator: "CONTAINS", target: "\"status\":\"ok\"" },
+    { comparator: "CONTAINS", target: '"status":"ok"' },
     { comparator: "NOT_EMPTY" },
   ];
 }
@@ -302,17 +307,17 @@ Validate DNS records.
 
 Monitor from 18 global locations:
 
-| Code  | Location       | Code  | Location       |
-| ----- | -------------- | ----- | -------------- |
-| `ams` | Amsterdam      | `lax` | Los Angeles    |
-| `arn` | Stockholm      | `lhr` | London         |
-| `bom` | Mumbai         | `nrt` | Tokyo          |
-| `cdg` | Paris          | `ord` | Chicago        |
-| `dfw` | Dallas         | `sjc` | San Jose       |
-| `ewr` | Newark         | `sin` | Singapore      |
-| `fra` | Frankfurt      | `syd` | Sydney         |
-| `gru` | São Paulo      | `yyz` | Toronto        |
-| `iad` | Washington D.C.| `jnb` | Johannesburg   |
+| Code  | Location        | Code  | Location     |
+| ----- | --------------- | ----- | ------------ |
+| `ams` | Amsterdam       | `lax` | Los Angeles  |
+| `arn` | Stockholm       | `lhr` | London       |
+| `bom` | Mumbai          | `nrt` | Tokyo        |
+| `cdg` | Paris           | `ord` | Chicago      |
+| `dfw` | Dallas          | `sjc` | San Jose     |
+| `ewr` | Newark          | `sin` | Singapore    |
+| `fra` | Frankfurt       | `syd` | Sydney       |
+| `gru` | São Paulo       | `yyz` | Toronto      |
+| `iad` | Washington D.C. | `jnb` | Johannesburg |
 
 ## Error Handling
 

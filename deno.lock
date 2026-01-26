@@ -1,24 +1,11 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@std/assert@1": "1.0.17",
-    "jsr:@std/internal@^1.0.12": "1.0.12",
     "npm:@bufbuild/buf@^1.64.0": "1.64.0",
     "npm:@bufbuild/protobuf@^2.11.0": "2.11.0",
     "npm:@bufbuild/protoc-gen-es@^2.11.0": "2.11.0_@bufbuild+protobuf@2.11.0",
     "npm:@connectrpc/connect-node@^2.1.1": "2.1.1_@bufbuild+protobuf@2.11.0_@connectrpc+connect@2.1.1__@bufbuild+protobuf@2.11.0",
     "npm:@connectrpc/connect@^2.1.1": "2.1.1_@bufbuild+protobuf@2.11.0"
-  },
-  "jsr": {
-    "@std/assert@1.0.17": {
-      "integrity": "df5ebfffe77c03b3fa1401e11c762cc8f603d51021c56c4d15a8c7ab45e90dbe",
-      "dependencies": [
-        "jsr:@std/internal"
-      ]
-    },
-    "@std/internal@1.0.12": {
-      "integrity": "972a634fd5bc34b242024402972cd5143eac68d8dffaca5eaa4dba30ce17b027"
-    }
   },
   "npm": {
     "@bufbuild/buf-darwin-arm64@1.64.0": {
@@ -128,7 +115,6 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/assert@1",
       "npm:@bufbuild/buf@^1.64.0",
       "npm:@bufbuild/protobuf@^2.11.0",
       "npm:@bufbuild/protoc-gen-es@^2.11.0",

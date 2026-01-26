@@ -1,6 +1,7 @@
 {
-  "name": "@openstatus/node-sdk",
-  "version": "0.1.0",
+  "name": "@openstatus/api-test",
+  "version": "0.1.2",
+  "description": "SDK for openstatus",
   "license": "MIT",
   "exports": {
     ".": "./src/mod.ts"

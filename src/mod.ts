@@ -52,11 +52,9 @@ export type {
 } from "./gen/openstatus/monitor/v1/assertions_pb.ts";
 
 // Re-export enums
-export {
-  HTTPMethod,
-  Periodicity,
-  Region,
-} from "./gen/openstatus/monitor/v1/http_monitor_pb.ts";
+export { HTTPMethod } from "./gen/openstatus/monitor/v1/http_monitor_pb.ts";
+
+export { Periodicity, Region } from "./gen/openstatus/monitor/v1/monitor_pb.ts";
 
 export { MonitorStatus } from "./gen/openstatus/monitor/v1/monitor_pb.ts";
 
@@ -87,7 +85,7 @@ export { CheckResponse_ServingStatus as ServingStatus } from "./gen/openstatus/h
 /**
  * Default OpenStatus API URL.
  */
-const DEFAULT_API_URL = "https://api.openstatus.dev";
+const DEFAULT_API_URL = "https://api.openstatus.dev/rpc";
 
 /**
  * Creates a Connect RPC transport configured for the OpenStatus API.

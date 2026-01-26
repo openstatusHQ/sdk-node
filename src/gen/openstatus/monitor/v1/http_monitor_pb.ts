@@ -15,6 +15,8 @@ import type {
   StatusCodeAssertion,
 } from "./assertions_pb.ts";
 import { file_openstatus_monitor_v1_assertions } from "./assertions_pb.ts";
+import type { MonitorStatus, Periodicity, Region } from "./monitor_pb.ts";
+import { file_openstatus_monitor_v1_monitor } from "./monitor_pb.ts";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
@@ -22,8 +24,12 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export const file_openstatus_monitor_v1_http_monitor: GenFile = /*@__PURE__*/
   fileDesc(
-    "CihvcGVuc3RhdHVzL21vbml0b3IvdjEvaHR0cF9tb25pdG9yLnByb3RvEhVvcGVuc3RhdHVzLm1vbml0b3IudjEiLgoHSGVhZGVycxIUCgNrZXkYASABKAlCB7pIBHICEAESDQoFdmFsdWUYAiABKAkibAoTT3BlblRlbGVtZXRyeUNvbmZpZxIaCghlbmRwb2ludBgBIAEoCUIIukgFcgMYgBASOQoHaGVhZGVycxgCIAMoCzIeLm9wZW5zdGF0dXMubW9uaXRvci52MS5IZWFkZXJzQgi6SAWSAQIQFCLFBgoLSFRUUE1vbml0b3ISCgoCaWQYASABKAkSGAoEbmFtZRgCIAEoCUIKukgHcgUQARiAAhIaCgN1cmwYAyABKAlCDbpICnIIEAEYgBCIAQESNQoLcGVyaW9kaWNpdHkYBCABKAlCILpIHXIbUgMzMHNSAjFtUgI1bVIDMTBtUgMzMG1SAjFoEjsKBm1ldGhvZBgFIAEoDjIhLm9wZW5zdGF0dXMubW9uaXRvci52MS5IVFRQTWV0aG9kQgi6SAWCAQIgABIMCgRib2R5GAYgASgJEhwKB3RpbWVvdXQYByABKANCC7pICCIGGMCpBygAEiUKC2RlZ3JhZGVkX2F0GAggASgDQgu6SAgiBhjAqQcoAEgAiAEBEhgKBXJldHJ5GAkgASgDQgm6SAYiBBgKKAASGAoQZm9sbG93X3JlZGlyZWN0cxgKIAEoCBI5CgdoZWFkZXJzGAsgAygLMh4ub3BlbnN0YXR1cy5tb25pdG9yLnYxLkhlYWRlcnNCCLpIBZIBAhAUElQKFnN0YXR1c19jb2RlX2Fzc2VydGlvbnMYDCADKAsyKi5vcGVuc3RhdHVzLm1vbml0b3IudjEuU3RhdHVzQ29kZUFzc2VydGlvbkIIukgFkgECEAoSRwoPYm9keV9hc3NlcnRpb25zGA0gAygLMiQub3BlbnN0YXR1cy5tb25pdG9yLnYxLkJvZHlBc3NlcnRpb25CCLpIBZIBAhAKEksKEWhlYWRlcl9hc3NlcnRpb25zGA4gAygLMiYub3BlbnN0YXR1cy5tb25pdG9yLnYxLkhlYWRlckFzc2VydGlvbkIIukgFkgECEAoSHQoLZGVzY3JpcHRpb24YDyABKAlCCLpIBXIDGIAIEg4KBmFjdGl2ZRgQIAEoCBIOCgZwdWJsaWMYESABKAgSPwoHcmVnaW9ucxgSIAMoDjIdLm9wZW5zdGF0dXMubW9uaXRvci52MS5SZWdpb25CD7pIDJIBCRAcIgWCAQIgABJCCg5vcGVuX3RlbGVtZXRyeRgTIAEoCzIqLm9wZW5zdGF0dXMubW9uaXRvci52MS5PcGVuVGVsZW1ldHJ5Q29uZmlnQg4KDF9kZWdyYWRlZF9hdCr3AQoKSFRUUE1ldGhvZBIbChdIVFRQX01FVEhPRF9VTlNQRUNJRklFRBAAEhMKD0hUVFBfTUVUSE9EX0dFVBABEhQKEEhUVFBfTUVUSE9EX1BPU1QQAhIUChBIVFRQX01FVEhPRF9IRUFEEAMSEwoPSFRUUF9NRVRIT0RfUFVUEAQSFQoRSFRUUF9NRVRIT0RfUEFUQ0gQBRIWChJIVFRQX01FVEhPRF9ERUxFVEUQBhIVChFIVFRQX01FVEhPRF9UUkFDRRAHEhcKE0hUVFBfTUVUSE9EX0NPTk5FQ1QQCBIXChNIVFRQX01FVEhPRF9PUFRJT05TEAkqpQEKC1BlcmlvZGljaXR5EhsKF1BFUklPRElDSVRZX1VOU1BFQ0lGSUVEEAASEwoPUEVSSU9ESUNJVFlfMzBTEAESEgoOUEVSSU9ESUNJVFlfMU0QAhISCg5QRVJJT0RJQ0lUWV81TRADEhMKD1BFUklPRElDSVRZXzEwTRAEEhMKD1BFUklPRElDSVRZXzMwTRAFEhIKDlBFUklPRElDSVRZXzFIEAYqwwQKBlJlZ2lvbhIWChJSRUdJT05fVU5TUEVDSUZJRUQQABIOCgpSRUdJT05fQU1TEAESDgoKUkVHSU9OX0FSThACEg4KClJFR0lPTl9CT00QAxIOCgpSRUdJT05fQ0RHEAQSDgoKUkVHSU9OX0RGVxAFEg4KClJFR0lPTl9FV1IQBhIOCgpSRUdJT05fRlJBEAcSDgoKUkVHSU9OX0dSVRAIEg4KClJFR0lPTl9JQUQQCRIOCgpSRUdJT05fSk5CEAoSDgoKUkVHSU9OX0xBWBALEg4KClJFR0lPTl9MSFIQDBIOCgpSRUdJT05fTlJUEA0SDgoKUkVHSU9OX09SRBAOEg4KClJFR0lPTl9TSkMQDxIOCgpSRUdJT05fU0lOEBASDgoKUkVHSU9OX1NZRBAREg4KClJFR0lPTl9ZWVoQEhIUChBSRUdJT05fS09ZRUJfRlJBEBMSFAoQUkVHSU9OX0tPWUVCX1BBUhAUEhQKEFJFR0lPTl9LT1lFQl9TRk8QFRIUChBSRUdJT05fS09ZRUJfU0lOEBYSFAoQUkVHSU9OX0tPWUVCX1RZTxAXEhQKEFJFR0lPTl9LT1lFQl9XQVMQGBIbChdSRUdJT05fUkFJTFdBWV9VU19XRVNUMhAZEhsKF1JFR0lPTl9SQUlMV0FZX1VTX0VBU1Q0EBoSHwobUkVHSU9OX1JBSUxXQVlfRVVST1BFX1dFU1Q0EBsSIgoeUkVHSU9OX1JBSUxXQVlfQVNJQV9TT1VUSEVBU1QxEBxCU1pRZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL21vbml0b3IvdjE7bW9uaXRvcnYxYgZwcm90bzM",
-    [file_buf_validate_validate, file_openstatus_monitor_v1_assertions],
+    "CihvcGVuc3RhdHVzL21vbml0b3IvdjEvaHR0cF9tb25pdG9yLnByb3RvEhVvcGVuc3RhdHVzLm1vbml0b3IudjEiLgoHSGVhZGVycxIUCgNrZXkYASABKAlCB7pIBHICEAESDQoFdmFsdWUYAiABKAkibAoTT3BlblRlbGVtZXRyeUNvbmZpZxIaCghlbmRwb2ludBgBIAEoCUIIukgFcgMYgBASOQoHaGVhZGVycxgCIAMoCzIeLm9wZW5zdGF0dXMubW9uaXRvci52MS5IZWFkZXJzQgi6SAWSAQIQFCKhBwoLSFRUUE1vbml0b3ISCgoCaWQYASABKAkSGAoEbmFtZRgCIAEoCUIKukgHcgUQARiAAhIaCgN1cmwYAyABKAlCDbpICnIIEAEYgBCIAQESQQoLcGVyaW9kaWNpdHkYBCABKA4yIi5vcGVuc3RhdHVzLm1vbml0b3IudjEuUGVyaW9kaWNpdHlCCLpIBYIBAiAAEjsKBm1ldGhvZBgFIAEoDjIhLm9wZW5zdGF0dXMubW9uaXRvci52MS5IVFRQTWV0aG9kQgi6SAWCAQIgABIMCgRib2R5GAYgASgJEhwKB3RpbWVvdXQYByABKANCC7pICCIGGMCpBygAEiUKC2RlZ3JhZGVkX2F0GAggASgDQgu6SAgiBhjAqQcoAEgAiAEBEhgKBXJldHJ5GAkgASgDQgm6SAYiBBgKKAASHQoQZm9sbG93X3JlZGlyZWN0cxgKIAEoCEgBiAEBEjkKB2hlYWRlcnMYCyADKAsyHi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyc0IIukgFkgECEBQSVAoWc3RhdHVzX2NvZGVfYXNzZXJ0aW9ucxgMIAMoCzIqLm9wZW5zdGF0dXMubW9uaXRvci52MS5TdGF0dXNDb2RlQXNzZXJ0aW9uQgi6SAWSAQIQChJHCg9ib2R5X2Fzc2VydGlvbnMYDSADKAsyJC5vcGVuc3RhdHVzLm1vbml0b3IudjEuQm9keUFzc2VydGlvbkIIukgFkgECEAoSSwoRaGVhZGVyX2Fzc2VydGlvbnMYDiADKAsyJi5vcGVuc3RhdHVzLm1vbml0b3IudjEuSGVhZGVyQXNzZXJ0aW9uQgi6SAWSAQIQChIdCgtkZXNjcmlwdGlvbhgPIAEoCUIIukgFcgMYgAgSDgoGYWN0aXZlGBAgASgIEg4KBnB1YmxpYxgRIAEoCBI/CgdyZWdpb25zGBIgAygOMh0ub3BlbnN0YXR1cy5tb25pdG9yLnYxLlJlZ2lvbkIPukgMkgEJEBwiBYIBAiAAEkIKDm9wZW5fdGVsZW1ldHJ5GBMgASgLMioub3BlbnN0YXR1cy5tb25pdG9yLnYxLk9wZW5UZWxlbWV0cnlDb25maWcSNAoGc3RhdHVzGBQgASgOMiQub3BlbnN0YXR1cy5tb25pdG9yLnYxLk1vbml0b3JTdGF0dXNCDgoMX2RlZ3JhZGVkX2F0QhMKEV9mb2xsb3dfcmVkaXJlY3RzKvcBCgpIVFRQTWV0aG9kEhsKF0hUVFBfTUVUSE9EX1VOU1BFQ0lGSUVEEAASEwoPSFRUUF9NRVRIT0RfR0VUEAESFAoQSFRUUF9NRVRIT0RfUE9TVBACEhQKEEhUVFBfTUVUSE9EX0hFQUQQAxITCg9IVFRQX01FVEhPRF9QVVQQBBIVChFIVFRQX01FVEhPRF9QQVRDSBAFEhYKEkhUVFBfTUVUSE9EX0RFTEVURRAGEhUKEUhUVFBfTUVUSE9EX1RSQUNFEAcSFwoTSFRUUF9NRVRIT0RfQ09OTkVDVBAIEhcKE0hUVFBfTUVUSE9EX09QVElPTlMQCUJTWlFnaXRodWIuY29tL29wZW5zdGF0dXNocS9vcGVuc3RhdHVzL3BhY2thZ2VzL3Byb3RvL29wZW5zdGF0dXMvbW9uaXRvci92MTttb25pdG9ydjFiBnByb3RvMw",
+    [
+      file_buf_validate_validate,
+      file_openstatus_monitor_v1_assertions,
+      file_openstatus_monitor_v1_monitor,
+    ],
   );
 
 /**
@@ -112,9 +118,9 @@ export type HTTPMonitor = Message<"openstatus.monitor.v1.HTTPMonitor"> & {
   /**
    * Check periodicity (required).
    *
-   * @generated from field: string periodicity = 4;
+   * @generated from field: openstatus.monitor.v1.Periodicity periodicity = 4;
    */
-  periodicity: string;
+  periodicity: Periodicity;
 
   /**
    * HTTP method to use (defaults to GET).
@@ -152,11 +158,11 @@ export type HTTPMonitor = Message<"openstatus.monitor.v1.HTTPMonitor"> & {
   retry: bigint;
 
   /**
-   * Whether to follow HTTP redirects (defaults to true).
+   * Whether to follow HTTP redirects (defaults to true when not specified).
    *
-   * @generated from field: bool follow_redirects = 10;
+   * @generated from field: optional bool follow_redirects = 10;
    */
-  followRedirects: boolean;
+  followRedirects?: boolean;
 
   /**
    * Custom headers for the request.
@@ -220,6 +226,13 @@ export type HTTPMonitor = Message<"openstatus.monitor.v1.HTTPMonitor"> & {
    * @generated from field: openstatus.monitor.v1.OpenTelemetryConfig open_telemetry = 19;
    */
   openTelemetry?: OpenTelemetryConfig;
+
+  /**
+   * Current operational status of the monitor.
+   *
+   * @generated from field: openstatus.monitor.v1.MonitorStatus status = 20;
+   */
+  status: MonitorStatus;
 };
 
 /**
@@ -291,271 +304,3 @@ export enum HTTPMethod {
  */
 export const HTTPMethodSchema: GenEnum<HTTPMethod> = /*@__PURE__*/
   enumDesc(file_openstatus_monitor_v1_http_monitor, 0);
-
-/**
- * Monitor periodicity options.
- *
- * @generated from enum openstatus.monitor.v1.Periodicity
- */
-export enum Periodicity {
-  /**
-   * @generated from enum value: PERIODICITY_UNSPECIFIED = 0;
-   */
-  PERIODICITY_UNSPECIFIED = 0,
-
-  /**
-   * @generated from enum value: PERIODICITY_30S = 1;
-   */
-  PERIODICITY_30S = 1,
-
-  /**
-   * @generated from enum value: PERIODICITY_1M = 2;
-   */
-  PERIODICITY_1M = 2,
-
-  /**
-   * @generated from enum value: PERIODICITY_5M = 3;
-   */
-  PERIODICITY_5M = 3,
-
-  /**
-   * @generated from enum value: PERIODICITY_10M = 4;
-   */
-  PERIODICITY_10M = 4,
-
-  /**
-   * @generated from enum value: PERIODICITY_30M = 5;
-   */
-  PERIODICITY_30M = 5,
-
-  /**
-   * @generated from enum value: PERIODICITY_1H = 6;
-   */
-  PERIODICITY_1H = 6,
-}
-
-/**
- * Describes the enum openstatus.monitor.v1.Periodicity.
- */
-export const PeriodicitySchema: GenEnum<Periodicity> = /*@__PURE__*/
-  enumDesc(file_openstatus_monitor_v1_http_monitor, 1);
-
-/**
- * Geographic regions where monitors can run checks from.
- *
- * @generated from enum openstatus.monitor.v1.Region
- */
-export enum Region {
-  /**
-   * @generated from enum value: REGION_UNSPECIFIED = 0;
-   */
-  UNSPECIFIED = 0,
-
-  /**
-   * Fly.io regions
-   *
-   * Amsterdam, Netherlands
-   *
-   * @generated from enum value: REGION_AMS = 1;
-   */
-  AMS = 1,
-
-  /**
-   * Stockholm, Sweden
-   *
-   * @generated from enum value: REGION_ARN = 2;
-   */
-  ARN = 2,
-
-  /**
-   * Mumbai, India
-   *
-   * @generated from enum value: REGION_BOM = 3;
-   */
-  BOM = 3,
-
-  /**
-   * Paris, France
-   *
-   * @generated from enum value: REGION_CDG = 4;
-   */
-  CDG = 4,
-
-  /**
-   * Dallas, USA
-   *
-   * @generated from enum value: REGION_DFW = 5;
-   */
-  DFW = 5,
-
-  /**
-   * Newark, USA
-   *
-   * @generated from enum value: REGION_EWR = 6;
-   */
-  EWR = 6,
-
-  /**
-   * Frankfurt, Germany
-   *
-   * @generated from enum value: REGION_FRA = 7;
-   */
-  FRA = 7,
-
-  /**
-   * São Paulo, Brazil
-   *
-   * @generated from enum value: REGION_GRU = 8;
-   */
-  GRU = 8,
-
-  /**
-   * Ashburn, USA
-   *
-   * @generated from enum value: REGION_IAD = 9;
-   */
-  IAD = 9,
-
-  /**
-   * Johannesburg, South Africa
-   *
-   * @generated from enum value: REGION_JNB = 10;
-   */
-  JNB = 10,
-
-  /**
-   * Los Angeles, USA
-   *
-   * @generated from enum value: REGION_LAX = 11;
-   */
-  LAX = 11,
-
-  /**
-   * London, UK
-   *
-   * @generated from enum value: REGION_LHR = 12;
-   */
-  LHR = 12,
-
-  /**
-   * Tokyo, Japan
-   *
-   * @generated from enum value: REGION_NRT = 13;
-   */
-  NRT = 13,
-
-  /**
-   * Chicago, USA
-   *
-   * @generated from enum value: REGION_ORD = 14;
-   */
-  ORD = 14,
-
-  /**
-   * San Jose, USA
-   *
-   * @generated from enum value: REGION_SJC = 15;
-   */
-  SJC = 15,
-
-  /**
-   * Singapore
-   *
-   * @generated from enum value: REGION_SIN = 16;
-   */
-  SIN = 16,
-
-  /**
-   * Sydney, Australia
-   *
-   * @generated from enum value: REGION_SYD = 17;
-   */
-  SYD = 17,
-
-  /**
-   * Toronto, Canada
-   *
-   * @generated from enum value: REGION_YYZ = 18;
-   */
-  YYZ = 18,
-
-  /**
-   * Koyeb regions
-   *
-   * Koyeb Frankfurt
-   *
-   * @generated from enum value: REGION_KOYEB_FRA = 19;
-   */
-  KOYEB_FRA = 19,
-
-  /**
-   * Koyeb Paris
-   *
-   * @generated from enum value: REGION_KOYEB_PAR = 20;
-   */
-  KOYEB_PAR = 20,
-
-  /**
-   * Koyeb San Francisco
-   *
-   * @generated from enum value: REGION_KOYEB_SFO = 21;
-   */
-  KOYEB_SFO = 21,
-
-  /**
-   * Koyeb Singapore
-   *
-   * @generated from enum value: REGION_KOYEB_SIN = 22;
-   */
-  KOYEB_SIN = 22,
-
-  /**
-   * Koyeb Tokyo
-   *
-   * @generated from enum value: REGION_KOYEB_TYO = 23;
-   */
-  KOYEB_TYO = 23,
-
-  /**
-   * Koyeb Washington
-   *
-   * @generated from enum value: REGION_KOYEB_WAS = 24;
-   */
-  KOYEB_WAS = 24,
-
-  /**
-   * Railway regions
-   *
-   * Railway US West
-   *
-   * @generated from enum value: REGION_RAILWAY_US_WEST2 = 25;
-   */
-  RAILWAY_US_WEST2 = 25,
-
-  /**
-   * Railway US East
-   *
-   * @generated from enum value: REGION_RAILWAY_US_EAST4 = 26;
-   */
-  RAILWAY_US_EAST4 = 26,
-
-  /**
-   * Railway Europe West
-   *
-   * @generated from enum value: REGION_RAILWAY_EUROPE_WEST4 = 27;
-   */
-  RAILWAY_EUROPE_WEST4 = 27,
-
-  /**
-   * Railway Asia Southeast
-   *
-   * @generated from enum value: REGION_RAILWAY_ASIA_SOUTHEAST1 = 28;
-   */
-  RAILWAY_ASIA_SOUTHEAST1 = 28,
-}
-
-/**
- * Describes the enum openstatus.monitor.v1.Region.
- */
-export const RegionSchema: GenEnum<Region> = /*@__PURE__*/
-  enumDesc(file_openstatus_monitor_v1_http_monitor, 2);
