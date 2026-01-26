@@ -1,7 +1,7 @@
 # OpenStatus Node.js SDK
 
-[![JSR](https://jsr.io/badges/@openstatus/node-sdk)](https://jsr.io/@openstatus/node-sdk)
-[![npm](https://img.shields.io/npm/v/@openstatus/node-sdk)](https://www.npmjs.com/package/@openstatus/node-sdk)
+[![JSR](https://jsr.io/badges/@openstatus/sdk-node)](https://jsr.io/@openstatus/sdk-node)
+[![npm](https://img.shields.io/npm/v/@openstatushq/sdk-node)](https://www.npmjs.com/package/@openstatushq/sdk-node)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Official Node.js SDK for [OpenStatus](https://openstatus.dev) - the open-source
