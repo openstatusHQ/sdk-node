@@ -12,7 +12,7 @@ monitoring platform.
 - **HTTP Monitoring** - Monitor websites and APIs with customizable assertions
 - **TCP Monitoring** - Check database connections and other TCP services
 - **DNS Monitoring** - Verify DNS records and resolution
-- **Global Regions** - Monitor from 18+ locations worldwide
+- **Global Regions** - Monitor from 28 locations worldwide
 - **Type-safe** - Full TypeScript support with generated types
 
 ## Installation
@@ -61,12 +61,10 @@ const monitor = await openstatus.monitor.v1.MonitorService.createHTTPMonitor(
 console.log(`Monitor created: ${monitor.monitor?.id}`);
 
 // List all monitors
-const { monitors } = await openstatus.monitor.v1.MonitorService.listMonitors(
-  {},
-  { headers },
-);
+const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } =
+  await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
 
-console.log(`Found ${monitors.length} monitors`);
+console.log(`Found ${totalSize} monitors`);
 ```
 
 ## Authentication
@@ -154,11 +152,11 @@ const { monitor } = await openstatus.monitor.v1.MonitorService.createDNSMonitor(
 
 #### `listMonitors(request, options)`
 
-List all monitors with pagination.
+List all monitors with pagination. Returns monitors grouped by type.
 
 ```typescript
-const { monitors, nextPageToken } = await openstatus.monitor.v1.MonitorService
-  .listMonitors(
+const { httpMonitors, tcpMonitors, dnsMonitors, nextPageToken, totalSize } =
+  await openstatus.monitor.v1.MonitorService.listMonitors(
     { pageSize: 10, pageToken: "" },
     { headers },
   );
@@ -184,6 +182,49 @@ await openstatus.monitor.v1.MonitorService.deleteMonitor(
   { id: "mon_123" },
   { headers },
 );
+```
+
+#### `getMonitorStatus(request, options)`
+
+Get the current status of a monitor across all configured regions.
+
+```typescript
+const { id, regions } =
+  await openstatus.monitor.v1.MonitorService.getMonitorStatus(
+    { id: "mon_123" },
+    { headers },
+  );
+
+// regions is an array of { region, status }
+// status: ACTIVE, DEGRADED, or ERROR
+for (const { region, status } of regions) {
+  console.log(`${region}: ${status}`);
+}
+```
+
+#### `getMonitorSummary(request, options)`
+
+Get aggregated metrics and latency percentiles for a monitor.
+
+```typescript
+import { TimeRange } from "@openstatus/node-sdk";
+
+const summary = await openstatus.monitor.v1.MonitorService.getMonitorSummary(
+  {
+    id: "mon_123",
+    timeRange: TimeRange.TIME_RANGE_7D, // 1D, 7D, or 14D
+    regions: [], // optional: filter by specific regions
+  },
+  { headers },
+);
+
+console.log(`Last ping: ${summary.lastPingAt}`);
+console.log(`Success: ${summary.totalSuccessful}`);
+console.log(`Degraded: ${summary.totalDegraded}`);
+console.log(`Failed: ${summary.totalFailed}`);
+console.log(`P50 latency: ${summary.p50}ms`);
+console.log(`P95 latency: ${summary.p95}ms`);
+console.log(`P99 latency: ${summary.p99}ms`);
 ```
 
 ### Health Service
@@ -305,7 +346,9 @@ Validate DNS records.
 
 ## Regions
 
-Monitor from 18 global locations:
+Monitor from 28 global locations across multiple providers:
+
+### Fly.io Regions
 
 | Code  | Location        | Code  | Location     |
 | ----- | --------------- | ----- | ------------ |
@@ -318,6 +361,26 @@ Monitor from 18 global locations:
 | `fra` | Frankfurt       | `syd` | Sydney       |
 | `gru` | São Paulo       | `yyz` | Toronto      |
 | `iad` | Washington D.C. | `jnb` | Johannesburg |
+
+### Koyeb Regions
+
+| Code        | Location      |
+| ----------- | ------------- |
+| `koyeb_fra` | Frankfurt     |
+| `koyeb_par` | Paris         |
+| `koyeb_sfo` | San Francisco |
+| `koyeb_sin` | Singapore     |
+| `koyeb_tyo` | Tokyo         |
+| `koyeb_was` | Washington    |
+
+### Railway Regions
+
+| Code                    | Location       |
+| ----------------------- | -------------- |
+| `railway_us_west2`      | US West        |
+| `railway_us_east4`      | US East        |
+| `railway_europe_west4`  | Europe West    |
+| `railway_asia_southeast1` | Asia Southeast |
 
 ## Error Handling
 
