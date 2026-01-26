@@ -40,7 +40,8 @@ jobs:
           deno-version: v2.x
       - name: Generate code
         run: deno run --allow-all scripts/build_npm.ts
-
+      - name: Update npm to latest version for OIDC support
+        run: npm install -g npm@latest
       - name: Publish to npm
         working-directory: ./npm
         run: npm publish
