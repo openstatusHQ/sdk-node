@@ -4,14 +4,18 @@
 [![npm](https://img.shields.io/npm/v/@openstatus/sdk-node)](https://www.npmjs.com/package/@openstatus/sdk-node)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Official Node.js SDK for [OpenStatus](https://openstatus.dev) - the open-source
-monitoring platform.
+Official Node.js SDK for [OpenStatus](https://openstatus.dev) - The open-source status page with uptime monitoring.
 
 ## Features
 
+### Status Page
+- **Status Reports** - Manage incident and maintenance reports with update timelines
+
+### Monitoring
 - **HTTP Monitoring** - Monitor websites and APIs with customizable assertions
 - **TCP Monitoring** - Check database connections and other TCP services
 - **DNS Monitoring** - Verify DNS records and resolution
+
 - **Global Regions** - Monitor from 28 locations worldwide
 - **Type-safe** - Full TypeScript support with generated types from protobuf
 
@@ -39,11 +43,11 @@ import { openstatus } from "jsr:@openstatus/sdk-node";
 
 ```typescript
 import {
+  HTTPMethod,
+  NumberComparator,
   openstatus,
   Periodicity,
   Region,
-  HTTPMethod,
-  NumberComparator,
 } from "@openstatus/sdk-node";
 
 const headers = {
@@ -51,28 +55,29 @@ const headers = {
 };
 
 // Create a monitor
-const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor(
-  {
-    monitor: {
-      name: "My API",
-      url: "https://api.example.com/health",
-      periodicity: Periodicity.PERIODICITY_1M,
-      method: HTTPMethod.HTTP_METHOD_GET,
-      regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
-      active: true,
-      statusCodeAssertions: [
-        { comparator: NumberComparator.EQUAL, target: BigInt(200) },
-      ],
+const { monitor } = await openstatus.monitor.v1.MonitorService
+  .createHTTPMonitor(
+    {
+      monitor: {
+        name: "My API",
+        url: "https://api.example.com/health",
+        periodicity: Periodicity.PERIODICITY_1M,
+        method: HTTPMethod.HTTP_METHOD_GET,
+        regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
+        active: true,
+        statusCodeAssertions: [
+          { comparator: NumberComparator.EQUAL, target: BigInt(200) },
+        ],
+      },
     },
-  },
-  { headers },
-);
+    { headers },
+  );
 
 console.log(`Monitor created: ${monitor?.id}`);
 
 // List all monitors
-const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } =
-  await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
+const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } = await openstatus
+  .monitor.v1.MonitorService.listMonitors({}, { headers });
 
 console.log(`Found ${totalSize} monitors`);
 ```
@@ -107,21 +112,22 @@ await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
 Create an HTTP/HTTPS monitor.
 
 ```typescript
-import { Periodicity, Region, HTTPMethod } from "@openstatus/sdk-node";
+import { HTTPMethod, Periodicity, Region } from "@openstatus/sdk-node";
 
-const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor(
-  {
-    monitor: {
-      name: "My Website",
-      url: "https://example.com",
-      periodicity: Periodicity.PERIODICITY_1M,
-      method: HTTPMethod.HTTP_METHOD_GET,
-      regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
-      active: true,
+const { monitor } = await openstatus.monitor.v1.MonitorService
+  .createHTTPMonitor(
+    {
+      monitor: {
+        name: "My Website",
+        url: "https://example.com",
+        periodicity: Periodicity.PERIODICITY_1M,
+        method: HTTPMethod.HTTP_METHOD_GET,
+        regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
+        active: true,
+      },
     },
-  },
-  { headers },
-);
+    { headers },
+  );
 ```
 
 #### `updateHTTPMonitor(request, options)`
@@ -129,16 +135,17 @@ const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor
 Update an existing HTTP monitor.
 
 ```typescript
-const { monitor } = await openstatus.monitor.v1.MonitorService.updateHTTPMonitor(
-  {
-    id: "mon_123",
-    monitor: {
-      name: "Updated Name",
-      active: false,
+const { monitor } = await openstatus.monitor.v1.MonitorService
+  .updateHTTPMonitor(
+    {
+      id: "mon_123",
+      monitor: {
+        name: "Updated Name",
+        active: false,
+      },
     },
-  },
-  { headers },
-);
+    { headers },
+  );
 ```
 
 #### `createTCPMonitor(request, options)`
@@ -261,10 +268,11 @@ Get the current status of a monitor across all configured regions.
 ```typescript
 import { MonitorStatus, Region } from "@openstatus/sdk-node";
 
-const { id, regions } = await openstatus.monitor.v1.MonitorService.getMonitorStatus(
-  { id: "mon_123" },
-  { headers },
-);
+const { id, regions } = await openstatus.monitor.v1.MonitorService
+  .getMonitorStatus(
+    { id: "mon_123" },
+    { headers },
+  );
 
 // regions is an array of { region, status }
 // region: Region enum value (e.g., Region.FLY_AMS)
@@ -312,88 +320,214 @@ const { status } = await openstatus.health.v1.HealthService.check({});
 console.log(ServingStatus[status]); // "SERVING"
 ```
 
+### Status Report Service
+
+Manage incident and maintenance reports with update timelines.
+
+#### `createStatusReport(request, options)`
+
+Create a new status report.
+
+```typescript
+import { StatusReportStatus } from "@openstatus/sdk-node";
+
+const { statusReport } = await openstatus.statusReport.v1.StatusReportService
+  .createStatusReport(
+    {
+      title: "API Degradation",
+      status: StatusReportStatus.INVESTIGATING,
+      message: "We are investigating reports of increased latency.",
+      date: "2024-01-15T10:30:00",
+      pageId: "page_123",
+      pageComponentIds: ["comp_456"],
+      notify: true,
+    },
+    { headers },
+  );
+
+console.log(`Status report created: ${statusReport?.id}`);
+```
+
+#### `getStatusReport(request, options)`
+
+Get a status report by ID (includes full update timeline).
+
+```typescript
+const { statusReport } = await openstatus.statusReport.v1.StatusReportService
+  .getStatusReport(
+    { id: "sr_123" },
+    { headers },
+  );
+
+console.log(`Title: ${statusReport?.title}`);
+console.log(`Status: ${StatusReportStatus[statusReport?.status ?? 0]}`);
+
+// Access update timeline
+for (const update of statusReport?.updates ?? []) {
+  console.log(`${update.date}: ${update.message}`);
+}
+```
+
+#### `listStatusReports(request, options)`
+
+List all status reports with pagination and optional filtering.
+
+```typescript
+import { StatusReportStatus } from "@openstatus/sdk-node";
+
+const { statusReports, totalSize } = await openstatus.statusReport.v1
+  .StatusReportService.listStatusReports(
+    {
+      limit: 10,
+      offset: 0,
+      statuses: [StatusReportStatus.INVESTIGATING, StatusReportStatus.IDENTIFIED],
+    },
+    { headers },
+  );
+
+console.log(`Found ${totalSize} status reports`);
+```
+
+#### `updateStatusReport(request, options)`
+
+Update status report metadata (title, page components).
+
+```typescript
+const { statusReport } = await openstatus.statusReport.v1.StatusReportService
+  .updateStatusReport(
+    {
+      id: "sr_123",
+      title: "Updated Title",
+      pageComponentIds: ["comp_456", "comp_789"],
+    },
+    { headers },
+  );
+```
+
+#### `deleteStatusReport(request, options)`
+
+Delete a status report and all its updates.
+
+```typescript
+const { success } = await openstatus.statusReport.v1.StatusReportService
+  .deleteStatusReport(
+    { id: "sr_123" },
+    { headers },
+  );
+```
+
+#### `addStatusReportUpdate(request, options)`
+
+Add a new update to an existing status report timeline.
+
+```typescript
+import { StatusReportStatus } from "@openstatus/sdk-node";
+
+const { statusReport } = await openstatus.statusReport.v1.StatusReportService
+  .addStatusReportUpdate(
+    {
+      statusReportId: "sr_123",
+      status: StatusReportStatus.IDENTIFIED,
+      message: "The issue has been identified as a database connection problem.",
+      date: "2024-01-15T11:00:00", // optional, defaults to current time
+      notify: true,
+    },
+    { headers },
+  );
+```
+
+### Status Report Status
+
+| Enum Value      | Description                     |
+| --------------- | ------------------------------- |
+| `UNSPECIFIED`   | Default/unspecified status      |
+| `INVESTIGATING` | Actively investigating the issue |
+| `IDENTIFIED`    | Root cause has been identified  |
+| `MONITORING`    | Fix deployed, monitoring        |
+| `RESOLVED`      | Issue fully resolved            |
+
 ## Monitor Options
 
 ### HTTP Monitor
 
-| Option                 | Type               | Required | Description                                              |
-| ---------------------- | ------------------ | -------- | -------------------------------------------------------- |
-| `name`                 | string             | Yes      | Monitor name (max 256 chars)                             |
-| `url`                  | string             | Yes      | URL to monitor (max 2048 chars)                          |
-| `periodicity`          | Periodicity        | Yes      | Check interval (see [Periodicity](#periodicity))         |
-| `method`               | HTTPMethod         | No       | HTTP method (see [HTTP Methods](#http-methods))          |
-| `body`                 | string             | No       | Request body                                             |
-| `headers`              | Headers[]          | No       | Custom headers (`{ key: string, value: string }[]`)      |
-| `timeout`              | bigint             | No       | Timeout in ms (default: 45000, max: 120000)              |
-| `retry`                | bigint             | No       | Retry attempts (default: 3, max: 10)                     |
-| `followRedirects`      | boolean            | No       | Follow redirects (default: true)                         |
-| `regions`              | Region[]           | No       | [Regions](#regions) for checks                           |
-| `active`               | boolean            | No       | Enable monitoring (default: false)                       |
-| `public`               | boolean            | No       | Public visibility (default: false)                       |
-| `degradedAt`           | bigint             | No       | Latency threshold (ms) for degraded status               |
-| `description`          | string             | No       | Monitor description (max 1024 chars)                     |
-| `statusCodeAssertions` | array              | No       | [Status code assertions](#status-code-assertions)        |
-| `bodyAssertions`       | array              | No       | [Body assertions](#body-assertions)                      |
-| `headerAssertions`     | array              | No       | [Header assertions](#header-assertions)                  |
-| `openTelemetry`        | OpenTelemetryConfig| No       | OpenTelemetry export configuration                       |
+| Option                 | Type                | Required | Description                                         |
+| ---------------------- | ------------------- | -------- | --------------------------------------------------- |
+| `name`                 | string              | Yes      | Monitor name (max 256 chars)                        |
+| `url`                  | string              | Yes      | URL to monitor (max 2048 chars)                     |
+| `periodicity`          | Periodicity         | Yes      | Check interval (see [Periodicity](#periodicity))    |
+| `method`               | HTTPMethod          | No       | HTTP method (see [HTTP Methods](#http-methods))     |
+| `body`                 | string              | No       | Request body                                        |
+| `headers`              | Headers[]           | No       | Custom headers (`{ key: string, value: string }[]`) |
+| `timeout`              | bigint              | No       | Timeout in ms (default: 45000, max: 120000)         |
+| `retry`                | bigint              | No       | Retry attempts (default: 3, max: 10)                |
+| `followRedirects`      | boolean             | No       | Follow redirects (default: true)                    |
+| `regions`              | Region[]            | No       | [Regions](#regions) for checks                      |
+| `active`               | boolean             | No       | Enable monitoring (default: false)                  |
+| `public`               | boolean             | No       | Public visibility (default: false)                  |
+| `degradedAt`           | bigint              | No       | Latency threshold (ms) for degraded status          |
+| `description`          | string              | No       | Monitor description (max 1024 chars)                |
+| `statusCodeAssertions` | array               | No       | [Status code assertions](#status-code-assertions)   |
+| `bodyAssertions`       | array               | No       | [Body assertions](#body-assertions)                 |
+| `headerAssertions`     | array               | No       | [Header assertions](#header-assertions)             |
+| `openTelemetry`        | OpenTelemetryConfig | No       | OpenTelemetry export configuration                  |
 
 ### TCP Monitor
 
-| Option          | Type               | Required | Description                                      |
-| --------------- | ------------------ | -------- | ------------------------------------------------ |
-| `name`          | string             | Yes      | Monitor name (max 256 chars)                     |
-| `uri`           | string             | Yes      | `host:port` to monitor (max 2048 chars)          |
-| `periodicity`   | Periodicity        | Yes      | Check interval (see [Periodicity](#periodicity)) |
-| `timeout`       | bigint             | No       | Timeout in ms (default: 45000, max: 120000)      |
-| `retry`         | bigint             | No       | Retry attempts (default: 3, max: 10)             |
-| `regions`       | Region[]           | No       | [Regions](#regions) for checks                   |
-| `active`        | boolean            | No       | Enable monitoring (default: false)               |
-| `public`        | boolean            | No       | Public visibility (default: false)               |
-| `degradedAt`    | bigint             | No       | Latency threshold (ms) for degraded status       |
-| `description`   | string             | No       | Monitor description (max 1024 chars)             |
-| `openTelemetry` | OpenTelemetryConfig| No       | OpenTelemetry export configuration               |
+| Option          | Type                | Required | Description                                      |
+| --------------- | ------------------- | -------- | ------------------------------------------------ |
+| `name`          | string              | Yes      | Monitor name (max 256 chars)                     |
+| `uri`           | string              | Yes      | `host:port` to monitor (max 2048 chars)          |
+| `periodicity`   | Periodicity         | Yes      | Check interval (see [Periodicity](#periodicity)) |
+| `timeout`       | bigint              | No       | Timeout in ms (default: 45000, max: 120000)      |
+| `retry`         | bigint              | No       | Retry attempts (default: 3, max: 10)             |
+| `regions`       | Region[]            | No       | [Regions](#regions) for checks                   |
+| `active`        | boolean             | No       | Enable monitoring (default: false)               |
+| `public`        | boolean             | No       | Public visibility (default: false)               |
+| `degradedAt`    | bigint              | No       | Latency threshold (ms) for degraded status       |
+| `description`   | string              | No       | Monitor description (max 1024 chars)             |
+| `openTelemetry` | OpenTelemetryConfig | No       | OpenTelemetry export configuration               |
 
 ### DNS Monitor
 
-| Option             | Type               | Required | Description                                        |
-| ------------------ | ------------------ | -------- | -------------------------------------------------- |
-| `name`             | string             | Yes      | Monitor name (max 256 chars)                       |
-| `uri`              | string             | Yes      | Domain to resolve (max 2048 chars)                 |
-| `periodicity`      | Periodicity        | Yes      | Check interval (see [Periodicity](#periodicity))   |
-| `timeout`          | bigint             | No       | Timeout in ms (default: 45000, max: 120000)        |
-| `retry`            | bigint             | No       | Retry attempts (default: 3, max: 10)               |
-| `regions`          | Region[]           | No       | [Regions](#regions) for checks                     |
-| `active`           | boolean            | No       | Enable monitoring (default: false)                 |
-| `public`           | boolean            | No       | Public visibility (default: false)                 |
-| `degradedAt`       | bigint             | No       | Latency threshold (ms) for degraded status         |
-| `description`      | string             | No       | Monitor description (max 1024 chars)               |
-| `recordAssertions` | array              | No       | [DNS record assertions](#dns-record-assertions)    |
-| `openTelemetry`    | OpenTelemetryConfig| No       | OpenTelemetry export configuration                 |
+| Option             | Type                | Required | Description                                      |
+| ------------------ | ------------------- | -------- | ------------------------------------------------ |
+| `name`             | string              | Yes      | Monitor name (max 256 chars)                     |
+| `uri`              | string              | Yes      | Domain to resolve (max 2048 chars)               |
+| `periodicity`      | Periodicity         | Yes      | Check interval (see [Periodicity](#periodicity)) |
+| `timeout`          | bigint              | No       | Timeout in ms (default: 45000, max: 120000)      |
+| `retry`            | bigint              | No       | Retry attempts (default: 3, max: 10)             |
+| `regions`          | Region[]            | No       | [Regions](#regions) for checks                   |
+| `active`           | boolean             | No       | Enable monitoring (default: false)               |
+| `public`           | boolean             | No       | Public visibility (default: false)               |
+| `degradedAt`       | bigint              | No       | Latency threshold (ms) for degraded status       |
+| `description`      | string              | No       | Monitor description (max 1024 chars)             |
+| `recordAssertions` | array               | No       | [DNS record assertions](#dns-record-assertions)  |
+| `openTelemetry`    | OpenTelemetryConfig | No       | OpenTelemetry export configuration               |
 
 ### Periodicity
 
-| Enum Value              | Description  |
-| ----------------------- | ------------ |
-| `PERIODICITY_30S`       | Every 30s    |
-| `PERIODICITY_1M`        | Every 1m     |
-| `PERIODICITY_5M`        | Every 5m     |
-| `PERIODICITY_10M`       | Every 10m    |
-| `PERIODICITY_30M`       | Every 30m    |
-| `PERIODICITY_1H`        | Every 1h     |
+| Enum Value        | Description |
+| ----------------- | ----------- |
+| `PERIODICITY_30S` | Every 30s   |
+| `PERIODICITY_1M`  | Every 1m    |
+| `PERIODICITY_5M`  | Every 5m    |
+| `PERIODICITY_10M` | Every 10m   |
+| `PERIODICITY_30M` | Every 30m   |
+| `PERIODICITY_1H`  | Every 1h    |
 
 ### HTTP Methods
 
-| Enum Value                | Description |
-| ------------------------- | ----------- |
-| `HTTP_METHOD_GET`         | GET         |
-| `HTTP_METHOD_POST`        | POST        |
-| `HTTP_METHOD_HEAD`        | HEAD        |
-| `HTTP_METHOD_PUT`         | PUT         |
-| `HTTP_METHOD_PATCH`       | PATCH       |
-| `HTTP_METHOD_DELETE`      | DELETE      |
-| `HTTP_METHOD_TRACE`       | TRACE       |
-| `HTTP_METHOD_CONNECT`     | CONNECT     |
-| `HTTP_METHOD_OPTIONS`     | OPTIONS     |
+| Enum Value            | Description |
+| --------------------- | ----------- |
+| `HTTP_METHOD_GET`     | GET         |
+| `HTTP_METHOD_POST`    | POST        |
+| `HTTP_METHOD_HEAD`    | HEAD        |
+| `HTTP_METHOD_PUT`     | PUT         |
+| `HTTP_METHOD_PATCH`   | PATCH       |
+| `HTTP_METHOD_DELETE`  | DELETE      |
+| `HTTP_METHOD_TRACE`   | TRACE       |
+| `HTTP_METHOD_CONNECT` | CONNECT     |
+| `HTTP_METHOD_OPTIONS` | OPTIONS     |
 
 ## Assertions
 
@@ -416,14 +550,14 @@ import { NumberComparator } from "@openstatus/sdk-node";
 
 **NumberComparator values:**
 
-| Enum Value              | Description              |
-| ----------------------- | ------------------------ |
-| `EQUAL`                 | Equal to target          |
-| `NOT_EQUAL`             | Not equal to target      |
-| `GREATER_THAN`          | Greater than target      |
-| `GREATER_THAN_OR_EQUAL` | Greater than or equal    |
-| `LESS_THAN`             | Less than target         |
-| `LESS_THAN_OR_EQUAL`    | Less than or equal       |
+| Enum Value              | Description           |
+| ----------------------- | --------------------- |
+| `EQUAL`                 | Equal to target       |
+| `NOT_EQUAL`             | Not equal to target   |
+| `GREATER_THAN`          | Greater than target   |
+| `GREATER_THAN_OR_EQUAL` | Greater than or equal |
+| `LESS_THAN`             | Less than target      |
+| `LESS_THAN_OR_EQUAL`    | Less than or equal    |
 
 ### Body Assertions
 
@@ -442,18 +576,18 @@ import { StringComparator } from "@openstatus/sdk-node";
 
 **StringComparator values:**
 
-| Enum Value              | Description                  |
-| ----------------------- | ---------------------------- |
-| `CONTAINS`              | Contains target string       |
-| `NOT_CONTAINS`          | Does not contain target      |
-| `EQUAL`                 | Equal to target              |
-| `NOT_EQUAL`             | Not equal to target          |
-| `EMPTY`                 | Body is empty                |
-| `NOT_EMPTY`             | Body is not empty            |
-| `GREATER_THAN`          | Lexicographically greater    |
-| `GREATER_THAN_OR_EQUAL` | Lexicographically >= target  |
-| `LESS_THAN`             | Lexicographically less       |
-| `LESS_THAN_OR_EQUAL`    | Lexicographically <= target  |
+| Enum Value              | Description                 |
+| ----------------------- | --------------------------- |
+| `CONTAINS`              | Contains target string      |
+| `NOT_CONTAINS`          | Does not contain target     |
+| `EQUAL`                 | Equal to target             |
+| `NOT_EQUAL`             | Not equal to target         |
+| `EMPTY`                 | Body is empty               |
+| `NOT_EMPTY`             | Body is not empty           |
+| `GREATER_THAN`          | Lexicographically greater   |
+| `GREATER_THAN_OR_EQUAL` | Lexicographically >= target |
+| `LESS_THAN`             | Lexicographically less      |
+| `LESS_THAN_OR_EQUAL`    | Lexicographically <= target |
 
 ### Header Assertions
 
@@ -482,7 +616,11 @@ import { RecordComparator } from "@openstatus/sdk-node";
 
 {
   recordAssertions: [
-    { record: "A", comparator: RecordComparator.EQUAL, target: "93.184.216.34" },
+    {
+      record: "A",
+      comparator: RecordComparator.EQUAL,
+      target: "93.184.216.34",
+    },
     { record: "CNAME", comparator: RecordComparator.CONTAINS, target: "cdn" },
   ];
 }
@@ -501,7 +639,8 @@ import { RecordComparator } from "@openstatus/sdk-node";
 
 ## Regions
 
-Monitor from 28 global locations across multiple providers. Use the `Region` enum:
+Monitor from 28 global locations across multiple providers. Use the `Region`
+enum:
 
 ```typescript
 import { Region } from "@openstatus/sdk-node";
@@ -546,12 +685,12 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 
 ### Railway Regions
 
-| Enum Value               | Location       |
-| ------------------------ | -------------- |
-| `RAILWAY_US_WEST2`       | US West        |
-| `RAILWAY_US_EAST4`       | US East        |
-| `RAILWAY_EUROPE_WEST4`   | Europe West    |
-| `RAILWAY_ASIA_SOUTHEAST1`| Asia Southeast |
+| Enum Value                | Location       |
+| ------------------------- | -------------- |
+| `RAILWAY_US_WEST2`        | US West        |
+| `RAILWAY_US_EAST4`        | US East        |
+| `RAILWAY_EUROPE_WEST4`    | Europe West    |
+| `RAILWAY_ASIA_SOUTHEAST1` | Asia Southeast |
 
 ## Error Handling
 
