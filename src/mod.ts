@@ -33,6 +33,7 @@ import { createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-node";
 import { MonitorService } from "./gen/openstatus/monitor/v1/service_pb.ts";
 import { HealthService } from "./gen/openstatus/health/v1/health_pb.ts";
+import { StatusReportService } from "./gen/openstatus/status_report/v1/service_pb.ts";
 
 // Re-export monitor types
 export type {
@@ -56,8 +57,8 @@ export type {
 // Re-export assertion comparator enums
 export {
   NumberComparator,
-  StringComparator,
   RecordComparator,
+  StringComparator,
 } from "./gen/openstatus/monitor/v1/assertions_pb.ts";
 
 // Re-export enums
@@ -75,12 +76,6 @@ export type {
   CreateHTTPMonitorResponse,
   CreateTCPMonitorRequest,
   CreateTCPMonitorResponse,
-  UpdateDNSMonitorRequest,
-  UpdateDNSMonitorResponse,
-  UpdateHTTPMonitorRequest,
-  UpdateHTTPMonitorResponse,
-  UpdateTCPMonitorRequest,
-  UpdateTCPMonitorResponse,
   DeleteMonitorRequest,
   DeleteMonitorResponse,
   GetMonitorStatusRequest,
@@ -92,6 +87,12 @@ export type {
   RegionStatus,
   TriggerMonitorRequest,
   TriggerMonitorResponse,
+  UpdateDNSMonitorRequest,
+  UpdateDNSMonitorResponse,
+  UpdateHTTPMonitorRequest,
+  UpdateHTTPMonitorResponse,
+  UpdateTCPMonitorRequest,
+  UpdateTCPMonitorResponse,
 } from "./gen/openstatus/monitor/v1/service_pb.ts";
 
 export { TimeRange } from "./gen/openstatus/monitor/v1/service_pb.ts";
@@ -103,6 +104,31 @@ export type {
 } from "./gen/openstatus/health/v1/health_pb.ts";
 
 export { CheckResponse_ServingStatus as ServingStatus } from "./gen/openstatus/health/v1/health_pb.ts";
+
+// Re-export status report types
+export type {
+  StatusReport,
+  StatusReportSummary,
+  StatusReportUpdate,
+} from "./gen/openstatus/status_report/v1/status_report_pb.ts";
+
+export { StatusReportStatus } from "./gen/openstatus/status_report/v1/status_report_pb.ts";
+
+// Re-export status report request/response types
+export type {
+  AddStatusReportUpdateRequest,
+  AddStatusReportUpdateResponse,
+  CreateStatusReportRequest,
+  CreateStatusReportResponse,
+  DeleteStatusReportRequest,
+  DeleteStatusReportResponse,
+  GetStatusReportRequest,
+  GetStatusReportResponse,
+  ListStatusReportsRequest,
+  ListStatusReportsResponse,
+  UpdateStatusReportRequest,
+  UpdateStatusReportResponse,
+} from "./gen/openstatus/status_report/v1/service_pb.ts";
 
 /**
  * Default OpenStatus API URL.
@@ -161,6 +187,25 @@ export interface OpenStatusClient {
       HealthService: Client<typeof HealthService>;
     };
   };
+  /**
+   * Status report service namespace (v1).
+   */
+  statusReport: {
+    v1: {
+      /**
+       * StatusReportService provides CRUD operations for status reports.
+       *
+       * Methods:
+       * - `createStatusReport` - Create a new status report
+       * - `getStatusReport` - Get a status report by ID
+       * - `listStatusReports` - List all status reports
+       * - `updateStatusReport` - Update a status report
+       * - `deleteStatusReport` - Delete a status report
+       * - `addStatusReportUpdate` - Add an update to a status report
+       */
+      StatusReportService: Client<typeof StatusReportService>;
+    };
+  };
 }
 
 /**
@@ -196,6 +241,11 @@ export const openstatus: OpenStatusClient = {
   health: {
     v1: {
       HealthService: createClient(HealthService, transport),
+    },
+  },
+  statusReport: {
+    v1: {
+      StatusReportService: createClient(StatusReportService, transport),
     },
   },
 };
