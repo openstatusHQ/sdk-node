@@ -45,3 +45,5 @@ jobs:
       - name: Publish to npm
         working-directory: ./npm
         run: npm publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
