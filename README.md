@@ -4,14 +4,21 @@
 [![npm](https://img.shields.io/npm/v/@openstatus/sdk-node)](https://www.npmjs.com/package/@openstatus/sdk-node)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Official Node.js SDK for [OpenStatus](https://openstatus.dev) - The open-source status page with uptime monitoring.
+Official Node.js SDK for [OpenStatus](https://openstatus.dev) - The open-source
+status page with uptime monitoring.
 
 ## Features
 
 ### Status Page
-- **Status Reports** - Manage incident and maintenance reports with update timelines
+
+- **Status Pages** - Create and manage public status pages with custom domains
+- **Page Components** - Add monitor-based or static components with grouping
+- **Subscribers** - Manage email subscriptions for status updates
+- **Status Reports** - Manage incident and maintenance reports with update
+  timelines
 
 ### Monitoring
+
 - **HTTP Monitoring** - Monitor websites and APIs with customizable assertions
 - **TCP Monitoring** - Check database connections and other TCP services
 - **DNS Monitoring** - Verify DNS records and resolution
@@ -380,7 +387,10 @@ const { statusReports, totalSize } = await openstatus.statusReport.v1
     {
       limit: 10,
       offset: 0,
-      statuses: [StatusReportStatus.INVESTIGATING, StatusReportStatus.IDENTIFIED],
+      statuses: [
+        StatusReportStatus.INVESTIGATING,
+        StatusReportStatus.IDENTIFIED,
+      ],
     },
     { headers },
   );
@@ -428,7 +438,8 @@ const { statusReport } = await openstatus.statusReport.v1.StatusReportService
     {
       statusReportId: "sr_123",
       status: StatusReportStatus.IDENTIFIED,
-      message: "The issue has been identified as a database connection problem.",
+      message:
+        "The issue has been identified as a database connection problem.",
       date: "2024-01-15T11:00:00", // optional, defaults to current time
       notify: true,
     },
@@ -438,13 +449,337 @@ const { statusReport } = await openstatus.statusReport.v1.StatusReportService
 
 ### Status Report Status
 
-| Enum Value      | Description                     |
-| --------------- | ------------------------------- |
-| `UNSPECIFIED`   | Default/unspecified status      |
+| Enum Value      | Description                      |
+| --------------- | -------------------------------- |
+| `UNSPECIFIED`   | Default/unspecified status       |
 | `INVESTIGATING` | Actively investigating the issue |
-| `IDENTIFIED`    | Root cause has been identified  |
-| `MONITORING`    | Fix deployed, monitoring        |
-| `RESOLVED`      | Issue fully resolved            |
+| `IDENTIFIED`    | Root cause has been identified   |
+| `MONITORING`    | Fix deployed, monitoring         |
+| `RESOLVED`      | Issue fully resolved             |
+
+### Status Page Service
+
+Manage status pages, components, and subscribers.
+
+#### `createStatusPage(request, options)`
+
+Create a new status page.
+
+```typescript
+const { statusPage } = await openstatus.statusPage.v1.StatusPageService
+  .createStatusPage(
+    {
+      title: "My Service Status",
+      slug: "my-service",
+      description: "Status page for My Service",
+      homepageUrl: "https://example.com",
+      contactUrl: "https://example.com/contact",
+    },
+    { headers },
+  );
+
+console.log(`Status page created: ${statusPage?.id}`);
+```
+
+#### `getStatusPage(request, options)`
+
+Get a status page by ID.
+
+```typescript
+const { statusPage } = await openstatus.statusPage.v1.StatusPageService
+  .getStatusPage(
+    { id: "page_123" },
+    { headers },
+  );
+```
+
+#### `listStatusPages(request, options)`
+
+List all status pages with pagination.
+
+```typescript
+const { statusPages, totalSize } = await openstatus.statusPage.v1
+  .StatusPageService.listStatusPages(
+    { limit: 10, offset: 0 },
+    { headers },
+  );
+
+console.log(`Found ${totalSize} status pages`);
+```
+
+#### `updateStatusPage(request, options)`
+
+Update a status page.
+
+```typescript
+const { statusPage } = await openstatus.statusPage.v1.StatusPageService
+  .updateStatusPage(
+    {
+      id: "page_123",
+      title: "Updated Title",
+      description: "Updated description",
+    },
+    { headers },
+  );
+```
+
+#### `deleteStatusPage(request, options)`
+
+Delete a status page.
+
+```typescript
+const { success } = await openstatus.statusPage.v1.StatusPageService
+  .deleteStatusPage(
+    { id: "page_123" },
+    { headers },
+  );
+```
+
+#### `addMonitorComponent(request, options)`
+
+Add a monitor-based component to a status page.
+
+```typescript
+const { component } = await openstatus.statusPage.v1.StatusPageService
+  .addMonitorComponent(
+    {
+      pageId: "page_123",
+      monitorId: "mon_456",
+      name: "API Server",
+      description: "Main API endpoint",
+      order: 1,
+    },
+    { headers },
+  );
+```
+
+#### `addStaticComponent(request, options)`
+
+Add a static component (not linked to a monitor).
+
+```typescript
+const { component } = await openstatus.statusPage.v1.StatusPageService
+  .addStaticComponent(
+    {
+      pageId: "page_123",
+      name: "Third-party Service",
+      description: "External dependency",
+      order: 2,
+    },
+    { headers },
+  );
+```
+
+#### `updateComponent(request, options)`
+
+Update a component.
+
+```typescript
+const { component } = await openstatus.statusPage.v1.StatusPageService
+  .updateComponent(
+    {
+      id: "comp_123",
+      name: "Updated Component Name",
+      order: 3,
+    },
+    { headers },
+  );
+```
+
+#### `removeComponent(request, options)`
+
+Remove a component from a status page.
+
+```typescript
+const { success } = await openstatus.statusPage.v1.StatusPageService
+  .removeComponent(
+    { id: "comp_123" },
+    { headers },
+  );
+```
+
+#### `createComponentGroup(request, options)`
+
+Create a component group.
+
+```typescript
+const { group } = await openstatus.statusPage.v1.StatusPageService
+  .createComponentGroup(
+    {
+      pageId: "page_123",
+      name: "Core Services",
+    },
+    { headers },
+  );
+```
+
+#### `updateComponentGroup(request, options)`
+
+Update a component group.
+
+```typescript
+const { group } = await openstatus.statusPage.v1.StatusPageService
+  .updateComponentGroup(
+    {
+      id: "group_123",
+      name: "Updated Group Name",
+    },
+    { headers },
+  );
+```
+
+#### `deleteComponentGroup(request, options)`
+
+Delete a component group.
+
+```typescript
+const { success } = await openstatus.statusPage.v1.StatusPageService
+  .deleteComponentGroup(
+    { id: "group_123" },
+    { headers },
+  );
+```
+
+#### `subscribeToPage(request, options)`
+
+Subscribe an email to status page updates.
+
+```typescript
+const { subscriber } = await openstatus.statusPage.v1.StatusPageService
+  .subscribeToPage(
+    {
+      pageId: "page_123",
+      email: "user@example.com",
+    },
+    { headers },
+  );
+```
+
+#### `unsubscribeFromPage(request, options)`
+
+Unsubscribe from a status page.
+
+```typescript
+// By email
+const { success } = await openstatus.statusPage.v1.StatusPageService
+  .unsubscribeFromPage(
+    {
+      pageId: "page_123",
+      identifier: { case: "email", value: "user@example.com" },
+    },
+    { headers },
+  );
+
+// Or by subscriber ID
+const { success: success2 } = await openstatus.statusPage.v1.StatusPageService
+  .unsubscribeFromPage(
+    {
+      pageId: "page_123",
+      identifier: { case: "id", value: "sub_456" },
+    },
+    { headers },
+  );
+```
+
+#### `listSubscribers(request, options)`
+
+List all subscribers for a status page.
+
+```typescript
+const { subscribers, totalSize } = await openstatus.statusPage.v1
+  .StatusPageService.listSubscribers(
+    {
+      pageId: "page_123",
+      limit: 50,
+      offset: 0,
+      includeUnsubscribed: false,
+    },
+    { headers },
+  );
+```
+
+#### `getStatusPageContent(request, options)`
+
+Get full status page content including components, groups, and active reports.
+
+```typescript
+const content = await openstatus.statusPage.v1.StatusPageService
+  .getStatusPageContent(
+    { identifier: { case: "slug", value: "my-service" } },
+    { headers },
+  );
+
+console.log(`Page: ${content.statusPage?.title}`);
+console.log(`Components: ${content.components.length}`);
+console.log(`Active reports: ${content.statusReports.length}`);
+```
+
+#### `getOverallStatus(request, options)`
+
+Get the aggregated status of a status page.
+
+```typescript
+import { OverallStatus } from "@openstatus/sdk-node";
+
+const { overallStatus, componentStatuses } = await openstatus.statusPage.v1
+  .StatusPageService.getOverallStatus(
+    { identifier: { case: "id", value: "page_123" } },
+    { headers },
+  );
+
+console.log(`Overall: ${OverallStatus[overallStatus]}`);
+for (const { componentId, status } of componentStatuses) {
+  console.log(`  ${componentId}: ${OverallStatus[status]}`);
+}
+```
+
+### Status Page Options
+
+| Option        | Type   | Required | Description                              |
+| ------------- | ------ | -------- | ---------------------------------------- |
+| `title`       | string | Yes      | Title of the status page (max 256 chars) |
+| `slug`        | string | Yes      | URL-friendly slug (lowercase, hyphens)   |
+| `description` | string | No       | Description (max 2048 chars)             |
+| `homepageUrl` | string | No       | Link to your homepage                    |
+| `contactUrl`  | string | No       | Link to your contact page                |
+
+### Page Access Type
+
+| Enum Value           | Description             |
+| -------------------- | ----------------------- |
+| `UNSPECIFIED`        | Default/unspecified     |
+| `PUBLIC`             | Publicly accessible     |
+| `PASSWORD_PROTECTED` | Requires password       |
+| `AUTHENTICATED`      | Requires authentication |
+
+### Page Theme
+
+| Enum Value    | Description         |
+| ------------- | ------------------- |
+| `UNSPECIFIED` | Default/unspecified |
+| `SYSTEM`      | Follow system theme |
+| `LIGHT`       | Light theme         |
+| `DARK`        | Dark theme          |
+
+### Overall Status
+
+| Enum Value       | Description                 |
+| ---------------- | --------------------------- |
+| `UNSPECIFIED`    | Default/unspecified         |
+| `OPERATIONAL`    | All systems operational     |
+| `DEGRADED`       | Performance is degraded     |
+| `PARTIAL_OUTAGE` | Some systems are down       |
+| `MAJOR_OUTAGE`   | Major systems are down      |
+| `MAINTENANCE`    | Scheduled maintenance       |
+| `UNKNOWN`        | Status cannot be determined |
+
+### Page Component Type
+
+| Enum Value    | Description               |
+| ------------- | ------------------------- |
+| `UNSPECIFIED` | Default/unspecified       |
+| `MONITOR`     | Linked to a monitor       |
+| `STATIC`      | Static component (manual) |
 
 ## Monitor Options
 

@@ -34,6 +34,7 @@ import { createConnectTransport } from "@connectrpc/connect-node";
 import { MonitorService } from "./gen/openstatus/monitor/v1/service_pb.ts";
 import { HealthService } from "./gen/openstatus/health/v1/health_pb.ts";
 import { StatusReportService } from "./gen/openstatus/status_report/v1/service_pb.ts";
+import { StatusPageService } from "./gen/openstatus/status_page/v1/service_pb.ts";
 
 // Re-export monitor types
 export type {
@@ -130,6 +131,69 @@ export type {
   UpdateStatusReportResponse,
 } from "./gen/openstatus/status_report/v1/service_pb.ts";
 
+// Re-export status page types
+export type {
+  Maintenance,
+  StatusPage,
+  StatusPageSummary,
+} from "./gen/openstatus/status_page/v1/status_page_pb.ts";
+
+export {
+  OverallStatus,
+  PageAccessType,
+  PageTheme,
+} from "./gen/openstatus/status_page/v1/status_page_pb.ts";
+
+// Re-export page component types
+export type {
+  PageComponent,
+  PageComponentGroup,
+} from "./gen/openstatus/status_page/v1/page_component_pb.ts";
+
+export { PageComponentType } from "./gen/openstatus/status_page/v1/page_component_pb.ts";
+
+// Re-export page subscriber types
+export type { PageSubscriber } from "./gen/openstatus/status_page/v1/page_subscriber_pb.ts";
+
+// Re-export status page request/response types
+export type {
+  AddMonitorComponentRequest,
+  AddMonitorComponentResponse,
+  AddStaticComponentRequest,
+  AddStaticComponentResponse,
+  ComponentStatus,
+  CreateComponentGroupRequest,
+  CreateComponentGroupResponse,
+  CreateStatusPageRequest,
+  CreateStatusPageResponse,
+  DeleteComponentGroupRequest,
+  DeleteComponentGroupResponse,
+  DeleteStatusPageRequest,
+  DeleteStatusPageResponse,
+  GetOverallStatusRequest,
+  GetOverallStatusResponse,
+  GetStatusPageContentRequest,
+  GetStatusPageContentResponse,
+  GetStatusPageRequest,
+  GetStatusPageResponse,
+  ListStatusPagesRequest,
+  ListStatusPagesResponse,
+  ListSubscribersRequest,
+  ListSubscribersResponse,
+  RemoveComponentRequest,
+  RemoveComponentResponse,
+  SubscribeToPageRequest,
+  SubscribeToPageResponse,
+  UnsubscribeFromPageRequest,
+  UnsubscribeFromPageResponse,
+  UpdateComponentGroupRequest,
+  UpdateComponentGroupResponse,
+  UpdateComponentRequest,
+  UpdateComponentResponse,
+  UpdateStatusPageRequest,
+  UpdateStatusPageResponse,
+} from "./gen/openstatus/status_page/v1/service_pb.ts";
+
 /**
  * Default OpenStatus API URL.
  */
@@ -206,6 +270,36 @@ export interface OpenStatusClient {
       StatusReportService: Client<typeof StatusReportService>;
     };
   };
+  /**
+   * Status page service namespace (v1).
+   */
+  statusPage: {
+    v1: {
+      /**
+       * StatusPageService provides CRUD and management operations for status pages.
+       *
+       * Methods:
+       * - `createStatusPage` - Create a new status page
+       * - `getStatusPage` - Get a status page by ID
+       * - `listStatusPages` - List all status pages
+       * - `updateStatusPage` - Update a status page
+       * - `deleteStatusPage` - Delete a status page
+       * - `addMonitorComponent` - Add a monitor-based component
+       * - `addStaticComponent` - Add a static component
+       * - `removeComponent` - Remove a component
+       * - `updateComponent` - Update a component
+       * - `createComponentGroup` - Create a component group
+       * - `deleteComponentGroup` - Delete a component group
+       * - `updateComponentGroup` - Update a component group
+       * - `subscribeToPage` - Subscribe an email to a status page
+       * - `unsubscribeFromPage` - Unsubscribe from a status page
+       * - `listSubscribers` - List all subscribers
+       * - `getStatusPageContent` - Get full status page content
+       * - `getOverallStatus` - Get aggregated status
+       */
+      StatusPageService: Client<typeof StatusPageService>;
+    };
+  };
 }
 
 /**
@@ -246,6 +340,11 @@ export const openstatus: OpenStatusClient = {
   statusReport: {
     v1: {
       StatusReportService: createClient(StatusReportService, transport),
+    },
+  },
+  statusPage: {
+    v1: {
+      StatusPageService: createClient(StatusPageService, transport),
     },
   },
 };
