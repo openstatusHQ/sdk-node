@@ -38,12 +38,12 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Generate code
-        run: deno run --allow-all scripts/build_npm.ts
       - name: Update npm to latest version for OIDC support
         run: npm install -g npm@latest
+      - name: Generate code
+        run: deno run --allow-all scripts/build_npm.ts
       - name: Publish to npm
         working-directory: ./npm
-        run: npm publish
+        run: npm publish --access public --provenance
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
