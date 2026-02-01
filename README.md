@@ -14,8 +14,8 @@ status page with uptime monitoring.
 - **Status Pages** - Create and manage public status pages with custom domains
 - **Page Components** - Add monitor-based or static components with grouping
 - **Subscribers** - Manage email subscriptions for status updates
-- **Status Reports** - Manage incident and maintenance reports with update
-  timelines
+- **Status Reports** - Manage incident reports with update timelines
+- **Maintenance Windows** - Schedule and manage planned maintenance periods
 
 ### Monitoring
 
@@ -731,6 +731,94 @@ console.log(`Overall: ${OverallStatus[overallStatus]}`);
 for (const { componentId, status } of componentStatuses) {
   console.log(`  ${componentId}: ${OverallStatus[status]}`);
 }
+```
+
+### Maintenance Service
+
+Manage scheduled maintenance windows.
+
+#### `createMaintenance(request, options)`
+
+Create a new maintenance window.
+
+```typescript
+const { maintenance } = await openstatus.maintenance.v1.MaintenanceService
+  .createMaintenance(
+    {
+      title: "Database Upgrade",
+      message: "We will be upgrading our database infrastructure.",
+      from: "2024-01-20T02:00:00Z",
+      to: "2024-01-20T04:00:00Z",
+      pageId: "page_123",
+      pageComponentIds: ["comp_456"],
+      notify: true,
+    },
+    { headers },
+  );
+
+console.log(`Maintenance created: ${maintenance?.id}`);
+```
+
+#### `getMaintenance(request, options)`
+
+Get a maintenance window by ID.
+
+```typescript
+const { maintenance } = await openstatus.maintenance.v1.MaintenanceService
+  .getMaintenance(
+    { id: "maint_123" },
+    { headers },
+  );
+
+console.log(`Title: ${maintenance?.title}`);
+console.log(`From: ${maintenance?.from}`);
+console.log(`To: ${maintenance?.to}`);
+```
+
+#### `listMaintenances(request, options)`
+
+List all maintenance windows with pagination and optional filtering.
+
+```typescript
+const { maintenances, totalSize } = await openstatus.maintenance.v1
+  .MaintenanceService.listMaintenances(
+    {
+      limit: 10,
+      offset: 0,
+      pageId: "page_123", // optional filter
+    },
+    { headers },
+  );
+
+console.log(`Found ${totalSize} maintenance windows`);
+```
+
+#### `updateMaintenance(request, options)`
+
+Update a maintenance window.
+
+```typescript
+const { maintenance } = await openstatus.maintenance.v1.MaintenanceService
+  .updateMaintenance(
+    {
+      id: "maint_123",
+      title: "Extended Database Upgrade",
+      to: "2024-01-20T06:00:00Z",
+    },
+    { headers },
+  );
+```
+
+#### `deleteMaintenance(request, options)`
+
+Delete a maintenance window.
+
+```typescript
+const { success } = await openstatus.maintenance.v1.MaintenanceService
+  .deleteMaintenance(
+    { id: "maint_123" },
+    { headers },
+  );
 ```
 
 ### Status Page Options

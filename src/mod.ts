@@ -35,6 +35,7 @@ import { MonitorService } from "./gen/openstatus/monitor/v1/service_pb.ts";
 import { HealthService } from "./gen/openstatus/health/v1/health_pb.ts";
 import { StatusReportService } from "./gen/openstatus/status_report/v1/service_pb.ts";
 import { StatusPageService } from "./gen/openstatus/status_page/v1/service_pb.ts";
+import { MaintenanceService } from "./gen/openstatus/maintenance/v1/service_pb.ts";
 
 // Re-export monitor types
 export type {
@@ -133,7 +134,6 @@ export type {
 
 // Re-export status page types
 export type {
-  Maintenance,
   StatusPage,
   StatusPageSummary,
 } from "./gen/openstatus/status_page/v1/status_page_pb.ts";
@@ -193,6 +193,26 @@ export type {
   UpdateStatusPageRequest,
   UpdateStatusPageResponse,
 } from "./gen/openstatus/status_page/v1/service_pb.ts";
+
+// Re-export maintenance types
+export type {
+  Maintenance,
+  MaintenanceSummary,
+} from "./gen/openstatus/maintenance/v1/maintenance_pb.ts";
+
+// Re-export maintenance request/response types
+export type {
+  CreateMaintenanceRequest,
+  CreateMaintenanceResponse,
+  DeleteMaintenanceRequest,
+  DeleteMaintenanceResponse,
+  GetMaintenanceRequest,
+  GetMaintenanceResponse,
+  ListMaintenancesRequest,
+  ListMaintenancesResponse,
+  UpdateMaintenanceRequest,
+  UpdateMaintenanceResponse,
+} from "./gen/openstatus/maintenance/v1/service_pb.ts";
 
 /**
  * Default OpenStatus API URL.
@@ -300,6 +320,24 @@ export interface OpenStatusClient {
       StatusPageService: Client<typeof StatusPageService>;
     };
   };
+  /**
+   * Maintenance service namespace (v1).
+   */
+  maintenance: {
+    v1: {
+      /**
+       * MaintenanceService provides CRUD operations for maintenance windows.
+       *
+       * Methods:
+       * - `createMaintenance` - Create a new maintenance window
+       * - `getMaintenance` - Get a maintenance window by ID
+       * - `listMaintenances` - List all maintenance windows
+       * - `updateMaintenance` - Update a maintenance window
+       * - `deleteMaintenance` - Delete a maintenance window
+       */
+      MaintenanceService: Client<typeof MaintenanceService>;
+    };
+  };
 }
 
 /**
@@ -345,6 +383,11 @@ export const openstatus: OpenStatusClient = {
   statusPage: {
     v1: {
       StatusPageService: createClient(StatusPageService, transport),
+    },
+  },
+  maintenance: {
+    v1: {
+      MaintenanceService: createClient(MaintenanceService, transport),
     },
   },
 };
