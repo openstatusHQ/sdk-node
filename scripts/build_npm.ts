@@ -20,7 +20,7 @@ await build({
       url: "git+https://github.com/openstatushq/sdk-node.git",
     },
     bugs: {
-      url: "https://github.com/openstatushq/sdk-nod/issues",
+      url: "https://github.com/openstatushq/sdk-node/issues",
     },
   },
   postBuild() {
