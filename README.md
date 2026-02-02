@@ -286,6 +286,26 @@ const { httpMonitors, tcpMonitors, dnsMonitors, nextPageToken, totalSize } =
   });
 ```
 
+#### `getMonitor(request)`
+
+Get a single monitor by ID. Returns the monitor configuration (HTTP, TCP, or
+DNS).
+
+```typescript
+const { monitor } = await client.monitor.v1.MonitorService.getMonitor({
+  id: "mon_123",
+});
+
+// Handle the monitor type
+if (monitor?.config.case === "http") {
+  console.log(`HTTP Monitor: ${monitor.config.value.name}`);
+} else if (monitor?.config.case === "tcp") {
+  console.log(`TCP Monitor: ${monitor.config.value.name}`);
+} else if (monitor?.config.case === "dns") {
+  console.log(`DNS Monitor: ${monitor.config.value.name}`);
+}
+```
+
 #### `triggerMonitor(request)`
 
 Trigger an immediate check.
