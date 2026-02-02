@@ -22,6 +22,10 @@ await build({
     bugs: {
       url: "https://github.com/openstatushq/sdk-node/issues",
     },
+    publishConfig: {
+      access: "public",
+      provenance: true,
+    },
   },
   postBuild() {
     // steps to run after building and before running the tests
