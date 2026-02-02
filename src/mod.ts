@@ -3,20 +3,21 @@
  *
  * Official Node.js SDK for OpenStatus - the open-source monitoring platform.
  *
- * @example Basic usage
+ * @example Basic usage (recommended)
  * ```typescript
- * import { openstatus, Periodicity, Region } from "@openstatus/sdk-node";
+ * import { createOpenStatusClient, Periodicity, Region } from "@openstatus/sdk-node";
  *
- * const headers = {
- *   "x-openstatus-key": `Bearer ${process.env.OPENSTATUS_API_KEY}`,
- * };
+ * // Create a client with your API key
+ * const client = createOpenStatusClient({
+ *   apiKey: process.env.OPENSTATUS_API_KEY,
+ * });
  *
- * // List all monitors
+ * // List all monitors - no need to pass headers
  * const { httpMonitors, tcpMonitors, dnsMonitors } =
- *   await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
+ *   await client.monitor.v1.MonitorService.listMonitors({});
  *
  * // Create an HTTP monitor
- * const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor({
+ * const { monitor } = await client.monitor.v1.MonitorService.createHTTPMonitor({
  *   monitor: {
  *     name: "My API",
  *     url: "https://api.example.com/health",
@@ -24,11 +25,21 @@
  *     regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
  *     active: true,
  *   },
+ * });
+ * ```
+ *
+ * @example Alternative: Manual headers
+ * ```typescript
+ * import { openstatus, Periodicity } from "@openstatus/sdk-node";
+ *
+ * const headers = { "x-openstatus-key": `Bearer ${process.env.OPENSTATUS_API_KEY}` };
+ * const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor({
+ *   monitor: { name: "My API", url: "https://api.example.com", periodicity: Periodicity.PERIODICITY_1M, active: true },
  * }, { headers });
  * ```
  */
 
-import type { Client } from "@connectrpc/connect";
+import type { Client, Interceptor } from "@connectrpc/connect";
 import { createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-node";
 import { MonitorService } from "./gen/openstatus/monitor/v1/service_pb.ts";
@@ -268,12 +279,47 @@ export type {
 const DEFAULT_API_URL = "https://api.openstatus.dev/rpc";
 
 /**
+ * Configuration options for creating an OpenStatus client.
+ */
+export interface OpenStatusClientOptions {
+  /**
+   * Your OpenStatus API key.
+   * If provided, it will be automatically included in all requests.
+   */
+  apiKey?: string;
+  /**
+   * Custom API base URL. Defaults to the OpenStatus production API.
+   */
+  baseUrl?: string;
+}
+
+/**
+ * Creates an interceptor that adds the API key header to all requests.
+ */
+function createAuthInterceptor(apiKey: string): Interceptor {
+  return (next) => (req) => {
+    req.header.set("x-openstatus-key", `${apiKey}`);
+    return next(req);
+  };
+}
+
+/**
  * Creates a Connect RPC transport configured for the OpenStatus API.
  */
-const transport = createConnectTransport({
-  baseUrl: process.env.OPENSTATUS_API_URL ?? DEFAULT_API_URL,
-  httpVersion: "2",
-});
+function createTransport(options?: OpenStatusClientOptions) {
+  const interceptors: Interceptor[] = [];
+
+  if (options?.apiKey) {
+    interceptors.push(createAuthInterceptor(options.apiKey));
+  }
+
+  return createConnectTransport({
+    baseUrl: options?.baseUrl ?? process.env.OPENSTATUS_API_URL ??
+      DEFAULT_API_URL,
+    httpVersion: "2",
+    interceptors,
+  });
+}
 
 /**
  * OpenStatus API client interface.
@@ -409,58 +455,98 @@ export interface OpenStatusClient {
 }
 
 /**
- * OpenStatus SDK client.
+ * Creates a configured OpenStatus client with optional API key authentication.
  *
- * Provides access to the OpenStatus API for managing monitors and checking service health.
+ * Use this factory function to create a client that automatically includes
+ * your API key in all requests, eliminating the need to pass headers manually.
  *
  * @example
  * ```typescript
- * import { openstatus, Periodicity } from "@openstatus/sdk-node";
+ * import { createOpenStatusClient, Periodicity, Region } from "@openstatus/sdk-node";
  *
- * // Check API health (no auth required)
- * const { status } = await openstatus.health.v1.HealthService.check({});
+ * // Create a configured client
+ * const client = createOpenStatusClient({
+ *   apiKey: process.env.OPENSTATUS_API_KEY,
+ * });
  *
- * // Create a monitor (auth required)
- * const headers = { "x-openstatus-key": `Bearer ${process.env.OPENSTATUS_API_KEY}` };
- * const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor({
+ * // No need to pass headers on each call
+ * const { httpMonitors } = await client.monitor.v1.MonitorService.listMonitors({});
+ *
+ * const { monitor } = await client.monitor.v1.MonitorService.createHTTPMonitor({
  *   monitor: {
- *     name: "My Website",
- *     url: "https://example.com",
+ *     name: "My API",
+ *     url: "https://api.example.com/health",
  *     periodicity: Periodicity.PERIODICITY_1M,
+ *     regions: [Region.FLY_AMS, Region.FLY_IAD],
  *     active: true,
  *   },
+ * });
+ * ```
+ */
+export function createOpenStatusClient(
+  options?: OpenStatusClientOptions,
+): OpenStatusClient {
+  const transport = createTransport(options);
+
+  return {
+    monitor: {
+      v1: {
+        MonitorService: createClient(MonitorService, transport),
+      },
+    },
+    health: {
+      v1: {
+        HealthService: createClient(HealthService, transport),
+      },
+    },
+    statusReport: {
+      v1: {
+        StatusReportService: createClient(StatusReportService, transport),
+      },
+    },
+    statusPage: {
+      v1: {
+        StatusPageService: createClient(StatusPageService, transport),
+      },
+    },
+    maintenance: {
+      v1: {
+        MaintenanceService: createClient(MaintenanceService, transport),
+      },
+    },
+    notification: {
+      v1: {
+        NotificationService: createClient(NotificationService, transport),
+      },
+    },
+  };
+}
+
+/**
+ * Default OpenStatus SDK client (without pre-configured authentication).
+ *
+ * For authenticated requests, either:
+ * 1. Use `createOpenStatusClient({ apiKey })` to create a pre-configured client (recommended)
+ * 2. Pass headers manually on each call
+ *
+ * @example Using createOpenStatusClient (recommended)
+ * ```typescript
+ * import { createOpenStatusClient, Periodicity } from "@openstatus/sdk-node";
+ *
+ * const client = createOpenStatusClient({ apiKey: process.env.OPENSTATUS_API_KEY });
+ * const { monitor } = await client.monitor.v1.MonitorService.createHTTPMonitor({
+ *   monitor: { name: "My Website", url: "https://example.com", periodicity: Periodicity.PERIODICITY_1M, active: true },
+ * });
+ * ```
+ *
+ * @example Using default client with manual headers
+ * ```typescript
+ * import { openstatus, Periodicity } from "@openstatus/sdk-node";
+ *
+ * const headers = { "x-openstatus-key": `Bearer ${process.env.OPENSTATUS_API_KEY}` };
+ * const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor({
+ *   monitor: { name: "My Website", url: "https://example.com", periodicity: Periodicity.PERIODICITY_1M, active: true },
  * }, { headers });
  * ```
  */
-export const openstatus: OpenStatusClient = {
-  monitor: {
-    v1: {
-      MonitorService: createClient(MonitorService, transport),
-    },
-  },
-  health: {
-    v1: {
-      HealthService: createClient(HealthService, transport),
-    },
-  },
-  statusReport: {
-    v1: {
-      StatusReportService: createClient(StatusReportService, transport),
-    },
-  },
-  statusPage: {
-    v1: {
-      StatusPageService: createClient(StatusPageService, transport),
-    },
-  },
-  maintenance: {
-    v1: {
-      MaintenanceService: createClient(MaintenanceService, transport),
-    },
-  },
-  notification: {
-    v1: {
-      NotificationService: createClient(NotificationService, transport),
-    },
-  },
-};
+export const openstatus: OpenStatusClient = createOpenStatusClient();
