@@ -16,6 +16,8 @@ status page with uptime monitoring.
 - **Subscribers** - Manage email subscriptions for status updates
 - **Status Reports** - Manage incident reports with update timelines
 - **Maintenance Windows** - Schedule and manage planned maintenance periods
+- **Notifications** - Configure notification channels (Slack, Discord, Email,
+  PagerDuty, etc.)
 
 ### Monitoring
 
@@ -819,6 +821,229 @@ const { success } = await openstatus.maintenance.v1.MaintenanceService
     { id: "maint_123" },
     { headers },
   );
+```
+
+### Notification Service
+
+Manage notification channels for monitor alerts.
+
+#### `createNotification(request, options)`
+
+Create a new notification channel.
+
+```typescript
+import { NotificationProvider } from "@openstatus/sdk-node";
+
+// Create a Slack notification
+const { notification } = await openstatus.notification.v1.NotificationService
+  .createNotification(
+    {
+      name: "Slack Alerts",
+      provider: NotificationProvider.SLACK,
+      data: {
+        data: {
+          case: "slack",
+          value: { webhookUrl: "https://hooks.slack.com/services/..." },
+        },
+      },
+      monitorIds: ["mon_123", "mon_456"],
+    },
+    { headers },
+  );
+
+console.log(`Notification created: ${notification?.id}`);
+```
+
+#### `getNotification(request, options)`
+
+Get a notification channel by ID.
+
+```typescript
+const { notification } = await openstatus.notification.v1.NotificationService
+  .getNotification(
+    { id: "notif_123" },
+    { headers },
+  );
+
+console.log(`Name: ${notification?.name}`);
+console.log(`Provider: ${NotificationProvider[notification?.provider ?? 0]}`);
+```
+
+#### `listNotifications(request, options)`
+
+List all notification channels with pagination.
+
+```typescript
+const { notifications, totalSize } = await openstatus.notification.v1
+  .NotificationService.listNotifications(
+    { limit: 10, offset: 0 },
+    { headers },
+  );
+
+console.log(`Found ${totalSize} notification channels`);
+```
+
+#### `updateNotification(request, options)`
+
+Update a notification channel.
+
+```typescript
+const { notification } = await openstatus.notification.v1.NotificationService
+  .updateNotification(
+    {
+      id: "notif_123",
+      name: "Updated Slack Alerts",
+      monitorIds: ["mon_123", "mon_456", "mon_789"],
+    },
+    { headers },
+  );
+```
+
+#### `deleteNotification(request, options)`
+
+Delete a notification channel.
+
+```typescript
+const { success } = await openstatus.notification.v1.NotificationService
+  .deleteNotification(
+    { id: "notif_123" },
+    { headers },
+  );
+```
+
+#### `sendTestNotification(request, options)`
+
+Send a test notification to verify configuration.
+
+```typescript
+import { NotificationProvider } from "@openstatus/sdk-node";
+
+const { success, errorMessage } = await openstatus.notification.v1
+  .NotificationService.sendTestNotification(
+    {
+      provider: NotificationProvider.SLACK,
+      data: {
+        data: {
+          case: "slack",
+          value: { webhookUrl: "https://hooks.slack.com/services/..." },
+        },
+      },
+    },
+    { headers },
+  );
+
+if (success) {
+  console.log("Test notification sent successfully");
+} else {
+  console.log(`Test failed: ${errorMessage}`);
+}
+```
+
+#### `checkNotificationLimit(request, options)`
+
+Check if the workspace has reached its notification limit.
+
+```typescript
+const { limitReached, currentCount, maxCount } = await openstatus.notification
+  .v1.NotificationService.checkNotificationLimit({}, { headers });
+
+console.log(`${currentCount}/${maxCount} notification channels used`);
+if (limitReached) {
+  console.log("Notification limit reached");
+}
+```
+
+### Notification Providers
+
+| Enum Value       | Description          |
+| ---------------- | -------------------- |
+| `UNSPECIFIED`    | Default/unspecified  |
+| `DISCORD`        | Discord webhook      |
+| `EMAIL`          | Email notification   |
+| `GOOGLE_CHAT`    | Google Chat webhook  |
+| `GRAFANA_ONCALL` | Grafana OnCall       |
+| `NTFY`           | Ntfy push service    |
+| `PAGERDUTY`      | PagerDuty            |
+| `OPSGENIE`       | Opsgenie             |
+| `SLACK`          | Slack webhook        |
+| `SMS`            | SMS notification     |
+| `TELEGRAM`       | Telegram bot         |
+| `WEBHOOK`        | Custom webhook       |
+| `WHATSAPP`       | WhatsApp             |
+
+### Provider Configuration Examples
+
+#### Discord
+
+```typescript
+{
+  data: {
+    case: "discord",
+    value: { webhookUrl: "https://discord.com/api/webhooks/..." }
+  }
+}
+```
+
+#### Email
+
+```typescript
+{
+  data: {
+    case: "email",
+    value: { email: "alerts@example.com" }
+  }
+}
+```
+
+#### PagerDuty
+
+```typescript
+{
+  data: {
+    case: "pagerduty",
+    value: { integrationKey: "your-integration-key" }
+  }
+}
+```
+
+#### Opsgenie
+
+```typescript
+import { OpsgenieRegion } from "@openstatus/sdk-node";
+
+{
+  data: {
+    case: "opsgenie",
+    value: { apiKey: "your-api-key", region: OpsgenieRegion.US }
+  }
+}
+```
+
+#### Telegram
+
+```typescript
+{
+  data: {
+    case: "telegram",
+    value: { chatId: "123456789" }
+  }
+}
+```
+
+#### Custom Webhook
+
+```typescript
+{
+  data: {
+    case: "webhook",
+    value: {
+      endpoint: "https://api.example.com/webhook",
+      headers: [
+        { key: "Authorization", value: "Bearer token" }
+      ]
+    }
+  }
+}
 ```
 
 ### Status Page Options

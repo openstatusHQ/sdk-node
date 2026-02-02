@@ -36,6 +36,7 @@ import { HealthService } from "./gen/openstatus/health/v1/health_pb.ts";
 import { StatusReportService } from "./gen/openstatus/status_report/v1/service_pb.ts";
 import { StatusPageService } from "./gen/openstatus/status_page/v1/service_pb.ts";
 import { MaintenanceService } from "./gen/openstatus/maintenance/v1/service_pb.ts";
+import { NotificationService } from "./gen/openstatus/notification/v1/service_pb.ts";
 
 // Re-export monitor types
 export type {
@@ -214,6 +215,53 @@ export type {
   UpdateMaintenanceResponse,
 } from "./gen/openstatus/maintenance/v1/service_pb.ts";
 
+// Re-export notification types
+export type {
+  Notification,
+  NotificationSummary,
+} from "./gen/openstatus/notification/v1/notification_pb.ts";
+
+// Re-export notification provider types and data
+export type {
+  DiscordData,
+  EmailData,
+  GoogleChatData,
+  GrafanaOncallData,
+  NotificationData,
+  NtfyData,
+  OpsgenieData,
+  PagerDutyData,
+  SlackData,
+  SmsData,
+  TelegramData,
+  WebhookData,
+  WebhookHeader,
+  WhatsappData,
+} from "./gen/openstatus/notification/v1/providers_pb.ts";
+
+export {
+  NotificationProvider,
+  OpsgenieRegion,
+} from "./gen/openstatus/notification/v1/providers_pb.ts";
+
+// Re-export notification request/response types
+export type {
+  CheckNotificationLimitRequest,
+  CheckNotificationLimitResponse,
+  CreateNotificationRequest,
+  CreateNotificationResponse,
+  DeleteNotificationRequest,
+  DeleteNotificationResponse,
+  GetNotificationRequest,
+  GetNotificationResponse,
+  ListNotificationsRequest,
+  ListNotificationsResponse,
+  SendTestNotificationRequest,
+  SendTestNotificationResponse,
+  UpdateNotificationRequest,
+  UpdateNotificationResponse,
+} from "./gen/openstatus/notification/v1/service_pb.ts";
+
 /**
  * Default OpenStatus API URL.
  */
@@ -338,6 +386,26 @@ export interface OpenStatusClient {
       MaintenanceService: Client<typeof MaintenanceService>;
     };
   };
+  /**
+   * Notification service namespace (v1).
+   */
+  notification: {
+    v1: {
+      /**
+       * NotificationService provides CRUD operations for notification channels.
+       *
+       * Methods:
+       * - `createNotification` - Create a new notification channel
+       * - `getNotification` - Get a notification channel by ID
+       * - `listNotifications` - List all notification channels
+       * - `updateNotification` - Update a notification channel
+       * - `deleteNotification` - Delete a notification channel
+       * - `sendTestNotification` - Send a test notification
+       * - `checkNotificationLimit` - Check notification limits
+       */
+      NotificationService: Client<typeof NotificationService>;
+    };
+  };
 }
 
 /**
@@ -388,6 +456,11 @@ export const openstatus: OpenStatusClient = {
   maintenance: {
     v1: {
       MaintenanceService: createClient(MaintenanceService, transport),
+    },
+  },
+  notification: {
+    v1: {
+      NotificationService: createClient(NotificationService, transport),
     },
   },
 };
