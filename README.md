@@ -7,7 +7,35 @@
 Official Node.js SDK for [OpenStatus](https://openstatus.dev) - The open-source
 status page with uptime monitoring.
 
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Authentication](#authentication)
+- [SDK Reference](#sdk-reference)
+  - [Monitor Service](#monitor-service)
+  - [Health Service](#health-service)
+  - [Status Report Service](#status-report-service)
+  - [Status Page Service](#status-page-service)
+  - [Maintenance Service](#maintenance-service)
+  - [Notification Service](#notification-service)
+- [Reference](#reference)
+  - [Monitor Options](#monitor-options)
+  - [Assertions](#assertions)
+  - [Regions](#regions)
+  - [Enums](#enums)
+- [Error Handling](#error-handling)
+- [Related](#related)
+
 ## Features
+
+### Monitoring
+
+- **HTTP Monitoring** - Monitor websites and APIs with customizable assertions
+- **TCP Monitoring** - Check database connections and other TCP services
+- **DNS Monitoring** - Verify DNS records and resolution
+- **Global Regions** - Monitor from 28 locations worldwide
 
 ### Status Page
 
@@ -16,30 +44,31 @@ status page with uptime monitoring.
 - **Subscribers** - Manage email subscriptions for status updates
 - **Status Reports** - Manage incident reports with update timelines
 - **Maintenance Windows** - Schedule and manage planned maintenance periods
-- **Notifications** - Configure notification channels (Slack, Discord, Email,
-  PagerDuty, etc.)
 
-### Monitoring
+### Notifications
 
-- **HTTP Monitoring** - Monitor websites and APIs with customizable assertions
-- **TCP Monitoring** - Check database connections and other TCP services
-- **DNS Monitoring** - Verify DNS records and resolution
+- **12 Providers** - Slack, Discord, Email, PagerDuty, Opsgenie, Telegram, and
+  more
+- **Webhook Support** - Custom webhooks with headers for any integration
+- **Monitor Alerts** - Get notified when monitors go down or recover
 
-- **Global Regions** - Monitor from 28 locations worldwide
+### Developer Experience
+
 - **Type-safe** - Full TypeScript support with generated types from protobuf
+- **Multiple Runtimes** - Works with Node.js, Deno, and Bun
 
 ## Installation
-
-### JSR
-
-```bash
-npx jsr add @openstatus/sdk-node
-```
 
 ### npm
 
 ```bash
 npm install @openstatus/sdk-node
+```
+
+### JSR
+
+```bash
+npx jsr add @openstatus/sdk-node
 ```
 
 ### Deno
@@ -60,33 +89,32 @@ import {
 } from "@openstatus/sdk-node";
 
 const headers = {
-  "x-openstatus-key": `${process.env.OPENSTATUS_API_KEY}`,
+  "x-openstatus-key": process.env.OPENSTATUS_API_KEY,
 };
 
 // Create a monitor
-const { monitor } = await openstatus.monitor.v1.MonitorService
-  .createHTTPMonitor(
-    {
-      monitor: {
-        name: "My API",
-        url: "https://api.example.com/health",
-        periodicity: Periodicity.PERIODICITY_1M,
-        method: HTTPMethod.HTTP_METHOD_GET,
-        regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
-        active: true,
-        statusCodeAssertions: [
-          { comparator: NumberComparator.EQUAL, target: BigInt(200) },
-        ],
-      },
+const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor(
+  {
+    monitor: {
+      name: "My API",
+      url: "https://api.example.com/health",
+      periodicity: Periodicity.PERIODICITY_1M,
+      method: HTTPMethod.HTTP_METHOD_GET,
+      regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
+      active: true,
+      statusCodeAssertions: [
+        { comparator: NumberComparator.EQUAL, target: BigInt(200) },
+      ],
     },
-    { headers },
-  );
+  },
+  { headers },
+);
 
 console.log(`Monitor created: ${monitor?.id}`);
 
 // List all monitors
-const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } = await openstatus
-  .monitor.v1.MonitorService.listMonitors({}, { headers });
+const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } =
+  await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
 
 console.log(`Found ${totalSize} monitors`);
 ```
@@ -98,23 +126,25 @@ All API requests require an API key. Get yours from the
 
 ```typescript
 const headers = {
-  "x-openstatus-key": `${process.env.OPENSTATUS_API_KEY}`,
+  "x-openstatus-key": process.env.OPENSTATUS_API_KEY,
 };
 
 // Pass headers to any service method
 await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
 ```
 
-## Environment Variables
+### Environment Variables
 
 | Variable             | Description             | Default                          |
 | -------------------- | ----------------------- | -------------------------------- |
-| `OPENSTATUS_API_KEY` | Your OpenStatus API key | -                                |
+| `OPENSTATUS_API_KEY` | Your OpenStatus API key | Required                         |
 | `OPENSTATUS_API_URL` | Custom API endpoint     | `https://api.openstatus.dev/rpc` |
 
-## API Reference
+## SDK Reference
 
 ### Monitor Service
+
+Manage HTTP, TCP, and DNS monitors.
 
 #### `createHTTPMonitor(request, options)`
 
@@ -123,20 +153,19 @@ Create an HTTP/HTTPS monitor.
 ```typescript
 import { HTTPMethod, Periodicity, Region } from "@openstatus/sdk-node";
 
-const { monitor } = await openstatus.monitor.v1.MonitorService
-  .createHTTPMonitor(
-    {
-      monitor: {
-        name: "My Website",
-        url: "https://example.com",
-        periodicity: Periodicity.PERIODICITY_1M,
-        method: HTTPMethod.HTTP_METHOD_GET,
-        regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
-        active: true,
-      },
+const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor(
+  {
+    monitor: {
+      name: "My Website",
+      url: "https://example.com",
+      periodicity: Periodicity.PERIODICITY_1M,
+      method: HTTPMethod.HTTP_METHOD_GET,
+      regions: [Region.FLY_AMS, Region.FLY_IAD, Region.FLY_SYD],
+      active: true,
     },
-    { headers },
-  );
+  },
+  { headers },
+);
 ```
 
 #### `updateHTTPMonitor(request, options)`
@@ -144,17 +173,16 @@ const { monitor } = await openstatus.monitor.v1.MonitorService
 Update an existing HTTP monitor.
 
 ```typescript
-const { monitor } = await openstatus.monitor.v1.MonitorService
-  .updateHTTPMonitor(
-    {
-      id: "mon_123",
-      monitor: {
-        name: "Updated Name",
-        active: false,
-      },
+const { monitor } = await openstatus.monitor.v1.MonitorService.updateHTTPMonitor(
+  {
+    id: "mon_123",
+    monitor: {
+      name: "Updated Name",
+      active: false,
     },
-    { headers },
-  );
+  },
+  { headers },
+);
 ```
 
 #### `createTCPMonitor(request, options)`
@@ -197,7 +225,7 @@ const { monitor } = await openstatus.monitor.v1.MonitorService.updateTCPMonitor(
 Create a DNS resolution monitor.
 
 ```typescript
-import { RecordComparator } from "@openstatus/sdk-node";
+import { Periodicity, RecordComparator, Region } from "@openstatus/sdk-node";
 
 const { monitor } = await openstatus.monitor.v1.MonitorService.createDNSMonitor(
   {
@@ -277,15 +305,11 @@ Get the current status of a monitor across all configured regions.
 ```typescript
 import { MonitorStatus, Region } from "@openstatus/sdk-node";
 
-const { id, regions } = await openstatus.monitor.v1.MonitorService
-  .getMonitorStatus(
-    { id: "mon_123" },
-    { headers },
-  );
+const { id, regions } = await openstatus.monitor.v1.MonitorService.getMonitorStatus(
+  { id: "mon_123" },
+  { headers },
+);
 
-// regions is an array of { region, status }
-// region: Region enum value (e.g., Region.FLY_AMS)
-// status: MonitorStatus.ACTIVE, MonitorStatus.DEGRADED, or MonitorStatus.ERROR
 for (const { region, status } of regions) {
   console.log(`${Region[region]}: ${MonitorStatus[status]}`);
 }
@@ -301,7 +325,7 @@ import { TimeRange } from "@openstatus/sdk-node";
 const summary = await openstatus.monitor.v1.MonitorService.getMonitorSummary(
   {
     id: "mon_123",
-    timeRange: TimeRange.TIME_RANGE_7D, // TIME_RANGE_1D, TIME_RANGE_7D, or TIME_RANGE_14D
+    timeRange: TimeRange.TIME_RANGE_7D,
     regions: [], // optional: filter by specific regions
   },
   { headers },
@@ -309,14 +333,13 @@ const summary = await openstatus.monitor.v1.MonitorService.getMonitorSummary(
 
 console.log(`Last ping: ${summary.lastPingAt}`);
 console.log(`Success: ${summary.totalSuccessful}`);
-console.log(`Degraded: ${summary.totalDegraded}`);
 console.log(`Failed: ${summary.totalFailed}`);
 console.log(`P50 latency: ${summary.p50}ms`);
-console.log(`P75 latency: ${summary.p75}ms`);
-console.log(`P90 latency: ${summary.p90}ms`);
 console.log(`P95 latency: ${summary.p95}ms`);
 console.log(`P99 latency: ${summary.p99}ms`);
 ```
+
+---
 
 ### Health Service
 
@@ -329,9 +352,11 @@ const { status } = await openstatus.health.v1.HealthService.check({});
 console.log(ServingStatus[status]); // "SERVING"
 ```
 
+---
+
 ### Status Report Service
 
-Manage incident and maintenance reports with update timelines.
+Manage incident reports with update timelines.
 
 #### `createStatusReport(request, options)`
 
@@ -340,19 +365,18 @@ Create a new status report.
 ```typescript
 import { StatusReportStatus } from "@openstatus/sdk-node";
 
-const { statusReport } = await openstatus.statusReport.v1.StatusReportService
-  .createStatusReport(
-    {
-      title: "API Degradation",
-      status: StatusReportStatus.INVESTIGATING,
-      message: "We are investigating reports of increased latency.",
-      date: "2024-01-15T10:30:00",
-      pageId: "page_123",
-      pageComponentIds: ["comp_456"],
-      notify: true,
-    },
-    { headers },
-  );
+const { statusReport } = await openstatus.statusReport.v1.StatusReportService.createStatusReport(
+  {
+    title: "API Degradation",
+    status: StatusReportStatus.INVESTIGATING,
+    message: "We are investigating reports of increased latency.",
+    date: "2024-01-15T10:30:00Z",
+    pageId: "page_123",
+    pageComponentIds: ["comp_456"],
+    notify: true,
+  },
+  { headers },
+);
 
 console.log(`Status report created: ${statusReport?.id}`);
 ```
@@ -362,16 +386,16 @@ console.log(`Status report created: ${statusReport?.id}`);
 Get a status report by ID (includes full update timeline).
 
 ```typescript
-const { statusReport } = await openstatus.statusReport.v1.StatusReportService
-  .getStatusReport(
-    { id: "sr_123" },
-    { headers },
-  );
+import { StatusReportStatus } from "@openstatus/sdk-node";
+
+const { statusReport } = await openstatus.statusReport.v1.StatusReportService.getStatusReport(
+  { id: "sr_123" },
+  { headers },
+);
 
 console.log(`Title: ${statusReport?.title}`);
 console.log(`Status: ${StatusReportStatus[statusReport?.status ?? 0]}`);
 
-// Access update timeline
 for (const update of statusReport?.updates ?? []) {
   console.log(`${update.date}: ${update.message}`);
 }
@@ -384,15 +408,12 @@ List all status reports with pagination and optional filtering.
 ```typescript
 import { StatusReportStatus } from "@openstatus/sdk-node";
 
-const { statusReports, totalSize } = await openstatus.statusReport.v1
-  .StatusReportService.listStatusReports(
+const { statusReports, totalSize } =
+  await openstatus.statusReport.v1.StatusReportService.listStatusReports(
     {
       limit: 10,
       offset: 0,
-      statuses: [
-        StatusReportStatus.INVESTIGATING,
-        StatusReportStatus.IDENTIFIED,
-      ],
+      statuses: [StatusReportStatus.INVESTIGATING, StatusReportStatus.IDENTIFIED],
     },
     { headers },
   );
@@ -402,18 +423,17 @@ console.log(`Found ${totalSize} status reports`);
 
 #### `updateStatusReport(request, options)`
 
-Update status report metadata (title, page components).
+Update status report metadata.
 
 ```typescript
-const { statusReport } = await openstatus.statusReport.v1.StatusReportService
-  .updateStatusReport(
-    {
-      id: "sr_123",
-      title: "Updated Title",
-      pageComponentIds: ["comp_456", "comp_789"],
-    },
-    { headers },
-  );
+const { statusReport } = await openstatus.statusReport.v1.StatusReportService.updateStatusReport(
+  {
+    id: "sr_123",
+    title: "Updated Title",
+    pageComponentIds: ["comp_456", "comp_789"],
+  },
+  { headers },
+);
 ```
 
 #### `deleteStatusReport(request, options)`
@@ -421,11 +441,10 @@ const { statusReport } = await openstatus.statusReport.v1.StatusReportService
 Delete a status report and all its updates.
 
 ```typescript
-const { success } = await openstatus.statusReport.v1.StatusReportService
-  .deleteStatusReport(
-    { id: "sr_123" },
-    { headers },
-  );
+const { success } = await openstatus.statusReport.v1.StatusReportService.deleteStatusReport(
+  { id: "sr_123" },
+  { headers },
+);
 ```
 
 #### `addStatusReportUpdate(request, options)`
@@ -435,29 +454,19 @@ Add a new update to an existing status report timeline.
 ```typescript
 import { StatusReportStatus } from "@openstatus/sdk-node";
 
-const { statusReport } = await openstatus.statusReport.v1.StatusReportService
-  .addStatusReportUpdate(
-    {
-      statusReportId: "sr_123",
-      status: StatusReportStatus.IDENTIFIED,
-      message:
-        "The issue has been identified as a database connection problem.",
-      date: "2024-01-15T11:00:00", // optional, defaults to current time
-      notify: true,
-    },
-    { headers },
-  );
+const { statusReport } = await openstatus.statusReport.v1.StatusReportService.addStatusReportUpdate(
+  {
+    statusReportId: "sr_123",
+    status: StatusReportStatus.IDENTIFIED,
+    message: "The issue has been identified as a database connection problem.",
+    date: "2024-01-15T11:00:00Z", // optional, defaults to current time
+    notify: true,
+  },
+  { headers },
+);
 ```
 
-### Status Report Status
-
-| Enum Value      | Description                      |
-| --------------- | -------------------------------- |
-| `UNSPECIFIED`   | Default/unspecified status       |
-| `INVESTIGATING` | Actively investigating the issue |
-| `IDENTIFIED`    | Root cause has been identified   |
-| `MONITORING`    | Fix deployed, monitoring         |
-| `RESOLVED`      | Issue fully resolved             |
+---
 
 ### Status Page Service
 
@@ -468,17 +477,16 @@ Manage status pages, components, and subscribers.
 Create a new status page.
 
 ```typescript
-const { statusPage } = await openstatus.statusPage.v1.StatusPageService
-  .createStatusPage(
-    {
-      title: "My Service Status",
-      slug: "my-service",
-      description: "Status page for My Service",
-      homepageUrl: "https://example.com",
-      contactUrl: "https://example.com/contact",
-    },
-    { headers },
-  );
+const { statusPage } = await openstatus.statusPage.v1.StatusPageService.createStatusPage(
+  {
+    title: "My Service Status",
+    slug: "my-service",
+    description: "Status page for My Service",
+    homepageUrl: "https://example.com",
+    contactUrl: "https://example.com/contact",
+  },
+  { headers },
+);
 
 console.log(`Status page created: ${statusPage?.id}`);
 ```
@@ -488,11 +496,10 @@ console.log(`Status page created: ${statusPage?.id}`);
 Get a status page by ID.
 
 ```typescript
-const { statusPage } = await openstatus.statusPage.v1.StatusPageService
-  .getStatusPage(
-    { id: "page_123" },
-    { headers },
-  );
+const { statusPage } = await openstatus.statusPage.v1.StatusPageService.getStatusPage(
+  { id: "page_123" },
+  { headers },
+);
 ```
 
 #### `listStatusPages(request, options)`
@@ -500,8 +507,8 @@ const { statusPage } = await openstatus.statusPage.v1.StatusPageService
 List all status pages with pagination.
 
 ```typescript
-const { statusPages, totalSize } = await openstatus.statusPage.v1
-  .StatusPageService.listStatusPages(
+const { statusPages, totalSize } =
+  await openstatus.statusPage.v1.StatusPageService.listStatusPages(
     { limit: 10, offset: 0 },
     { headers },
   );
@@ -514,15 +521,14 @@ console.log(`Found ${totalSize} status pages`);
 Update a status page.
 
 ```typescript
-const { statusPage } = await openstatus.statusPage.v1.StatusPageService
-  .updateStatusPage(
-    {
-      id: "page_123",
-      title: "Updated Title",
-      description: "Updated description",
-    },
-    { headers },
-  );
+const { statusPage } = await openstatus.statusPage.v1.StatusPageService.updateStatusPage(
+  {
+    id: "page_123",
+    title: "Updated Title",
+    description: "Updated description",
+  },
+  { headers },
+);
 ```
 
 #### `deleteStatusPage(request, options)`
@@ -530,11 +536,10 @@ const { statusPage } = await openstatus.statusPage.v1.StatusPageService
 Delete a status page.
 
 ```typescript
-const { success } = await openstatus.statusPage.v1.StatusPageService
-  .deleteStatusPage(
-    { id: "page_123" },
-    { headers },
-  );
+const { success } = await openstatus.statusPage.v1.StatusPageService.deleteStatusPage(
+  { id: "page_123" },
+  { headers },
+);
 ```
 
 #### `addMonitorComponent(request, options)`
@@ -542,17 +547,16 @@ const { success } = await openstatus.statusPage.v1.StatusPageService
 Add a monitor-based component to a status page.
 
 ```typescript
-const { component } = await openstatus.statusPage.v1.StatusPageService
-  .addMonitorComponent(
-    {
-      pageId: "page_123",
-      monitorId: "mon_456",
-      name: "API Server",
-      description: "Main API endpoint",
-      order: 1,
-    },
-    { headers },
-  );
+const { component } = await openstatus.statusPage.v1.StatusPageService.addMonitorComponent(
+  {
+    pageId: "page_123",
+    monitorId: "mon_456",
+    name: "API Server",
+    description: "Main API endpoint",
+    order: 1,
+  },
+  { headers },
+);
 ```
 
 #### `addStaticComponent(request, options)`
@@ -560,16 +564,15 @@ const { component } = await openstatus.statusPage.v1.StatusPageService
 Add a static component (not linked to a monitor).
 
 ```typescript
-const { component } = await openstatus.statusPage.v1.StatusPageService
-  .addStaticComponent(
-    {
-      pageId: "page_123",
-      name: "Third-party Service",
-      description: "External dependency",
-      order: 2,
-    },
-    { headers },
-  );
+const { component } = await openstatus.statusPage.v1.StatusPageService.addStaticComponent(
+  {
+    pageId: "page_123",
+    name: "Third-party Service",
+    description: "External dependency",
+    order: 2,
+  },
+  { headers },
+);
 ```
 
 #### `updateComponent(request, options)`
@@ -577,15 +580,14 @@ const { component } = await openstatus.statusPage.v1.StatusPageService
 Update a component.
 
 ```typescript
-const { component } = await openstatus.statusPage.v1.StatusPageService
-  .updateComponent(
-    {
-      id: "comp_123",
-      name: "Updated Component Name",
-      order: 3,
-    },
-    { headers },
-  );
+const { component } = await openstatus.statusPage.v1.StatusPageService.updateComponent(
+  {
+    id: "comp_123",
+    name: "Updated Component Name",
+    order: 3,
+  },
+  { headers },
+);
 ```
 
 #### `removeComponent(request, options)`
@@ -593,11 +595,10 @@ const { component } = await openstatus.statusPage.v1.StatusPageService
 Remove a component from a status page.
 
 ```typescript
-const { success } = await openstatus.statusPage.v1.StatusPageService
-  .removeComponent(
-    { id: "comp_123" },
-    { headers },
-  );
+const { success } = await openstatus.statusPage.v1.StatusPageService.removeComponent(
+  { id: "comp_123" },
+  { headers },
+);
 ```
 
 #### `createComponentGroup(request, options)`
@@ -605,14 +606,13 @@ const { success } = await openstatus.statusPage.v1.StatusPageService
 Create a component group.
 
 ```typescript
-const { group } = await openstatus.statusPage.v1.StatusPageService
-  .createComponentGroup(
-    {
-      pageId: "page_123",
-      name: "Core Services",
-    },
-    { headers },
-  );
+const { group } = await openstatus.statusPage.v1.StatusPageService.createComponentGroup(
+  {
+    pageId: "page_123",
+    name: "Core Services",
+  },
+  { headers },
+);
 ```
 
 #### `updateComponentGroup(request, options)`
@@ -620,14 +620,13 @@ const { group } = await openstatus.statusPage.v1.StatusPageService
 Update a component group.
 
 ```typescript
-const { group } = await openstatus.statusPage.v1.StatusPageService
-  .updateComponentGroup(
-    {
-      id: "group_123",
-      name: "Updated Group Name",
-    },
-    { headers },
-  );
+const { group } = await openstatus.statusPage.v1.StatusPageService.updateComponentGroup(
+  {
+    id: "group_123",
+    name: "Updated Group Name",
+  },
+  { headers },
+);
 ```
 
 #### `deleteComponentGroup(request, options)`
@@ -635,11 +634,10 @@ const { group } = await openstatus.statusPage.v1.StatusPageService
 Delete a component group.
 
 ```typescript
-const { success } = await openstatus.statusPage.v1.StatusPageService
-  .deleteComponentGroup(
-    { id: "group_123" },
-    { headers },
-  );
+const { success } = await openstatus.statusPage.v1.StatusPageService.deleteComponentGroup(
+  { id: "group_123" },
+  { headers },
+);
 ```
 
 #### `subscribeToPage(request, options)`
@@ -647,14 +645,13 @@ const { success } = await openstatus.statusPage.v1.StatusPageService
 Subscribe an email to status page updates.
 
 ```typescript
-const { subscriber } = await openstatus.statusPage.v1.StatusPageService
-  .subscribeToPage(
-    {
-      pageId: "page_123",
-      email: "user@example.com",
-    },
-    { headers },
-  );
+const { subscriber } = await openstatus.statusPage.v1.StatusPageService.subscribeToPage(
+  {
+    pageId: "page_123",
+    email: "user@example.com",
+  },
+  { headers },
+);
 ```
 
 #### `unsubscribeFromPage(request, options)`
@@ -663,24 +660,22 @@ Unsubscribe from a status page.
 
 ```typescript
 // By email
-const { success } = await openstatus.statusPage.v1.StatusPageService
-  .unsubscribeFromPage(
-    {
-      pageId: "page_123",
-      identifier: { case: "email", value: "user@example.com" },
-    },
-    { headers },
-  );
+const { success } = await openstatus.statusPage.v1.StatusPageService.unsubscribeFromPage(
+  {
+    pageId: "page_123",
+    identifier: { case: "email", value: "user@example.com" },
+  },
+  { headers },
+);
 
 // Or by subscriber ID
-const { success: success2 } = await openstatus.statusPage.v1.StatusPageService
-  .unsubscribeFromPage(
-    {
-      pageId: "page_123",
-      identifier: { case: "id", value: "sub_456" },
-    },
-    { headers },
-  );
+const { success: success2 } = await openstatus.statusPage.v1.StatusPageService.unsubscribeFromPage(
+  {
+    pageId: "page_123",
+    identifier: { case: "id", value: "sub_456" },
+  },
+  { headers },
+);
 ```
 
 #### `listSubscribers(request, options)`
@@ -688,8 +683,8 @@ const { success: success2 } = await openstatus.statusPage.v1.StatusPageService
 List all subscribers for a status page.
 
 ```typescript
-const { subscribers, totalSize } = await openstatus.statusPage.v1
-  .StatusPageService.listSubscribers(
+const { subscribers, totalSize } =
+  await openstatus.statusPage.v1.StatusPageService.listSubscribers(
     {
       pageId: "page_123",
       limit: 50,
@@ -705,11 +700,10 @@ const { subscribers, totalSize } = await openstatus.statusPage.v1
 Get full status page content including components, groups, and active reports.
 
 ```typescript
-const content = await openstatus.statusPage.v1.StatusPageService
-  .getStatusPageContent(
-    { identifier: { case: "slug", value: "my-service" } },
-    { headers },
-  );
+const content = await openstatus.statusPage.v1.StatusPageService.getStatusPageContent(
+  { identifier: { case: "slug", value: "my-service" } },
+  { headers },
+);
 
 console.log(`Page: ${content.statusPage?.title}`);
 console.log(`Components: ${content.components.length}`);
@@ -723,8 +717,8 @@ Get the aggregated status of a status page.
 ```typescript
 import { OverallStatus } from "@openstatus/sdk-node";
 
-const { overallStatus, componentStatuses } = await openstatus.statusPage.v1
-  .StatusPageService.getOverallStatus(
+const { overallStatus, componentStatuses } =
+  await openstatus.statusPage.v1.StatusPageService.getOverallStatus(
     { identifier: { case: "id", value: "page_123" } },
     { headers },
   );
@@ -735,6 +729,8 @@ for (const { componentId, status } of componentStatuses) {
 }
 ```
 
+---
+
 ### Maintenance Service
 
 Manage scheduled maintenance windows.
@@ -744,19 +740,18 @@ Manage scheduled maintenance windows.
 Create a new maintenance window.
 
 ```typescript
-const { maintenance } = await openstatus.maintenance.v1.MaintenanceService
-  .createMaintenance(
-    {
-      title: "Database Upgrade",
-      message: "We will be upgrading our database infrastructure.",
-      from: "2024-01-20T02:00:00Z",
-      to: "2024-01-20T04:00:00Z",
-      pageId: "page_123",
-      pageComponentIds: ["comp_456"],
-      notify: true,
-    },
-    { headers },
-  );
+const { maintenance } = await openstatus.maintenance.v1.MaintenanceService.createMaintenance(
+  {
+    title: "Database Upgrade",
+    message: "We will be upgrading our database infrastructure.",
+    from: "2024-01-20T02:00:00Z",
+    to: "2024-01-20T04:00:00Z",
+    pageId: "page_123",
+    pageComponentIds: ["comp_456"],
+    notify: true,
+  },
+  { headers },
+);
 
 console.log(`Maintenance created: ${maintenance?.id}`);
 ```
@@ -766,11 +761,10 @@ console.log(`Maintenance created: ${maintenance?.id}`);
 Get a maintenance window by ID.
 
 ```typescript
-const { maintenance } = await openstatus.maintenance.v1.MaintenanceService
-  .getMaintenance(
-    { id: "maint_123" },
-    { headers },
-  );
+const { maintenance } = await openstatus.maintenance.v1.MaintenanceService.getMaintenance(
+  { id: "maint_123" },
+  { headers },
+);
 
 console.log(`Title: ${maintenance?.title}`);
 console.log(`From: ${maintenance?.from}`);
@@ -782,8 +776,8 @@ console.log(`To: ${maintenance?.to}`);
 List all maintenance windows with pagination and optional filtering.
 
 ```typescript
-const { maintenances, totalSize } = await openstatus.maintenance.v1
-  .MaintenanceService.listMaintenances(
+const { maintenances, totalSize } =
+  await openstatus.maintenance.v1.MaintenanceService.listMaintenances(
     {
       limit: 10,
       offset: 0,
@@ -800,15 +794,14 @@ console.log(`Found ${totalSize} maintenance windows`);
 Update a maintenance window.
 
 ```typescript
-const { maintenance } = await openstatus.maintenance.v1.MaintenanceService
-  .updateMaintenance(
-    {
-      id: "maint_123",
-      title: "Extended Database Upgrade",
-      to: "2024-01-20T06:00:00Z",
-    },
-    { headers },
-  );
+const { maintenance } = await openstatus.maintenance.v1.MaintenanceService.updateMaintenance(
+  {
+    id: "maint_123",
+    title: "Extended Database Upgrade",
+    to: "2024-01-20T06:00:00Z",
+  },
+  { headers },
+);
 ```
 
 #### `deleteMaintenance(request, options)`
@@ -816,16 +809,18 @@ const { maintenance } = await openstatus.maintenance.v1.MaintenanceService
 Delete a maintenance window.
 
 ```typescript
-const { success } = await openstatus.maintenance.v1.MaintenanceService
-  .deleteMaintenance(
-    { id: "maint_123" },
-    { headers },
-  );
+const { success } = await openstatus.maintenance.v1.MaintenanceService.deleteMaintenance(
+  { id: "maint_123" },
+  { headers },
+);
 ```
+
+---
 
 ### Notification Service
 
-Manage notification channels for monitor alerts.
+Manage notification channels for monitor alerts. Supports 12 providers including
+Slack, Discord, Email, PagerDuty, and custom webhooks.
 
 #### `createNotification(request, options)`
 
@@ -834,22 +829,20 @@ Create a new notification channel.
 ```typescript
 import { NotificationProvider } from "@openstatus/sdk-node";
 
-// Create a Slack notification
-const { notification } = await openstatus.notification.v1.NotificationService
-  .createNotification(
-    {
-      name: "Slack Alerts",
-      provider: NotificationProvider.SLACK,
+const { notification } = await openstatus.notification.v1.NotificationService.createNotification(
+  {
+    name: "Slack Alerts",
+    provider: NotificationProvider.SLACK,
+    data: {
       data: {
-        data: {
-          case: "slack",
-          value: { webhookUrl: "https://hooks.slack.com/services/..." },
-        },
+        case: "slack",
+        value: { webhookUrl: "https://hooks.slack.com/services/..." },
       },
-      monitorIds: ["mon_123", "mon_456"],
     },
-    { headers },
-  );
+    monitorIds: ["mon_123", "mon_456"],
+  },
+  { headers },
+);
 
 console.log(`Notification created: ${notification?.id}`);
 ```
@@ -859,11 +852,12 @@ console.log(`Notification created: ${notification?.id}`);
 Get a notification channel by ID.
 
 ```typescript
-const { notification } = await openstatus.notification.v1.NotificationService
-  .getNotification(
-    { id: "notif_123" },
-    { headers },
-  );
+import { NotificationProvider } from "@openstatus/sdk-node";
+
+const { notification } = await openstatus.notification.v1.NotificationService.getNotification(
+  { id: "notif_123" },
+  { headers },
+);
 
 console.log(`Name: ${notification?.name}`);
 console.log(`Provider: ${NotificationProvider[notification?.provider ?? 0]}`);
@@ -874,8 +868,8 @@ console.log(`Provider: ${NotificationProvider[notification?.provider ?? 0]}`);
 List all notification channels with pagination.
 
 ```typescript
-const { notifications, totalSize } = await openstatus.notification.v1
-  .NotificationService.listNotifications(
+const { notifications, totalSize } =
+  await openstatus.notification.v1.NotificationService.listNotifications(
     { limit: 10, offset: 0 },
     { headers },
   );
@@ -888,15 +882,14 @@ console.log(`Found ${totalSize} notification channels`);
 Update a notification channel.
 
 ```typescript
-const { notification } = await openstatus.notification.v1.NotificationService
-  .updateNotification(
-    {
-      id: "notif_123",
-      name: "Updated Slack Alerts",
-      monitorIds: ["mon_123", "mon_456", "mon_789"],
-    },
-    { headers },
-  );
+const { notification } = await openstatus.notification.v1.NotificationService.updateNotification(
+  {
+    id: "notif_123",
+    name: "Updated Slack Alerts",
+    monitorIds: ["mon_123", "mon_456", "mon_789"],
+  },
+  { headers },
+);
 ```
 
 #### `deleteNotification(request, options)`
@@ -904,11 +897,10 @@ const { notification } = await openstatus.notification.v1.NotificationService
 Delete a notification channel.
 
 ```typescript
-const { success } = await openstatus.notification.v1.NotificationService
-  .deleteNotification(
-    { id: "notif_123" },
-    { headers },
-  );
+const { success } = await openstatus.notification.v1.NotificationService.deleteNotification(
+  { id: "notif_123" },
+  { headers },
+);
 ```
 
 #### `sendTestNotification(request, options)`
@@ -918,8 +910,8 @@ Send a test notification to verify configuration.
 ```typescript
 import { NotificationProvider } from "@openstatus/sdk-node";
 
-const { success, errorMessage } = await openstatus.notification.v1
-  .NotificationService.sendTestNotification(
+const { success, errorMessage } =
+  await openstatus.notification.v1.NotificationService.sendTestNotification(
     {
       provider: NotificationProvider.SLACK,
       data: {
@@ -944,244 +936,297 @@ if (success) {
 Check if the workspace has reached its notification limit.
 
 ```typescript
-const { limitReached, currentCount, maxCount } = await openstatus.notification
-  .v1.NotificationService.checkNotificationLimit({}, { headers });
+const { limitReached, currentCount, maxCount } =
+  await openstatus.notification.v1.NotificationService.checkNotificationLimit({}, { headers });
 
 console.log(`${currentCount}/${maxCount} notification channels used`);
-if (limitReached) {
-  console.log("Notification limit reached");
-}
 ```
 
-### Notification Providers
+#### Provider Configuration Examples
 
-| Enum Value       | Description          |
-| ---------------- | -------------------- |
-| `UNSPECIFIED`    | Default/unspecified  |
-| `DISCORD`        | Discord webhook      |
-| `EMAIL`          | Email notification   |
-| `GOOGLE_CHAT`    | Google Chat webhook  |
-| `GRAFANA_ONCALL` | Grafana OnCall       |
-| `NTFY`           | Ntfy push service    |
-| `PAGERDUTY`      | PagerDuty            |
-| `OPSGENIE`       | Opsgenie             |
-| `SLACK`          | Slack webhook        |
-| `SMS`            | SMS notification     |
-| `TELEGRAM`       | Telegram bot         |
-| `WEBHOOK`        | Custom webhook       |
-| `WHATSAPP`       | WhatsApp             |
-
-### Provider Configuration Examples
-
-#### Discord
+<details>
+<summary><strong>Slack</strong></summary>
 
 ```typescript
 {
+  provider: NotificationProvider.SLACK,
   data: {
-    case: "discord",
-    value: { webhookUrl: "https://discord.com/api/webhooks/..." }
-  }
-}
-```
-
-#### Email
-
-```typescript
-{
-  data: {
-    case: "email",
-    value: { email: "alerts@example.com" }
-  }
-}
-```
-
-#### PagerDuty
-
-```typescript
-{
-  data: {
-    case: "pagerduty",
-    value: { integrationKey: "your-integration-key" }
-  }
-}
-```
-
-#### Opsgenie
-
-```typescript
-import { OpsgenieRegion } from "@openstatus/sdk-node";
-
-{
-  data: {
-    case: "opsgenie",
-    value: { apiKey: "your-api-key", region: OpsgenieRegion.US }
-  }
-}
-```
-
-#### Telegram
-
-```typescript
-{
-  data: {
-    case: "telegram",
-    value: { chatId: "123456789" }
-  }
-}
-```
-
-#### Custom Webhook
-
-```typescript
-{
-  data: {
-    case: "webhook",
-    value: {
-      endpoint: "https://api.example.com/webhook",
-      headers: [
-        { key: "Authorization", value: "Bearer token" }
-      ]
+    data: {
+      case: "slack",
+      value: { webhookUrl: "https://hooks.slack.com/services/..." }
     }
   }
 }
 ```
 
-### Status Page Options
+</details>
 
-| Option        | Type   | Required | Description                              |
-| ------------- | ------ | -------- | ---------------------------------------- |
-| `title`       | string | Yes      | Title of the status page (max 256 chars) |
-| `slug`        | string | Yes      | URL-friendly slug (lowercase, hyphens)   |
-| `description` | string | No       | Description (max 2048 chars)             |
-| `homepageUrl` | string | No       | Link to your homepage                    |
-| `contactUrl`  | string | No       | Link to your contact page                |
+<details>
+<summary><strong>Discord</strong></summary>
 
-### Page Access Type
+```typescript
+{
+  provider: NotificationProvider.DISCORD,
+  data: {
+    data: {
+      case: "discord",
+      value: { webhookUrl: "https://discord.com/api/webhooks/..." }
+    }
+  }
+}
+```
 
-| Enum Value           | Description             |
-| -------------------- | ----------------------- |
-| `UNSPECIFIED`        | Default/unspecified     |
-| `PUBLIC`             | Publicly accessible     |
-| `PASSWORD_PROTECTED` | Requires password       |
-| `AUTHENTICATED`      | Requires authentication |
+</details>
 
-### Page Theme
+<details>
+<summary><strong>Email</strong></summary>
 
-| Enum Value    | Description         |
-| ------------- | ------------------- |
-| `UNSPECIFIED` | Default/unspecified |
-| `SYSTEM`      | Follow system theme |
-| `LIGHT`       | Light theme         |
-| `DARK`        | Dark theme          |
+```typescript
+{
+  provider: NotificationProvider.EMAIL,
+  data: {
+    data: {
+      case: "email",
+      value: { email: "alerts@example.com" }
+    }
+  }
+}
+```
 
-### Overall Status
+</details>
 
-| Enum Value       | Description                 |
-| ---------------- | --------------------------- |
-| `UNSPECIFIED`    | Default/unspecified         |
-| `OPERATIONAL`    | All systems operational     |
-| `DEGRADED`       | Performance is degraded     |
-| `PARTIAL_OUTAGE` | Some systems are down       |
-| `MAJOR_OUTAGE`   | Major systems are down      |
-| `MAINTENANCE`    | Scheduled maintenance       |
-| `UNKNOWN`        | Status cannot be determined |
+<details>
+<summary><strong>PagerDuty</strong></summary>
 
-### Page Component Type
+```typescript
+{
+  provider: NotificationProvider.PAGERDUTY,
+  data: {
+    data: {
+      case: "pagerduty",
+      value: { integrationKey: "your-integration-key" }
+    }
+  }
+}
+```
 
-| Enum Value    | Description               |
-| ------------- | ------------------------- |
-| `UNSPECIFIED` | Default/unspecified       |
-| `MONITOR`     | Linked to a monitor       |
-| `STATIC`      | Static component (manual) |
+</details>
 
-## Monitor Options
+<details>
+<summary><strong>Opsgenie</strong></summary>
 
-### HTTP Monitor
+```typescript
+import { OpsgenieRegion } from "@openstatus/sdk-node";
 
-| Option                 | Type                | Required | Description                                         |
-| ---------------------- | ------------------- | -------- | --------------------------------------------------- |
-| `name`                 | string              | Yes      | Monitor name (max 256 chars)                        |
-| `url`                  | string              | Yes      | URL to monitor (max 2048 chars)                     |
-| `periodicity`          | Periodicity         | Yes      | Check interval (see [Periodicity](#periodicity))    |
-| `method`               | HTTPMethod          | No       | HTTP method (see [HTTP Methods](#http-methods))     |
-| `body`                 | string              | No       | Request body                                        |
-| `headers`              | Headers[]           | No       | Custom headers (`{ key: string, value: string }[]`) |
-| `timeout`              | bigint              | No       | Timeout in ms (default: 45000, max: 120000)         |
-| `retry`                | bigint              | No       | Retry attempts (default: 3, max: 10)                |
-| `followRedirects`      | boolean             | No       | Follow redirects (default: true)                    |
-| `regions`              | Region[]            | No       | [Regions](#regions) for checks                      |
-| `active`               | boolean             | No       | Enable monitoring (default: false)                  |
-| `public`               | boolean             | No       | Public visibility (default: false)                  |
-| `degradedAt`           | bigint              | No       | Latency threshold (ms) for degraded status          |
-| `description`          | string              | No       | Monitor description (max 1024 chars)                |
-| `statusCodeAssertions` | array               | No       | [Status code assertions](#status-code-assertions)   |
-| `bodyAssertions`       | array               | No       | [Body assertions](#body-assertions)                 |
-| `headerAssertions`     | array               | No       | [Header assertions](#header-assertions)             |
-| `openTelemetry`        | OpenTelemetryConfig | No       | OpenTelemetry export configuration                  |
+{
+  provider: NotificationProvider.OPSGENIE,
+  data: {
+    data: {
+      case: "opsgenie",
+      value: { apiKey: "your-api-key", region: OpsgenieRegion.US }
+    }
+  }
+}
+```
 
-### TCP Monitor
+</details>
 
-| Option          | Type                | Required | Description                                      |
-| --------------- | ------------------- | -------- | ------------------------------------------------ |
-| `name`          | string              | Yes      | Monitor name (max 256 chars)                     |
-| `uri`           | string              | Yes      | `host:port` to monitor (max 2048 chars)          |
-| `periodicity`   | Periodicity         | Yes      | Check interval (see [Periodicity](#periodicity)) |
-| `timeout`       | bigint              | No       | Timeout in ms (default: 45000, max: 120000)      |
-| `retry`         | bigint              | No       | Retry attempts (default: 3, max: 10)             |
-| `regions`       | Region[]            | No       | [Regions](#regions) for checks                   |
-| `active`        | boolean             | No       | Enable monitoring (default: false)               |
-| `public`        | boolean             | No       | Public visibility (default: false)               |
-| `degradedAt`    | bigint              | No       | Latency threshold (ms) for degraded status       |
-| `description`   | string              | No       | Monitor description (max 1024 chars)             |
-| `openTelemetry` | OpenTelemetryConfig | No       | OpenTelemetry export configuration               |
+<details>
+<summary><strong>Telegram</strong></summary>
 
-### DNS Monitor
+```typescript
+{
+  provider: NotificationProvider.TELEGRAM,
+  data: {
+    data: {
+      case: "telegram",
+      value: { chatId: "123456789" }
+    }
+  }
+}
+```
 
-| Option             | Type                | Required | Description                                      |
-| ------------------ | ------------------- | -------- | ------------------------------------------------ |
-| `name`             | string              | Yes      | Monitor name (max 256 chars)                     |
-| `uri`              | string              | Yes      | Domain to resolve (max 2048 chars)               |
-| `periodicity`      | Periodicity         | Yes      | Check interval (see [Periodicity](#periodicity)) |
-| `timeout`          | bigint              | No       | Timeout in ms (default: 45000, max: 120000)      |
-| `retry`            | bigint              | No       | Retry attempts (default: 3, max: 10)             |
-| `regions`          | Region[]            | No       | [Regions](#regions) for checks                   |
-| `active`           | boolean             | No       | Enable monitoring (default: false)               |
-| `public`           | boolean             | No       | Public visibility (default: false)               |
-| `degradedAt`       | bigint              | No       | Latency threshold (ms) for degraded status       |
-| `description`      | string              | No       | Monitor description (max 1024 chars)             |
-| `recordAssertions` | array               | No       | [DNS record assertions](#dns-record-assertions)  |
-| `openTelemetry`    | OpenTelemetryConfig | No       | OpenTelemetry export configuration               |
+</details>
 
-### Periodicity
+<details>
+<summary><strong>Google Chat</strong></summary>
 
-| Enum Value        | Description |
-| ----------------- | ----------- |
-| `PERIODICITY_30S` | Every 30s   |
-| `PERIODICITY_1M`  | Every 1m    |
-| `PERIODICITY_5M`  | Every 5m    |
-| `PERIODICITY_10M` | Every 10m   |
-| `PERIODICITY_30M` | Every 30m   |
-| `PERIODICITY_1H`  | Every 1h    |
+```typescript
+{
+  provider: NotificationProvider.GOOGLE_CHAT,
+  data: {
+    data: {
+      case: "googleChat",
+      value: { webhookUrl: "https://chat.googleapis.com/v1/spaces/..." }
+    }
+  }
+}
+```
 
-### HTTP Methods
+</details>
 
-| Enum Value            | Description |
-| --------------------- | ----------- |
-| `HTTP_METHOD_GET`     | GET         |
-| `HTTP_METHOD_POST`    | POST        |
-| `HTTP_METHOD_HEAD`    | HEAD        |
-| `HTTP_METHOD_PUT`     | PUT         |
-| `HTTP_METHOD_PATCH`   | PATCH       |
-| `HTTP_METHOD_DELETE`  | DELETE      |
-| `HTTP_METHOD_TRACE`   | TRACE       |
-| `HTTP_METHOD_CONNECT` | CONNECT     |
-| `HTTP_METHOD_OPTIONS` | OPTIONS     |
+<details>
+<summary><strong>Grafana OnCall</strong></summary>
 
-## Assertions
+```typescript
+{
+  provider: NotificationProvider.GRAFANA_ONCALL,
+  data: {
+    data: {
+      case: "grafanaOncall",
+      value: { webhookUrl: "https://oncall.example.com/..." }
+    }
+  }
+}
+```
 
-All assertion comparators are exported as enums from the SDK.
+</details>
 
-### Status Code Assertions
+<details>
+<summary><strong>Ntfy</strong></summary>
+
+```typescript
+{
+  provider: NotificationProvider.NTFY,
+  data: {
+    data: {
+      case: "ntfy",
+      value: {
+        topic: "my-alerts",
+        serverUrl: "https://ntfy.sh", // optional, defaults to ntfy.sh
+        token: "tk_..." // optional auth token
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>SMS</strong></summary>
+
+```typescript
+{
+  provider: NotificationProvider.SMS,
+  data: {
+    data: {
+      case: "sms",
+      value: { phoneNumber: "+1234567890" }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>WhatsApp</strong></summary>
+
+```typescript
+{
+  provider: NotificationProvider.WHATSAPP,
+  data: {
+    data: {
+      case: "whatsapp",
+      value: { phoneNumber: "+1234567890" }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Custom Webhook</strong></summary>
+
+```typescript
+{
+  provider: NotificationProvider.WEBHOOK,
+  data: {
+    data: {
+      case: "webhook",
+      value: {
+        endpoint: "https://api.example.com/webhook",
+        headers: [
+          { key: "Authorization", value: "Bearer token" },
+          { key: "X-Custom-Header", value: "value" }
+        ]
+      }
+    }
+  }
+}
+```
+
+</details>
+
+---
+
+## Reference
+
+### Monitor Options
+
+#### HTTP Monitor
+
+| Option                 | Type                | Required | Description                                |
+| ---------------------- | ------------------- | -------- | ------------------------------------------ |
+| `name`                 | string              | Yes      | Monitor name (max 256 chars)               |
+| `url`                  | string              | Yes      | URL to monitor (max 2048 chars)            |
+| `periodicity`          | Periodicity         | Yes      | Check interval                             |
+| `method`               | HTTPMethod          | No       | HTTP method (default: GET)                 |
+| `body`                 | string              | No       | Request body                               |
+| `headers`              | Headers[]           | No       | Custom headers `{ key, value }[]`          |
+| `timeout`              | bigint              | No       | Timeout in ms (default: 45000, max: 120000)|
+| `retry`                | bigint              | No       | Retry attempts (default: 3, max: 10)       |
+| `followRedirects`      | boolean             | No       | Follow redirects (default: true)           |
+| `regions`              | Region[]            | No       | Regions for checks                         |
+| `active`               | boolean             | No       | Enable monitoring (default: false)         |
+| `public`               | boolean             | No       | Public visibility (default: false)         |
+| `degradedAt`           | bigint              | No       | Latency threshold (ms) for degraded status |
+| `description`          | string              | No       | Monitor description (max 1024 chars)       |
+| `statusCodeAssertions` | array               | No       | Status code assertions                     |
+| `bodyAssertions`       | array               | No       | Body assertions                            |
+| `headerAssertions`     | array               | No       | Header assertions                          |
+| `openTelemetry`        | OpenTelemetryConfig | No       | OpenTelemetry export configuration         |
+
+#### TCP Monitor
+
+| Option          | Type                | Required | Description                                |
+| --------------- | ------------------- | -------- | ------------------------------------------ |
+| `name`          | string              | Yes      | Monitor name (max 256 chars)               |
+| `uri`           | string              | Yes      | `host:port` to monitor (max 2048 chars)    |
+| `periodicity`   | Periodicity         | Yes      | Check interval                             |
+| `timeout`       | bigint              | No       | Timeout in ms (default: 45000, max: 120000)|
+| `retry`         | bigint              | No       | Retry attempts (default: 3, max: 10)       |
+| `regions`       | Region[]            | No       | Regions for checks                         |
+| `active`        | boolean             | No       | Enable monitoring (default: false)         |
+| `public`        | boolean             | No       | Public visibility (default: false)         |
+| `degradedAt`    | bigint              | No       | Latency threshold (ms) for degraded status |
+| `description`   | string              | No       | Monitor description (max 1024 chars)       |
+| `openTelemetry` | OpenTelemetryConfig | No       | OpenTelemetry export configuration         |
+
+#### DNS Monitor
+
+| Option             | Type                | Required | Description                                |
+| ------------------ | ------------------- | -------- | ------------------------------------------ |
+| `name`             | string              | Yes      | Monitor name (max 256 chars)               |
+| `uri`              | string              | Yes      | Domain to resolve (max 2048 chars)         |
+| `periodicity`      | Periodicity         | Yes      | Check interval                             |
+| `timeout`          | bigint              | No       | Timeout in ms (default: 45000, max: 120000)|
+| `retry`            | bigint              | No       | Retry attempts (default: 3, max: 10)       |
+| `regions`          | Region[]            | No       | Regions for checks                         |
+| `active`           | boolean             | No       | Enable monitoring (default: false)         |
+| `public`           | boolean             | No       | Public visibility (default: false)         |
+| `degradedAt`       | bigint              | No       | Latency threshold (ms) for degraded status |
+| `description`      | string              | No       | Monitor description (max 1024 chars)       |
+| `recordAssertions` | array               | No       | DNS record assertions                      |
+| `openTelemetry`    | OpenTelemetryConfig | No       | OpenTelemetry export configuration         |
+
+---
+
+### Assertions
+
+#### Status Code Assertions
 
 Validate HTTP response status codes using `NumberComparator`.
 
@@ -1196,18 +1241,7 @@ import { NumberComparator } from "@openstatus/sdk-node";
 }
 ```
 
-**NumberComparator values:**
-
-| Enum Value              | Description           |
-| ----------------------- | --------------------- |
-| `EQUAL`                 | Equal to target       |
-| `NOT_EQUAL`             | Not equal to target   |
-| `GREATER_THAN`          | Greater than target   |
-| `GREATER_THAN_OR_EQUAL` | Greater than or equal |
-| `LESS_THAN`             | Less than target      |
-| `LESS_THAN_OR_EQUAL`    | Less than or equal    |
-
-### Body Assertions
+#### Body Assertions
 
 Validate response body content using `StringComparator`.
 
@@ -1222,22 +1256,7 @@ import { StringComparator } from "@openstatus/sdk-node";
 }
 ```
 
-**StringComparator values:**
-
-| Enum Value              | Description                 |
-| ----------------------- | --------------------------- |
-| `CONTAINS`              | Contains target string      |
-| `NOT_CONTAINS`          | Does not contain target     |
-| `EQUAL`                 | Equal to target             |
-| `NOT_EQUAL`             | Not equal to target         |
-| `EMPTY`                 | Body is empty               |
-| `NOT_EMPTY`             | Body is not empty           |
-| `GREATER_THAN`          | Lexicographically greater   |
-| `GREATER_THAN_OR_EQUAL` | Lexicographically >= target |
-| `LESS_THAN`             | Lexicographically less      |
-| `LESS_THAN_OR_EQUAL`    | Lexicographically <= target |
-
-### Header Assertions
+#### Header Assertions
 
 Validate response headers using `StringComparator`.
 
@@ -1255,7 +1274,7 @@ import { StringComparator } from "@openstatus/sdk-node";
 }
 ```
 
-### DNS Record Assertions
+#### DNS Record Assertions
 
 Validate DNS records using `RecordComparator`.
 
@@ -1274,30 +1293,21 @@ import { RecordComparator } from "@openstatus/sdk-node";
 }
 ```
 
-**RecordComparator values:**
-
-| Enum Value     | Description             |
-| -------------- | ----------------------- |
-| `EQUAL`        | Equal to target         |
-| `NOT_EQUAL`    | Not equal to target     |
-| `CONTAINS`     | Contains target string  |
-| `NOT_CONTAINS` | Does not contain target |
-
 **Supported record types:** `A`, `AAAA`, `CNAME`, `MX`, `TXT`
 
-## Regions
+---
 
-Monitor from 28 global locations across multiple providers. Use the `Region`
-enum:
+### Regions
+
+Monitor from 28 global locations across multiple providers.
 
 ```typescript
 import { Region } from "@openstatus/sdk-node";
 
-// Example: Use specific regions
 regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 ```
 
-### Fly.io Regions
+#### Fly.io Regions (18)
 
 | Enum Value | Location        |
 | ---------- | --------------- |
@@ -1320,7 +1330,7 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 | `FLY_SYD`  | Sydney          |
 | `FLY_YYZ`  | Toronto         |
 
-### Koyeb Regions
+#### Koyeb Regions (6)
 
 | Enum Value  | Location      |
 | ----------- | ------------- |
@@ -1331,7 +1341,7 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 | `KOYEB_TYO` | Tokyo         |
 | `KOYEB_WAS` | Washington    |
 
-### Railway Regions
+#### Railway Regions (4)
 
 | Enum Value                | Location       |
 | ------------------------- | -------------- |
@@ -1339,6 +1349,155 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 | `RAILWAY_US_EAST4`        | US East        |
 | `RAILWAY_EUROPE_WEST4`    | Europe West    |
 | `RAILWAY_ASIA_SOUTHEAST1` | Asia Southeast |
+
+---
+
+### Enums
+
+#### Periodicity
+
+| Value             | Description |
+| ----------------- | ----------- |
+| `PERIODICITY_30S` | Every 30s   |
+| `PERIODICITY_1M`  | Every 1m    |
+| `PERIODICITY_5M`  | Every 5m    |
+| `PERIODICITY_10M` | Every 10m   |
+| `PERIODICITY_30M` | Every 30m   |
+| `PERIODICITY_1H`  | Every 1h    |
+
+#### HTTPMethod
+
+| Value                 | Description |
+| --------------------- | ----------- |
+| `HTTP_METHOD_GET`     | GET         |
+| `HTTP_METHOD_POST`    | POST        |
+| `HTTP_METHOD_HEAD`    | HEAD        |
+| `HTTP_METHOD_PUT`     | PUT         |
+| `HTTP_METHOD_PATCH`   | PATCH       |
+| `HTTP_METHOD_DELETE`  | DELETE      |
+| `HTTP_METHOD_TRACE`   | TRACE       |
+| `HTTP_METHOD_CONNECT` | CONNECT     |
+| `HTTP_METHOD_OPTIONS` | OPTIONS     |
+
+#### MonitorStatus
+
+| Value      | Description              |
+| ---------- | ------------------------ |
+| `ACTIVE`   | Monitor is healthy       |
+| `DEGRADED` | Latency threshold exceeded |
+| `ERROR`    | Monitor is failing       |
+
+#### TimeRange
+
+| Value             | Description |
+| ----------------- | ----------- |
+| `TIME_RANGE_1D`   | Last 1 day  |
+| `TIME_RANGE_7D`   | Last 7 days |
+| `TIME_RANGE_14D`  | Last 14 days|
+
+#### StatusReportStatus
+
+| Value           | Description                      |
+| --------------- | -------------------------------- |
+| `INVESTIGATING` | Actively investigating the issue |
+| `IDENTIFIED`    | Root cause has been identified   |
+| `MONITORING`    | Fix deployed, monitoring         |
+| `RESOLVED`      | Issue fully resolved             |
+
+#### OverallStatus
+
+| Value            | Description                 |
+| ---------------- | --------------------------- |
+| `OPERATIONAL`    | All systems operational     |
+| `DEGRADED`       | Performance is degraded     |
+| `PARTIAL_OUTAGE` | Some systems are down       |
+| `MAJOR_OUTAGE`   | Major systems are down      |
+| `MAINTENANCE`    | Scheduled maintenance       |
+| `UNKNOWN`        | Status cannot be determined |
+
+#### NotificationProvider
+
+| Value            | Description         |
+| ---------------- | ------------------- |
+| `DISCORD`        | Discord webhook     |
+| `EMAIL`          | Email notification  |
+| `GOOGLE_CHAT`    | Google Chat webhook |
+| `GRAFANA_ONCALL` | Grafana OnCall      |
+| `NTFY`           | Ntfy push service   |
+| `PAGERDUTY`      | PagerDuty           |
+| `OPSGENIE`       | Opsgenie            |
+| `SLACK`          | Slack webhook       |
+| `SMS`            | SMS notification    |
+| `TELEGRAM`       | Telegram bot        |
+| `WEBHOOK`        | Custom webhook      |
+| `WHATSAPP`       | WhatsApp            |
+
+#### OpsgenieRegion
+
+| Value | Description |
+| ----- | ----------- |
+| `US`  | US region   |
+| `EU`  | EU region   |
+
+#### PageAccessType
+
+| Value                | Description             |
+| -------------------- | ----------------------- |
+| `PUBLIC`             | Publicly accessible     |
+| `PASSWORD_PROTECTED` | Requires password       |
+| `AUTHENTICATED`      | Requires authentication |
+
+#### PageTheme
+
+| Value    | Description         |
+| -------- | ------------------- |
+| `SYSTEM` | Follow system theme |
+| `LIGHT`  | Light theme         |
+| `DARK`   | Dark theme          |
+
+#### PageComponentType
+
+| Value     | Description               |
+| --------- | ------------------------- |
+| `MONITOR` | Linked to a monitor       |
+| `STATIC`  | Static component (manual) |
+
+#### NumberComparator
+
+| Value                   | Description           |
+| ----------------------- | --------------------- |
+| `EQUAL`                 | Equal to target       |
+| `NOT_EQUAL`             | Not equal to target   |
+| `GREATER_THAN`          | Greater than target   |
+| `GREATER_THAN_OR_EQUAL` | Greater than or equal |
+| `LESS_THAN`             | Less than target      |
+| `LESS_THAN_OR_EQUAL`    | Less than or equal    |
+
+#### StringComparator
+
+| Value                   | Description                 |
+| ----------------------- | --------------------------- |
+| `CONTAINS`              | Contains target string      |
+| `NOT_CONTAINS`          | Does not contain target     |
+| `EQUAL`                 | Equal to target             |
+| `NOT_EQUAL`             | Not equal to target         |
+| `EMPTY`                 | Value is empty              |
+| `NOT_EMPTY`             | Value is not empty          |
+| `GREATER_THAN`          | Lexicographically greater   |
+| `GREATER_THAN_OR_EQUAL` | Lexicographically >= target |
+| `LESS_THAN`             | Lexicographically less      |
+| `LESS_THAN_OR_EQUAL`    | Lexicographically <= target |
+
+#### RecordComparator
+
+| Value          | Description             |
+| -------------- | ----------------------- |
+| `EQUAL`        | Equal to target         |
+| `NOT_EQUAL`    | Not equal to target     |
+| `CONTAINS`     | Contains target string  |
+| `NOT_CONTAINS` | Does not contain target |
+
+---
 
 ## Error Handling
 
