@@ -17,14 +17,13 @@ await build({
     license: "MIT",
     repository: {
       type: "git",
-      url: "https://github.com/openstatushq/sdk-node.git",
+      url: "git+https://github.com/openstatusHQ/sdk-node.git",
     },
     bugs: {
-      url: "https://github.com/openstatushq/sdk-node/issues",
+      url: "https://github.com/openstatusHQ/sdk-node/issues",
     },
     publishConfig: {
       access: "public",
-      provenance: true,
     },
   },
   postBuild() {
