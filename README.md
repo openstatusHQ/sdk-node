@@ -1,4 +1,4 @@
-# OpenStatus Node.js SDK (Beta)
+# OpenStatus Node.js SDK
 
 [![JSR](https://jsr.io/badges/@openstatus/sdk-node)](https://jsr.io/@openstatus/sdk-node)
 [![npm](https://img.shields.io/npm/v/@openstatus/sdk-node)](https://www.npmjs.com/package/@openstatus/sdk-node)

@@ -12,12 +12,12 @@ await build({
   package: {
     // package.json properties
     name: "@openstatus/sdk-node",
-    version: "0.1.3",
+    version: "0.1.4",
     description: "SDK for openstatus.",
     license: "MIT",
     repository: {
       type: "git",
-      url: "git+https://github.com/openstatushq/sdk-node.git",
+      url: "https://github.com/openstatushq/sdk-node.git",
     },
     bugs: {
       url: "https://github.com/openstatushq/sdk-node/issues",

@@ -30,9 +30,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "24"
+          node-version: 24
           registry-url: "https://registry.npmjs.org"
       - name: Install Deno
         uses: denoland/setup-deno@v2
