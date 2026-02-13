@@ -28,6 +28,8 @@ status page with uptime monitoring.
 - [Error Handling](#error-handling)
 - [Related](#related)
 
+For comprehensive documentation, see [docs/index.md](docs/index.md).
+
 ## Features
 
 ### Monitoring
@@ -279,10 +281,10 @@ const { monitor } = await client.monitor.v1.MonitorService.updateDNSMonitor({
 List all monitors with pagination. Returns monitors grouped by type.
 
 ```typescript
-const { httpMonitors, tcpMonitors, dnsMonitors, nextPageToken, totalSize } =
+const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } =
   await client.monitor.v1.MonitorService.listMonitors({
-    pageSize: 10,
-    pageToken: "",
+    limit: 10,
+    offset: 0,
   });
 ```
 

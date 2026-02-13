@@ -32,7 +32,7 @@
  * ```typescript
  * import { openstatus, Periodicity } from "@openstatus/sdk-node";
  *
- * const headers = { "x-openstatus-key": `Bearer ${process.env.OPENSTATUS_API_KEY}` };
+ * const headers = { "x-openstatus-key": `${process.env.OPENSTATUS_API_KEY}` };
  * const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor({
  *   monitor: { name: "My API", url: "https://api.example.com", periodicity: Periodicity.PERIODICITY_1M, active: true },
  * }, { headers });
@@ -543,7 +543,7 @@ export function createOpenStatusClient(
  * ```typescript
  * import { openstatus, Periodicity } from "@openstatus/sdk-node";
  *
- * const headers = { "x-openstatus-key": `Bearer ${process.env.OPENSTATUS_API_KEY}` };
+ * const headers = { "x-openstatus-key": `${process.env.OPENSTATUS_API_KEY}` };
  * const { monitor } = await openstatus.monitor.v1.MonitorService.createHTTPMonitor({
  *   monitor: { name: "My Website", url: "https://example.com", periodicity: Periodicity.PERIODICITY_1M, active: true },
  * }, { headers });
