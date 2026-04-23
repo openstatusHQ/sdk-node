@@ -8,6 +8,7 @@ import type {
   GenMessage,
 } from "@bufbuild/protobuf/codegenv2";
 import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import { file_gnostic_openapi_v3_annotations } from "../../../gnostic/openapi/v3/annotations_pb.ts";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
@@ -15,7 +16,8 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export const file_openstatus_status_page_v1_status_page: GenFile = /*@__PURE__*/
   fileDesc(
-    "CitvcGVuc3RhdHVzL3N0YXR1c19wYWdlL3YxL3N0YXR1c19wYWdlLnByb3RvEhlvcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxIsoCCgpTdGF0dXNQYWdlEgoKAmlkGAEgASgJEg0KBXRpdGxlGAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJEgwKBHNsdWcYBCABKAkSFQoNY3VzdG9tX2RvbWFpbhgFIAEoCRIRCglwdWJsaXNoZWQYBiABKAgSPgoLYWNjZXNzX3R5cGUYByABKA4yKS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VBY2Nlc3NUeXBlEjMKBXRoZW1lGAggASgOMiQub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlVGhlbWUSFAoMaG9tZXBhZ2VfdXJsGAkgASgJEhMKC2NvbnRhY3RfdXJsGAogASgJEgwKBGljb24YCyABKAkSEgoKY3JlYXRlZF9hdBgMIAEoCRISCgp1cGRhdGVkX2F0GA0gASgJIncKEVN0YXR1c1BhZ2VTdW1tYXJ5EgoKAmlkGAEgASgJEg0KBXRpdGxlGAIgASgJEgwKBHNsdWcYAyABKAkSEQoJcHVibGlzaGVkGAQgASgIEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKdXBkYXRlZF9hdBgGIAEoCSqcAQoOUGFnZUFjY2Vzc1R5cGUSIAocUEFHRV9BQ0NFU1NfVFlQRV9VTlNQRUNJRklFRBAAEhsKF1BBR0VfQUNDRVNTX1RZUEVfUFVCTElDEAESJwojUEFHRV9BQ0NFU1NfVFlQRV9QQVNTV09SRF9QUk9URUNURUQQAhIiCh5QQUdFX0FDQ0VTU19UWVBFX0FVVEhFTlRJQ0FURUQQAyppCglQYWdlVGhlbWUSGgoWUEFHRV9USEVNRV9VTlNQRUNJRklFRBAAEhUKEVBBR0VfVEhFTUVfU1lTVEVNEAESFAoQUEFHRV9USEVNRV9MSUdIVBACEhMKD1BBR0VfVEhFTUVfREFSSxADKuwBCg1PdmVyYWxsU3RhdHVzEh4KGk9WRVJBTExfU1RBVFVTX1VOU1BFQ0lGSUVEEAASHgoaT1ZFUkFMTF9TVEFUVVNfT1BFUkFUSU9OQUwQARIbChdPVkVSQUxMX1NUQVRVU19ERUdSQURFRBACEiEKHU9WRVJBTExfU1RBVFVTX1BBUlRJQUxfT1VUQUdFEAMSHwobT1ZFUkFMTF9TVEFUVVNfTUFKT1JfT1VUQUdFEAQSHgoaT1ZFUkFMTF9TVEFUVVNfTUFJTlRFTkFOQ0UQBRIaChZPVkVSQUxMX1NUQVRVU19VTktOT1dOEAZCWlpYZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL3N0YXR1c19wYWdlL3YxO3N0YXR1c3BhZ2V2MWIGcHJvdG8z",
+    "CitvcGVuc3RhdHVzL3N0YXR1c19wYWdlL3YxL3N0YXR1c19wYWdlLnByb3RvEhlvcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxIv4ECgpTdGF0dXNQYWdlEgoKAmlkGAEgASgJEg0KBXRpdGxlGAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJEh4KBHNsdWcYBCABKAlCELpHDToLEglhY21lLWNvcnASMAoNY3VzdG9tX2RvbWFpbhgFIAEoCUIZukcWOhQSEnN0YXR1cy5leGFtcGxlLmNvbRIRCglwdWJsaXNoZWQYBiABKAgSPgoLYWNjZXNzX3R5cGUYByABKA4yKS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VBY2Nlc3NUeXBlEjMKBXRoZW1lGAggASgOMiQub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlVGhlbWUSFAoMaG9tZXBhZ2VfdXJsGAkgASgJEhMKC2NvbnRhY3RfdXJsGAogASgJEgwKBGljb24YCyABKAkSLwoKY3JlYXRlZF9hdBgMIAEoCUIbukcYOhYSFDIwMjQtMDEtMTVUMDk6MDA6MDBaEi8KCnVwZGF0ZWRfYXQYDSABKAlCG7pHGDoWEhQyMDI0LTA2LTIwVDE0OjMwOjAwWhI5Cg5kZWZhdWx0X2xvY2FsZRgOIAEoDjIhLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuTG9jYWxlEjIKB2xvY2FsZXMYDyADKA4yIS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkxvY2FsZRIQCghwYXNzd29yZBgQIAEoCRIaChJhdXRoX2VtYWlsX2RvbWFpbnMYESADKAkSEwoLYWxsb3dfaW5kZXgYEiABKAgSGQoRYWxsb3dlZF9pcF9yYW5nZXMYEyABKAkiqQEKEVN0YXR1c1BhZ2VTdW1tYXJ5EgoKAmlkGAEgASgJEg0KBXRpdGxlGAIgASgJEgwKBHNsdWcYAyABKAkSEQoJcHVibGlzaGVkGAQgASgIEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKdXBkYXRlZF9hdBgGIAEoCRIwCg1jdXN0b21fZG9tYWluGAcgASgJQhm6RxY6FBISc3RhdHVzLmV4YW1wbGUuY29tKsABCg5QYWdlQWNjZXNzVHlwZRIgChxQQUdFX0FDQ0VTU19UWVBFX1VOU1BFQ0lGSUVEEAASGwoXUEFHRV9BQ0NFU1NfVFlQRV9QVUJMSUMQARInCiNQQUdFX0FDQ0VTU19UWVBFX1BBU1NXT1JEX1BST1RFQ1RFRBACEiIKHlBBR0VfQUNDRVNTX1RZUEVfQVVUSEVOVElDQVRFRBADEiIKHlBBR0VfQUNDRVNTX1RZUEVfSVBfUkVTVFJJQ1RFRBAEKmkKCVBhZ2VUaGVtZRIaChZQQUdFX1RIRU1FX1VOU1BFQ0lGSUVEEAASFQoRUEFHRV9USEVNRV9TWVNURU0QARIUChBQQUdFX1RIRU1FX0xJR0hUEAISEwoPUEFHRV9USEVNRV9EQVJLEAMqTQoGTG9jYWxlEhYKEkxPQ0FMRV9VTlNQRUNJRklFRBAAEg0KCUxPQ0FMRV9FThABEg0KCUxPQ0FMRV9GUhACEg0KCUxPQ0FMRV9ERRADKuwBCg1PdmVyYWxsU3RhdHVzEh4KGk9WRVJBTExfU1RBVFVTX1VOU1BFQ0lGSUVEEAASHgoaT1ZFUkFMTF9TVEFUVVNfT1BFUkFUSU9OQUwQARIbChdPVkVSQUxMX1NUQVRVU19ERUdSQURFRBACEiEKHU9WRVJBTExfU1RBVFVTX1BBUlRJQUxfT1VUQUdFEAMSHwobT1ZFUkFMTF9TVEFUVVNfTUFKT1JfT1VUQUdFEAQSHgoaT1ZFUkFMTF9TVEFUVVNfTUFJTlRFTkFOQ0UQBRIaChZPVkVSQUxMX1NUQVRVU19VTktOT1dOEAZCWlpYZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL3N0YXR1c19wYWdlL3YxO3N0YXR1c3BhZ2V2MWIGcHJvdG8z",
+    [file_gnostic_openapi_v3_annotations],
   );
 
 /**
@@ -114,6 +116,48 @@ export type StatusPage = Message<"openstatus.status_page.v1.StatusPage"> & {
    * @generated from field: string updated_at = 13;
    */
   updatedAt: string;
+
+  /**
+   * Default locale for the status page.
+   *
+   * @generated from field: openstatus.status_page.v1.Locale default_locale = 14;
+   */
+  defaultLocale: Locale;
+
+  /**
+   * Enabled locales for the status page.
+   *
+   * @generated from field: repeated openstatus.status_page.v1.Locale locales = 15;
+   */
+  locales: Locale[];
+
+  /**
+   * Password for the status page (only set when access_type is PASSWORD_PROTECTED).
+   *
+   * @generated from field: string password = 16;
+   */
+  password: string;
+
+  /**
+   * Email domains allowed to access the page (only set when access_type is AUTHENTICATED).
+   *
+   * @generated from field: repeated string auth_email_domains = 17;
+   */
+  authEmailDomains: string[];
+
+  /**
+   * Whether search engines are allowed to index this status page.
+   *
+   * @generated from field: bool allow_index = 18;
+   */
+  allowIndex: boolean;
+
+  /**
+   * Comma-separated IPv4 CIDR ranges (only set when access_type is IP_RESTRICTED).
+   *
+   * @generated from field: string allowed_ip_ranges = 19;
+   */
+  allowedIpRanges: string;
 };
 
 /**
@@ -172,6 +216,13 @@ export type StatusPageSummary =
      * @generated from field: string updated_at = 6;
      */
     updatedAt: string;
+
+    /**
+     * Custom domain for the status page (optional).
+     *
+     * @generated from field: string custom_domain = 7;
+     */
+    customDomain: string;
   };
 
 /**
@@ -208,6 +259,11 @@ export enum PageAccessType {
    * @generated from enum value: PAGE_ACCESS_TYPE_AUTHENTICATED = 3;
    */
   AUTHENTICATED = 3,
+
+  /**
+   * @generated from enum value: PAGE_ACCESS_TYPE_IP_RESTRICTED = 4;
+   */
+  IP_RESTRICTED = 4,
 }
 
 /**
@@ -248,6 +304,39 @@ export enum PageTheme {
  */
 export const PageThemeSchema: GenEnum<PageTheme> = /*@__PURE__*/
   enumDesc(file_openstatus_status_page_v1_status_page, 1);
+
+/**
+ * Locale defines the supported languages for a status page.
+ *
+ * @generated from enum openstatus.status_page.v1.Locale
+ */
+export enum Locale {
+  /**
+   * @generated from enum value: LOCALE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: LOCALE_EN = 1;
+   */
+  EN = 1,
+
+  /**
+   * @generated from enum value: LOCALE_FR = 2;
+   */
+  FR = 2,
+
+  /**
+   * @generated from enum value: LOCALE_DE = 3;
+   */
+  DE = 3,
+}
+
+/**
+ * Describes the enum openstatus.status_page.v1.Locale.
+ */
+export const LocaleSchema: GenEnum<Locale> = /*@__PURE__*/
+  enumDesc(file_openstatus_status_page_v1_status_page, 2);
 
 /**
  * OverallStatus represents the aggregated status of all components on a page.
@@ -295,4 +384,4 @@ export enum OverallStatus {
  * Describes the enum openstatus.status_page.v1.OverallStatus.
  */
 export const OverallStatusSchema: GenEnum<OverallStatus> = /*@__PURE__*/
-  enumDesc(file_openstatus_status_page_v1_status_page, 2);
+  enumDesc(file_openstatus_status_page_v1_status_page, 3);

@@ -2,7 +2,8 @@
 
 # Status Page Service
 
-Manage status pages, components, component groups, and subscribers. The Status Page Service provides 17 RPC methods.
+Manage status pages, components, component groups, and subscribers. The Status
+Page Service provides 17 RPC methods.
 
 ## Status Page CRUD
 
@@ -57,7 +58,8 @@ const { success } = await client.statusPage.v1.StatusPageService
 
 ## Components
 
-Components represent individual services on a status page. They can be linked to a monitor (automatically reflects monitor status) or static (manually managed).
+Components represent individual services on a status page. They can be linked to
+a monitor (automatically reflects monitor status) or static (manually managed).
 
 ### Add Monitor Component
 
@@ -185,7 +187,8 @@ const { subscribers, totalSize } = await client.statusPage.v1.StatusPageService
 
 ## Get Status Page Content
 
-Get the full content of a status page including components, groups, active status reports, and maintenance windows. Identify the page by ID or slug.
+Get the full content of a status page including components, groups, active
+status reports, and maintenance windows. Identify the page by ID or slug.
 
 ```typescript
 const content = await client.statusPage.v1.StatusPageService

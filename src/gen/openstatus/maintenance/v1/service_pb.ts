@@ -13,6 +13,7 @@ import {
   serviceDesc,
 } from "@bufbuild/protobuf/codegenv2";
 import { file_buf_validate_validate } from "../../../buf/validate/validate_pb.ts";
+import { file_gnostic_openapi_v3_annotations } from "../../../gnostic/openapi/v3/annotations_pb.ts";
 import type { Maintenance, MaintenanceSummary } from "./maintenance_pb.ts";
 import { file_openstatus_maintenance_v1_maintenance } from "./maintenance_pb.ts";
 import type { Message } from "@bufbuild/protobuf";
@@ -22,11 +23,17 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export const file_openstatus_maintenance_v1_service: GenFile = /*@__PURE__*/
   fileDesc(
-    "CidvcGVuc3RhdHVzL21haW50ZW5hbmNlL3YxL3NlcnZpY2UucHJvdG8SGW9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEi2QIKGENyZWF0ZU1haW50ZW5hbmNlUmVxdWVzdBIZCgV0aXRsZRgBIAEoCUIKukgHcgUQARiAAhIYCgdtZXNzYWdlGAIgASgJQge6SARyAhABElkKBGZyb20YAyABKAlCS7pISHJGMkReXGR7NH0tXGR7Mn0tXGR7Mn1UXGR7Mn06XGR7Mn06XGR7Mn0oXC5cZHsxLDl9KT8oWnxbKy1dXGR7Mn06XGR7Mn0pJBJXCgJ0bxgEIAEoCUJLukhIckYyRF5cZHs0fS1cZHsyfS1cZHsyfVRcZHsyfTpcZHsyfTpcZHsyfShcLlxkezEsOX0pPyhafFsrLV1cZHsyfTpcZHsyfSkkEhgKB3BhZ2VfaWQYBSABKAlCB7pIBHICEAESGgoScGFnZV9jb21wb25lbnRfaWRzGAYgAygJEhMKBm5vdGlmeRgHIAEoCEgAiAEBQgkKB19ub3RpZnkiWAoZQ3JlYXRlTWFpbnRlbmFuY2VSZXNwb25zZRI7CgttYWludGVuYW5jZRgBIAEoCzImLm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuTWFpbnRlbmFuY2UiLAoVR2V0TWFpbnRlbmFuY2VSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABIlUKFkdldE1haW50ZW5hbmNlUmVzcG9uc2USOwoLbWFpbnRlbmFuY2UYASABKAsyJi5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLk1haW50ZW5hbmNlIo0BChdMaXN0TWFpbnRlbmFuY2VzUmVxdWVzdBIdCgVsaW1pdBgBIAEoBUIJukgGGgQYZCgBSACIAQESHAoGb2Zmc2V0GAIgASgFQge6SAQaAigASAGIAQESFAoHcGFnZV9pZBgDIAEoCUgCiAEBQggKBl9saW1pdEIJCgdfb2Zmc2V0QgoKCF9wYWdlX2lkInMKGExpc3RNYWludGVuYW5jZXNSZXNwb25zZRJDCgxtYWludGVuYW5jZXMYASADKAsyLS5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLk1haW50ZW5hbmNlU3VtbWFyeRISCgp0b3RhbF9zaXplGAIgASgFIocDChhVcGRhdGVNYWludGVuYW5jZVJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAESHgoFdGl0bGUYAiABKAlCCrpIB3IFEAEYgAJIAIgBARIUCgdtZXNzYWdlGAMgASgJSAGIAQESXgoEZnJvbRgEIAEoCUJLukhIckYyRF5cZHs0fS1cZHsyfS1cZHsyfVRcZHsyfTpcZHsyfTpcZHsyfShcLlxkezEsOX0pPyhafFsrLV1cZHsyfTpcZHsyfSkkSAKIAQESXAoCdG8YBSABKAlCS7pISHJGMkReXGR7NH0tXGR7Mn0tXGR7Mn1UXGR7Mn06XGR7Mn06XGR7Mn0oXC5cZHsxLDl9KT8oWnxbKy1dXGR7Mn06XGR7Mn0pJEgDiAEBEhQKB3BhZ2VfaWQYBiABKAlIBIgBARIaChJwYWdlX2NvbXBvbmVudF9pZHMYByADKAlCCAoGX3RpdGxlQgoKCF9tZXNzYWdlQgcKBV9mcm9tQgUKA190b0IKCghfcGFnZV9pZCJYChlVcGRhdGVNYWludGVuYW5jZVJlc3BvbnNlEjsKC21haW50ZW5hbmNlGAEgASgLMiYub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5NYWludGVuYW5jZSIvChhEZWxldGVNYWludGVuYW5jZVJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAEiLAoZRGVsZXRlTWFpbnRlbmFuY2VSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIMogFChJNYWludGVuYW5jZVNlcnZpY2USfgoRQ3JlYXRlTWFpbnRlbmFuY2USMy5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLkNyZWF0ZU1haW50ZW5hbmNlUmVxdWVzdBo0Lm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuQ3JlYXRlTWFpbnRlbmFuY2VSZXNwb25zZRJ1Cg5HZXRNYWludGVuYW5jZRIwLm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuR2V0TWFpbnRlbmFuY2VSZXF1ZXN0GjEub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5HZXRNYWludGVuYW5jZVJlc3BvbnNlEnsKEExpc3RNYWludGVuYW5jZXMSMi5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLkxpc3RNYWludGVuYW5jZXNSZXF1ZXN0GjMub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5MaXN0TWFpbnRlbmFuY2VzUmVzcG9uc2USfgoRVXBkYXRlTWFpbnRlbmFuY2USMy5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLlVwZGF0ZU1haW50ZW5hbmNlUmVxdWVzdBo0Lm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuVXBkYXRlTWFpbnRlbmFuY2VSZXNwb25zZRJ+ChFEZWxldGVNYWludGVuYW5jZRIzLm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuRGVsZXRlTWFpbnRlbmFuY2VSZXF1ZXN0GjQub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5EZWxldGVNYWludGVuYW5jZVJlc3BvbnNlQltaWWdpdGh1Yi5jb20vb3BlbnN0YXR1c2hxL29wZW5zdGF0dXMvcGFja2FnZXMvcHJvdG8vb3BlbnN0YXR1cy9tYWludGVuYW5jZS92MTttYWludGVuYW5jZXYxYgZwcm90bzM",
-    [file_buf_validate_validate, file_openstatus_maintenance_v1_maintenance],
+    "CidvcGVuc3RhdHVzL21haW50ZW5hbmNlL3YxL3NlcnZpY2UucHJvdG8SGW9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEiqAMKGENyZWF0ZU1haW50ZW5hbmNlUmVxdWVzdBIyCgV0aXRsZRgBIAEoCUIjukcWOhQSEkRhdGFiYXNlIE1pZ3JhdGlvbrpIB3IFEAEYgAISGAoHbWVzc2FnZRgCIAEoCUIHukgEcgIQARJ0CgRmcm9tGAMgASgJQma6Rxg6FhIUMjAyNC0wMy0wMVQwMjowMDowMFq6SEhyRjJEXlxkezR9LVxkezJ9LVxkezJ9VFxkezJ9OlxkezJ9OlxkezJ9KFwuXGR7MSw5fSk/KFp8WystXVxkezJ9OlxkezJ9KSQScgoCdG8YBCABKAlCZrpHGDoWEhQyMDI0LTAzLTAxVDA2OjAwOjAwWrpISHJGMkReXGR7NH0tXGR7Mn0tXGR7Mn1UXGR7Mn06XGR7Mn06XGR7Mn0oXC5cZHsxLDl9KT8oWnxbKy1dXGR7Mn06XGR7Mn0pJBIYCgdwYWdlX2lkGAUgASgJQge6SARyAhABEhoKEnBhZ2VfY29tcG9uZW50X2lkcxgGIAMoCRITCgZub3RpZnkYByABKAhIAIgBAUIJCgdfbm90aWZ5IlgKGUNyZWF0ZU1haW50ZW5hbmNlUmVzcG9uc2USOwoLbWFpbnRlbmFuY2UYASABKAsyJi5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLk1haW50ZW5hbmNlIiwKFUdldE1haW50ZW5hbmNlUmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASJVChZHZXRNYWludGVuYW5jZVJlc3BvbnNlEjsKC21haW50ZW5hbmNlGAEgASgLMiYub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5NYWludGVuYW5jZSKNAQoXTGlzdE1haW50ZW5hbmNlc1JlcXVlc3QSHQoFbGltaXQYASABKAVCCbpIBhoEGGQoAUgAiAEBEhwKBm9mZnNldBgCIAEoBUIHukgEGgIoAEgBiAEBEhQKB3BhZ2VfaWQYAyABKAlIAogBAUIICgZfbGltaXRCCQoHX29mZnNldEIKCghfcGFnZV9pZCJzChhMaXN0TWFpbnRlbmFuY2VzUmVzcG9uc2USQwoMbWFpbnRlbmFuY2VzGAEgAygLMi0ub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5NYWludGVuYW5jZVN1bW1hcnkSEgoKdG90YWxfc2l6ZRgCIAEoBSLRAwoYVXBkYXRlTWFpbnRlbmFuY2VSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABEh4KBXRpdGxlGAIgASgJQgq6SAdyBRABGIACSACIAQESFAoHbWVzc2FnZRgDIAEoCUgBiAEBEl4KBGZyb20YBCABKAlCS7pISHJGMkReXGR7NH0tXGR7Mn0tXGR7Mn1UXGR7Mn06XGR7Mn06XGR7Mn0oXC5cZHsxLDl9KT8oWnxbKy1dXGR7Mn06XGR7Mn0pJEgCiAEBElwKAnRvGAUgASgJQku6SEhyRjJEXlxkezR9LVxkezJ9LVxkezJ9VFxkezJ9OlxkezJ9OlxkezJ9KFwuXGR7MSw5fSk/KFp8WystXVxkezJ9OlxkezJ9KSRIA4gBARIYCgdwYWdlX2lkGAYgASgJQgIYAUgEiAEBEhoKEnBhZ2VfY29tcG9uZW50X2lkcxgHIAMoCRImChl1cGRhdGVfcGFnZV9jb21wb25lbnRfaWRzGAggASgISAWIAQFCCAoGX3RpdGxlQgoKCF9tZXNzYWdlQgcKBV9mcm9tQgUKA190b0IKCghfcGFnZV9pZEIcChpfdXBkYXRlX3BhZ2VfY29tcG9uZW50X2lkcyJYChlVcGRhdGVNYWludGVuYW5jZVJlc3BvbnNlEjsKC21haW50ZW5hbmNlGAEgASgLMiYub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5NYWludGVuYW5jZSIvChhEZWxldGVNYWludGVuYW5jZVJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAEiLAoZRGVsZXRlTWFpbnRlbmFuY2VSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIMpMFChJNYWludGVuYW5jZVNlcnZpY2USfgoRQ3JlYXRlTWFpbnRlbmFuY2USMy5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLkNyZWF0ZU1haW50ZW5hbmNlUmVxdWVzdBo0Lm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuQ3JlYXRlTWFpbnRlbmFuY2VSZXNwb25zZRJ6Cg5HZXRNYWludGVuYW5jZRIwLm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuR2V0TWFpbnRlbmFuY2VSZXF1ZXN0GjEub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5HZXRNYWludGVuYW5jZVJlc3BvbnNlIgOQAgESgAEKEExpc3RNYWludGVuYW5jZXMSMi5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLkxpc3RNYWludGVuYW5jZXNSZXF1ZXN0GjMub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5MaXN0TWFpbnRlbmFuY2VzUmVzcG9uc2UiA5ACARJ+ChFVcGRhdGVNYWludGVuYW5jZRIzLm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuVXBkYXRlTWFpbnRlbmFuY2VSZXF1ZXN0GjQub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5VcGRhdGVNYWludGVuYW5jZVJlc3BvbnNlEn4KEURlbGV0ZU1haW50ZW5hbmNlEjMub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5EZWxldGVNYWludGVuYW5jZVJlcXVlc3QaNC5vcGVuc3RhdHVzLm1haW50ZW5hbmNlLnYxLkRlbGV0ZU1haW50ZW5hbmNlUmVzcG9uc2VCW1pZZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL21haW50ZW5hbmNlL3YxO21haW50ZW5hbmNldjFiBnByb3RvMw",
+    [
+      file_buf_validate_validate,
+      file_gnostic_openapi_v3_annotations,
+      file_openstatus_maintenance_v1_maintenance,
+    ],
   );
 
 /**
+ * CreateMaintenanceRequest is the request to create a new maintenance window.
+ *
  * @generated from message openstatus.maintenance.v1.CreateMaintenanceRequest
  */
 export type CreateMaintenanceRequest =
@@ -92,6 +99,8 @@ export const CreateMaintenanceRequestSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 0);
 
 /**
+ * CreateMaintenanceResponse is the response after creating a maintenance window.
+ *
  * @generated from message openstatus.maintenance.v1.CreateMaintenanceResponse
  */
 export type CreateMaintenanceResponse =
@@ -115,6 +124,8 @@ export const CreateMaintenanceResponseSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 1);
 
 /**
+ * GetMaintenanceRequest is the request to get a maintenance window by ID.
+ *
  * @generated from message openstatus.maintenance.v1.GetMaintenanceRequest
  */
 export type GetMaintenanceRequest =
@@ -138,6 +149,8 @@ export const GetMaintenanceRequestSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 2);
 
 /**
+ * GetMaintenanceResponse is the response containing the maintenance window.
+ *
  * @generated from message openstatus.maintenance.v1.GetMaintenanceResponse
  */
 export type GetMaintenanceResponse =
@@ -161,6 +174,8 @@ export const GetMaintenanceResponseSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 3);
 
 /**
+ * ListMaintenancesRequest is the request to list maintenance windows.
+ *
  * @generated from message openstatus.maintenance.v1.ListMaintenancesRequest
  */
 export type ListMaintenancesRequest =
@@ -198,6 +213,8 @@ export const ListMaintenancesRequestSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 4);
 
 /**
+ * ListMaintenancesResponse is the response containing maintenance window summaries.
+ *
  * @generated from message openstatus.maintenance.v1.ListMaintenancesResponse
  */
 export type ListMaintenancesResponse =
@@ -228,6 +245,8 @@ export const ListMaintenancesResponseSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 5);
 
 /**
+ * UpdateMaintenanceRequest is the request to update a maintenance window.
+ *
  * @generated from message openstatus.maintenance.v1.UpdateMaintenanceRequest
  */
 export type UpdateMaintenanceRequest =
@@ -269,9 +288,10 @@ export type UpdateMaintenanceRequest =
     to?: string;
 
     /**
-     * New page ID (optional).
+     * Deprecated: page_id is now derived from page_component_ids.
      *
-     * @generated from field: optional string page_id = 6;
+     * @generated from field: optional string page_id = 6 [deprecated = true];
+     * @deprecated
      */
     pageId?: string;
 
@@ -281,6 +301,15 @@ export type UpdateMaintenanceRequest =
      * @generated from field: repeated string page_component_ids = 7;
      */
     pageComponentIds: string[];
+
+    /**
+     * Set to true to update page component associations.
+     * When true, page_component_ids replaces the existing list (empty clears all).
+     * When false or unset, page_component_ids is ignored and existing associations are preserved.
+     *
+     * @generated from field: optional bool update_page_component_ids = 8;
+     */
+    updatePageComponentIds?: boolean;
   };
 
 /**
@@ -293,6 +322,8 @@ export const UpdateMaintenanceRequestSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 6);
 
 /**
+ * UpdateMaintenanceResponse is the response after updating a maintenance window.
+ *
  * @generated from message openstatus.maintenance.v1.UpdateMaintenanceResponse
  */
 export type UpdateMaintenanceResponse =
@@ -316,6 +347,8 @@ export const UpdateMaintenanceResponseSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 7);
 
 /**
+ * DeleteMaintenanceRequest is the request to delete a maintenance window.
+ *
  * @generated from message openstatus.maintenance.v1.DeleteMaintenanceRequest
  */
 export type DeleteMaintenanceRequest =
@@ -339,6 +372,8 @@ export const DeleteMaintenanceRequestSchema: GenMessage<
   messageDesc(file_openstatus_maintenance_v1_service, 8);
 
 /**
+ * DeleteMaintenanceResponse is the response after deleting a maintenance window.
+ *
  * @generated from message openstatus.maintenance.v1.DeleteMaintenanceResponse
  */
 export type DeleteMaintenanceResponse =

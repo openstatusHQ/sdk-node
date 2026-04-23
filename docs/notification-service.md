@@ -2,7 +2,8 @@
 
 # Notification Service
 
-Manage notification channels for monitor alerts. Supports 12 providers. The Notification Service provides 7 RPC methods.
+Manage notification channels for monitor alerts. Supports 12 providers. The
+Notification Service provides 7 RPC methods.
 
 ## Create Notification
 
@@ -32,7 +33,10 @@ const { notification } = await client.notification.v1.NotificationService
 console.log(`Notification created: ${notification?.id}`);
 ```
 
-The `data` field uses a nested oneof pattern: the outer `data` is the `NotificationData` message, and `data.data` is the oneof that selects the provider-specific configuration. The `case` must match the provider type in lowercase.
+The `data` field uses a nested oneof pattern: the outer `data` is the
+`NotificationData` message, and `data.data` is the oneof that selects the
+provider-specific configuration. The `case` must match the provider type in
+lowercase.
 
 ## Provider Configurations
 

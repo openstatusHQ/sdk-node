@@ -2,7 +2,8 @@
 
 # Maintenance Service
 
-Manage scheduled maintenance windows. The Maintenance Service provides 5 RPC methods.
+Manage scheduled maintenance windows. The Maintenance Service provides 5 RPC
+methods.
 
 ## Create Maintenance Window
 

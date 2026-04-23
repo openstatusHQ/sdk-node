@@ -1,6 +1,9 @@
 # OpenStatus Node.js SDK Documentation
 
-Official documentation for [`@openstatus/sdk-node`](https://www.npmjs.com/package/@openstatus/sdk-node) — the TypeScript SDK for the [OpenStatus](https://openstatus.dev) monitoring platform.
+Official documentation for
+[`@openstatus/sdk-node`](https://www.npmjs.com/package/@openstatus/sdk-node) —
+the TypeScript SDK for the [OpenStatus](https://openstatus.dev) monitoring
+platform.
 
 ---
 

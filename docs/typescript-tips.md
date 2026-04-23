@@ -8,7 +8,8 @@ Protocol Buffers `int64` fields map to `bigint` in TypeScript. This affects:
 
 - **Monitor configuration**: `timeout`, `retry`, `degradedAt`
 - **Assertions**: `StatusCodeAssertion.target`
-- **Monitor summary**: `totalSuccessful`, `totalDegraded`, `totalFailed`, `p50`, `p75`, `p90`, `p95`, `p99`
+- **Monitor summary**: `totalSuccessful`, `totalDegraded`, `totalFailed`, `p50`,
+  `p75`, `p90`, `p95`, `p99`
 
 Use `BigInt()` to create values:
 
@@ -19,9 +20,9 @@ const { monitor } = await client.monitor.v1.MonitorService.createHTTPMonitor({
     url: "https://example.com",
     periodicity: Periodicity.PERIODICITY_1M,
     active: true,
-    timeout: BigInt(30000),       // 30 seconds
-    retry: BigInt(5),             // 5 retries
-    degradedAt: BigInt(3000),     // degraded after 3s
+    timeout: BigInt(30000), // 30 seconds
+    retry: BigInt(5), // 5 retries
+    degradedAt: BigInt(3000), // degraded after 3s
     statusCodeAssertions: [
       { comparator: NumberComparator.EQUAL, target: BigInt(200) },
     ],
@@ -40,12 +41,17 @@ const summary = await client.monitor.v1.MonitorService.getMonitorSummary({
 
 // bigint values — use Number() for display if values are safe
 console.log(`P95 latency: ${summary.p95}ms`);
-console.log(`Total checks: ${summary.totalSuccessful + summary.totalDegraded + summary.totalFailed}`);
+console.log(
+  `Total checks: ${
+    summary.totalSuccessful + summary.totalDegraded + summary.totalFailed
+  }`,
+);
 ```
 
 ## Handling oneof Types
 
-Several responses use protobuf `oneof` fields, which map to discriminated unions in TypeScript.
+Several responses use protobuf `oneof` fields, which map to discriminated unions
+in TypeScript.
 
 ### MonitorConfig (getMonitor)
 
@@ -89,7 +95,8 @@ data: {
 
 ### Status Page Identifiers
 
-`getStatusPageContent` and `getOverallStatus` accept a page identifier by ID or slug:
+`getStatusPageContent` and `getOverallStatus` accept a page identifier by ID or
+slug:
 
 ```typescript
 // By ID
@@ -125,7 +132,12 @@ const { httpMonitors } = await openstatus.monitor.v1.MonitorService
 
 const { monitor } = await openstatus.monitor.v1.MonitorService
   .createHTTPMonitor({
-    monitor: { name: "API", url: "https://example.com", periodicity: 2, active: true },
+    monitor: {
+      name: "API",
+      url: "https://example.com",
+      periodicity: 2,
+      active: true,
+    },
   }, { headers });
 ```
 
