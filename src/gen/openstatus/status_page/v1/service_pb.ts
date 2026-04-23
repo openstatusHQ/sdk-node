@@ -13,6 +13,7 @@ import {
   serviceDesc,
 } from "@bufbuild/protobuf/codegenv2";
 import { file_buf_validate_validate } from "../../../buf/validate/validate_pb.ts";
+import { file_gnostic_openapi_v3_annotations } from "../../../gnostic/openapi/v3/annotations_pb.ts";
 import type { MaintenanceSummary } from "../../maintenance/v1/maintenance_pb.ts";
 import { file_openstatus_maintenance_v1_maintenance } from "../../maintenance/v1/maintenance_pb.ts";
 import type { PageComponent, PageComponentGroup } from "./page_component_pb.ts";
@@ -20,7 +21,10 @@ import { file_openstatus_status_page_v1_page_component } from "./page_component_
 import type { PageSubscriber } from "./page_subscriber_pb.ts";
 import { file_openstatus_status_page_v1_page_subscriber } from "./page_subscriber_pb.ts";
 import type {
+  Locale,
   OverallStatus,
+  PageAccessType,
+  PageTheme,
   StatusPage,
   StatusPageSummary,
 } from "./status_page_pb.ts";
@@ -34,9 +38,10 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export const file_openstatus_status_page_v1_service: GenFile = /*@__PURE__*/
   fileDesc(
-    "CidvcGVuc3RhdHVzL3N0YXR1c19wYWdlL3YxL3NlcnZpY2UucHJvdG8SGW9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEi9AEKF0NyZWF0ZVN0YXR1c1BhZ2VSZXF1ZXN0EhkKBXRpdGxlGAEgASgJQgq6SAdyBRABGIACEiIKC2Rlc2NyaXB0aW9uGAIgASgJQgi6SAVyAxiACEgAiAEBEjQKBHNsdWcYAyABKAlCJrpII3IhEAEYgAIyGl5bYS16MC05XSsoPzotW2EtejAtOV0rKSokEhkKDGhvbWVwYWdlX3VybBgEIAEoCUgBiAEBEhgKC2NvbnRhY3RfdXJsGAUgASgJSAKIAQFCDgoMX2Rlc2NyaXB0aW9uQg8KDV9ob21lcGFnZV91cmxCDgoMX2NvbnRhY3RfdXJsIlYKGENyZWF0ZVN0YXR1c1BhZ2VSZXNwb25zZRI6CgtzdGF0dXNfcGFnZRgBIAEoCzIlLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuU3RhdHVzUGFnZSIrChRHZXRTdGF0dXNQYWdlUmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASJTChVHZXRTdGF0dXNQYWdlUmVzcG9uc2USOgoLc3RhdHVzX3BhZ2UYASABKAsyJS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlN0YXR1c1BhZ2UiagoWTGlzdFN0YXR1c1BhZ2VzUmVxdWVzdBIdCgVsaW1pdBgBIAEoBUIJukgGGgQYZCgBSACIAQESHAoGb2Zmc2V0GAIgASgFQge6SAQaAigASAGIAQFCCAoGX2xpbWl0QgkKB19vZmZzZXQicQoXTGlzdFN0YXR1c1BhZ2VzUmVzcG9uc2USQgoMc3RhdHVzX3BhZ2VzGAEgAygLMiwub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5TdGF0dXNQYWdlU3VtbWFyeRISCgp0b3RhbF9zaXplGAIgASgFIqYCChdVcGRhdGVTdGF0dXNQYWdlUmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQARIeCgV0aXRsZRgCIAEoCUIKukgHcgUQARiAAkgAiAEBEiIKC2Rlc2NyaXB0aW9uGAMgASgJQgi6SAVyAxiACEgBiAEBEjkKBHNsdWcYBCABKAlCJrpII3IhEAEYgAIyGl5bYS16MC05XSsoPzotW2EtejAtOV0rKSokSAKIAQESGQoMaG9tZXBhZ2VfdXJsGAUgASgJSAOIAQESGAoLY29udGFjdF91cmwYBiABKAlIBIgBAUIICgZfdGl0bGVCDgoMX2Rlc2NyaXB0aW9uQgcKBV9zbHVnQg8KDV9ob21lcGFnZV91cmxCDgoMX2NvbnRhY3RfdXJsIlYKGFVwZGF0ZVN0YXR1c1BhZ2VSZXNwb25zZRI6CgtzdGF0dXNfcGFnZRgBIAEoCzIlLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuU3RhdHVzUGFnZSIuChdEZWxldGVTdGF0dXNQYWdlUmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASIrChhEZWxldGVTdGF0dXNQYWdlUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCCLvAQoaQWRkTW9uaXRvckNvbXBvbmVudFJlcXVlc3QSGAoHcGFnZV9pZBgBIAEoCUIHukgEcgIQARIbCgptb25pdG9yX2lkGAIgASgJQge6SARyAhABEhsKBG5hbWUYAyABKAlCCLpIBXIDGIACSACIAQESIgoLZGVzY3JpcHRpb24YBCABKAlCCLpIBXIDGIAISAGIAQESEgoFb3JkZXIYBSABKAVIAogBARIVCghncm91cF9pZBgGIAEoCUgDiAEBQgcKBV9uYW1lQg4KDF9kZXNjcmlwdGlvbkIICgZfb3JkZXJCCwoJX2dyb3VwX2lkIloKG0FkZE1vbml0b3JDb21wb25lbnRSZXNwb25zZRI7Cgljb21wb25lbnQYASABKAsyKC5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VDb21wb25lbnQixQEKGUFkZFN0YXRpY0NvbXBvbmVudFJlcXVlc3QSGAoHcGFnZV9pZBgBIAEoCUIHukgEcgIQARIYCgRuYW1lGAIgASgJQgq6SAdyBRABGIACEiIKC2Rlc2NyaXB0aW9uGAMgASgJQgi6SAVyAxiACEgAiAEBEhIKBW9yZGVyGAQgASgFSAGIAQESFQoIZ3JvdXBfaWQYBSABKAlIAogBAUIOCgxfZGVzY3JpcHRpb25CCAoGX29yZGVyQgsKCV9ncm91cF9pZCJZChpBZGRTdGF0aWNDb21wb25lbnRSZXNwb25zZRI7Cgljb21wb25lbnQYASABKAsyKC5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VDb21wb25lbnQiLQoWUmVtb3ZlQ29tcG9uZW50UmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASIqChdSZW1vdmVDb21wb25lbnRSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIvMBChZVcGRhdGVDb21wb25lbnRSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABEhsKBG5hbWUYAiABKAlCCLpIBXIDGIACSACIAQESIgoLZGVzY3JpcHRpb24YAyABKAlCCLpIBXIDGIAISAGIAQESEgoFb3JkZXIYBCABKAVIAogBARIVCghncm91cF9pZBgFIAEoCUgDiAEBEhgKC2dyb3VwX29yZGVyGAYgASgFSASIAQFCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9uQggKBl9vcmRlckILCglfZ3JvdXBfaWRCDgoMX2dyb3VwX29yZGVyIlYKF1VwZGF0ZUNvbXBvbmVudFJlc3BvbnNlEjsKCWNvbXBvbmVudBgBIAEoCzIoLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUGFnZUNvbXBvbmVudCJRChtDcmVhdGVDb21wb25lbnRHcm91cFJlcXVlc3QSGAoHcGFnZV9pZBgBIAEoCUIHukgEcgIQARIYCgRuYW1lGAIgASgJQgq6SAdyBRABGIACIlwKHENyZWF0ZUNvbXBvbmVudEdyb3VwUmVzcG9uc2USPAoFZ3JvdXAYASABKAsyLS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VDb21wb25lbnRHcm91cCIyChtEZWxldGVDb21wb25lbnRHcm91cFJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAEiLwocRGVsZXRlQ29tcG9uZW50R3JvdXBSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIloKG1VwZGF0ZUNvbXBvbmVudEdyb3VwUmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQARIdCgRuYW1lGAIgASgJQgq6SAdyBRABGIACSACIAQFCBwoFX25hbWUiXAocVXBkYXRlQ29tcG9uZW50R3JvdXBSZXNwb25zZRI8CgVncm91cBgBIAEoCzItLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUGFnZUNvbXBvbmVudEdyb3VwIkoKFlN1YnNjcmliZVRvUGFnZVJlcXVlc3QSGAoHcGFnZV9pZBgBIAEoCUIHukgEcgIQARIWCgVlbWFpbBgCIAEoCUIHukgEcgJgASJYChdTdWJzY3JpYmVUb1BhZ2VSZXNwb25zZRI9CgpzdWJzY3JpYmVyGAEgASgLMikub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlU3Vic2NyaWJlciJjChpVbnN1YnNjcmliZUZyb21QYWdlUmVxdWVzdBIYCgdwYWdlX2lkGAEgASgJQge6SARyAhABEg8KBWVtYWlsGAIgASgJSAASDAoCaWQYAyABKAlIAEIMCgppZGVudGlmaWVyIi4KG1Vuc3Vic2NyaWJlRnJvbVBhZ2VSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIsABChZMaXN0U3Vic2NyaWJlcnNSZXF1ZXN0EhgKB3BhZ2VfaWQYASABKAlCB7pIBHICEAESHQoFbGltaXQYAiABKAVCCbpIBhoEGGQoAUgAiAEBEhwKBm9mZnNldBgDIAEoBUIHukgEGgIoAEgBiAEBEiEKFGluY2x1ZGVfdW5zdWJzY3JpYmVkGAQgASgISAKIAQFCCAoGX2xpbWl0QgkKB19vZmZzZXRCFwoVX2luY2x1ZGVfdW5zdWJzY3JpYmVkIm0KF0xpc3RTdWJzY3JpYmVyc1Jlc3BvbnNlEj4KC3N1YnNjcmliZXJzGAEgAygLMikub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlU3Vic2NyaWJlchISCgp0b3RhbF9zaXplGAIgASgFIkkKG0dldFN0YXR1c1BhZ2VDb250ZW50UmVxdWVzdBIMCgJpZBgBIAEoCUgAEg4KBHNsdWcYAiABKAlIAEIMCgppZGVudGlmaWVyIt8CChxHZXRTdGF0dXNQYWdlQ29udGVudFJlc3BvbnNlEjoKC3N0YXR1c19wYWdlGAEgASgLMiUub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5TdGF0dXNQYWdlEjwKCmNvbXBvbmVudHMYAiADKAsyKC5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VDb21wb25lbnQSPQoGZ3JvdXBzGAMgAygLMi0ub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlQ29tcG9uZW50R3JvdXASQQoOc3RhdHVzX3JlcG9ydHMYBCADKAsyKS5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuU3RhdHVzUmVwb3J0EkMKDG1haW50ZW5hbmNlcxgFIAMoCzItLm9wZW5zdGF0dXMubWFpbnRlbmFuY2UudjEuTWFpbnRlbmFuY2VTdW1tYXJ5IkUKF0dldE92ZXJhbGxTdGF0dXNSZXF1ZXN0EgwKAmlkGAEgASgJSAASDgoEc2x1ZxgCIAEoCUgAQgwKCmlkZW50aWZpZXIiYQoPQ29tcG9uZW50U3RhdHVzEhQKDGNvbXBvbmVudF9pZBgBIAEoCRI4CgZzdGF0dXMYAiABKA4yKC5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLk92ZXJhbGxTdGF0dXMipAEKGEdldE92ZXJhbGxTdGF0dXNSZXNwb25zZRJACg5vdmVyYWxsX3N0YXR1cxgBIAEoDjIoLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuT3ZlcmFsbFN0YXR1cxJGChJjb21wb25lbnRfc3RhdHVzZXMYAiADKAsyKi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkNvbXBvbmVudFN0YXR1czKXEQoRU3RhdHVzUGFnZVNlcnZpY2USewoQQ3JlYXRlU3RhdHVzUGFnZRIyLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuQ3JlYXRlU3RhdHVzUGFnZVJlcXVlc3QaMy5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkNyZWF0ZVN0YXR1c1BhZ2VSZXNwb25zZRJyCg1HZXRTdGF0dXNQYWdlEi8ub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5HZXRTdGF0dXNQYWdlUmVxdWVzdBowLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuR2V0U3RhdHVzUGFnZVJlc3BvbnNlEngKD0xpc3RTdGF0dXNQYWdlcxIxLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuTGlzdFN0YXR1c1BhZ2VzUmVxdWVzdBoyLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuTGlzdFN0YXR1c1BhZ2VzUmVzcG9uc2USewoQVXBkYXRlU3RhdHVzUGFnZRIyLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuVXBkYXRlU3RhdHVzUGFnZVJlcXVlc3QaMy5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlVwZGF0ZVN0YXR1c1BhZ2VSZXNwb25zZRJ7ChBEZWxldGVTdGF0dXNQYWdlEjIub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5EZWxldGVTdGF0dXNQYWdlUmVxdWVzdBozLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuRGVsZXRlU3RhdHVzUGFnZVJlc3BvbnNlEoQBChNBZGRNb25pdG9yQ29tcG9uZW50EjUub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5BZGRNb25pdG9yQ29tcG9uZW50UmVxdWVzdBo2Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuQWRkTW9uaXRvckNvbXBvbmVudFJlc3BvbnNlEoEBChJBZGRTdGF0aWNDb21wb25lbnQSNC5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkFkZFN0YXRpY0NvbXBvbmVudFJlcXVlc3QaNS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkFkZFN0YXRpY0NvbXBvbmVudFJlc3BvbnNlEngKD1JlbW92ZUNvbXBvbmVudBIxLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUmVtb3ZlQ29tcG9uZW50UmVxdWVzdBoyLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUmVtb3ZlQ29tcG9uZW50UmVzcG9uc2USeAoPVXBkYXRlQ29tcG9uZW50EjEub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5VcGRhdGVDb21wb25lbnRSZXF1ZXN0GjIub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5VcGRhdGVDb21wb25lbnRSZXNwb25zZRKHAQoUQ3JlYXRlQ29tcG9uZW50R3JvdXASNi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkNyZWF0ZUNvbXBvbmVudEdyb3VwUmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuQ3JlYXRlQ29tcG9uZW50R3JvdXBSZXNwb25zZRKHAQoURGVsZXRlQ29tcG9uZW50R3JvdXASNi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkRlbGV0ZUNvbXBvbmVudEdyb3VwUmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuRGVsZXRlQ29tcG9uZW50R3JvdXBSZXNwb25zZRKHAQoUVXBkYXRlQ29tcG9uZW50R3JvdXASNi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlVwZGF0ZUNvbXBvbmVudEdyb3VwUmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuVXBkYXRlQ29tcG9uZW50R3JvdXBSZXNwb25zZRJ4Cg9TdWJzY3JpYmVUb1BhZ2USMS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlN1YnNjcmliZVRvUGFnZVJlcXVlc3QaMi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlN1YnNjcmliZVRvUGFnZVJlc3BvbnNlEoQBChNVbnN1YnNjcmliZUZyb21QYWdlEjUub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5VbnN1YnNjcmliZUZyb21QYWdlUmVxdWVzdBo2Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuVW5zdWJzY3JpYmVGcm9tUGFnZVJlc3BvbnNlEngKD0xpc3RTdWJzY3JpYmVycxIxLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuTGlzdFN1YnNjcmliZXJzUmVxdWVzdBoyLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuTGlzdFN1YnNjcmliZXJzUmVzcG9uc2UShwEKFEdldFN0YXR1c1BhZ2VDb250ZW50EjYub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5HZXRTdGF0dXNQYWdlQ29udGVudFJlcXVlc3QaNy5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkdldFN0YXR1c1BhZ2VDb250ZW50UmVzcG9uc2USewoQR2V0T3ZlcmFsbFN0YXR1cxIyLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuR2V0T3ZlcmFsbFN0YXR1c1JlcXVlc3QaMy5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkdldE92ZXJhbGxTdGF0dXNSZXNwb25zZUJaWlhnaXRodWIuY29tL29wZW5zdGF0dXNocS9vcGVuc3RhdHVzL3BhY2thZ2VzL3Byb3RvL29wZW5zdGF0dXMvc3RhdHVzX3BhZ2UvdjE7c3RhdHVzcGFnZXYxYgZwcm90bzM",
+    "CidvcGVuc3RhdHVzL3N0YXR1c19wYWdlL3YxL3NlcnZpY2UucHJvdG8SGW9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEi6gYKF0NyZWF0ZVN0YXR1c1BhZ2VSZXF1ZXN0EjAKBXRpdGxlGAEgASgJQiG6RxQ6EhIQQWNtZSBDb3JwIFN0YXR1c7pIB3IFEAEYgAISIgoLZGVzY3JpcHRpb24YAiABKAlCCLpIBXIDGIAISACIAQESSQoEc2x1ZxgDIAEoCUI7ukcSOhASDm15LXN0YXR1cy1wYWdlukgjciEQARiAAjIaXlthLXowLTldKyg/Oi1bYS16MC05XSspKiQSOQoMaG9tZXBhZ2VfdXJsGAQgASgJQh66Rxs6GRIXaHR0cHM6Ly93d3cuZXhhbXBsZS5jb21IAYgBARIYCgtjb250YWN0X3VybBgFIAEoCUgCiAEBEj4KDmRlZmF1bHRfbG9jYWxlGAYgASgOMiEub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5Mb2NhbGVIA4gBARIyCgdsb2NhbGVzGAcgAygOMiEub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5Mb2NhbGUSGwoEaWNvbhgIIAEoCUIIukgFcgMYgAhIBIgBARIkCg1jdXN0b21fZG9tYWluGAkgASgJQgi6SAVyAxiAAkgFiAEBEjgKBXRoZW1lGAogASgOMiQub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlVGhlbWVIBogBARJDCgthY2Nlc3NfdHlwZRgLIAEoDjIpLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUGFnZUFjY2Vzc1R5cGVIB4gBARIhCghwYXNzd29yZBgMIAEoCUIKukgHcgUQARiAAkgIiAEBEhoKEmF1dGhfZW1haWxfZG9tYWlucxgNIAMoCRIYCgthbGxvd19pbmRleBgOIAEoCEgJiAEBEh4KEWFsbG93ZWRfaXBfcmFuZ2VzGA8gASgJSAqIAQFCDgoMX2Rlc2NyaXB0aW9uQg8KDV9ob21lcGFnZV91cmxCDgoMX2NvbnRhY3RfdXJsQhEKD19kZWZhdWx0X2xvY2FsZUIHCgVfaWNvbkIQCg5fY3VzdG9tX2RvbWFpbkIICgZfdGhlbWVCDgoMX2FjY2Vzc190eXBlQgsKCV9wYXNzd29yZEIOCgxfYWxsb3dfaW5kZXhCFAoSX2FsbG93ZWRfaXBfcmFuZ2VzIlYKGENyZWF0ZVN0YXR1c1BhZ2VSZXNwb25zZRI6CgtzdGF0dXNfcGFnZRgBIAEoCzIlLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuU3RhdHVzUGFnZSIrChRHZXRTdGF0dXNQYWdlUmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASJTChVHZXRTdGF0dXNQYWdlUmVzcG9uc2USOgoLc3RhdHVzX3BhZ2UYASABKAsyJS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlN0YXR1c1BhZ2UiagoWTGlzdFN0YXR1c1BhZ2VzUmVxdWVzdBIdCgVsaW1pdBgBIAEoBUIJukgGGgQYZCgBSACIAQESHAoGb2Zmc2V0GAIgASgFQge6SAQaAigASAGIAQFCCAoGX2xpbWl0QgkKB19vZmZzZXQicQoXTGlzdFN0YXR1c1BhZ2VzUmVzcG9uc2USQgoMc3RhdHVzX3BhZ2VzGAEgAygLMiwub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5TdGF0dXNQYWdlU3VtbWFyeRISCgp0b3RhbF9zaXplGAIgASgFItAGChdVcGRhdGVTdGF0dXNQYWdlUmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQARIeCgV0aXRsZRgCIAEoCUIKukgHcgUQARiAAkgAiAEBEiIKC2Rlc2NyaXB0aW9uGAMgASgJQgi6SAVyAxiACEgBiAEBEjkKBHNsdWcYBCABKAlCJrpII3IhEAEYgAIyGl5bYS16MC05XSsoPzotW2EtejAtOV0rKSokSAKIAQESGQoMaG9tZXBhZ2VfdXJsGAUgASgJSAOIAQESGAoLY29udGFjdF91cmwYBiABKAlIBIgBARI+Cg5kZWZhdWx0X2xvY2FsZRgHIAEoDjIhLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuTG9jYWxlSAWIAQESMgoHbG9jYWxlcxgIIAMoDjIhLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuTG9jYWxlEhsKBGljb24YCSABKAlCCLpIBXIDGIAISAaIAQESJAoNY3VzdG9tX2RvbWFpbhgKIAEoCUIIukgFcgMYgAJIB4gBARI4CgV0aGVtZRgLIAEoDjIkLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUGFnZVRoZW1lSAiIAQESQwoLYWNjZXNzX3R5cGUYDCABKA4yKS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VBY2Nlc3NUeXBlSAmIAQESIQoIcGFzc3dvcmQYDSABKAlCCrpIB3IFEAEYgAJICogBARIaChJhdXRoX2VtYWlsX2RvbWFpbnMYDiADKAkSGAoLYWxsb3dfaW5kZXgYDyABKAhIC4gBARIeChFhbGxvd2VkX2lwX3JhbmdlcxgQIAEoCUgMiAEBQggKBl90aXRsZUIOCgxfZGVzY3JpcHRpb25CBwoFX3NsdWdCDwoNX2hvbWVwYWdlX3VybEIOCgxfY29udGFjdF91cmxCEQoPX2RlZmF1bHRfbG9jYWxlQgcKBV9pY29uQhAKDl9jdXN0b21fZG9tYWluQggKBl90aGVtZUIOCgxfYWNjZXNzX3R5cGVCCwoJX3Bhc3N3b3JkQg4KDF9hbGxvd19pbmRleEIUChJfYWxsb3dlZF9pcF9yYW5nZXMiVgoYVXBkYXRlU3RhdHVzUGFnZVJlc3BvbnNlEjoKC3N0YXR1c19wYWdlGAEgASgLMiUub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5TdGF0dXNQYWdlIi4KF0RlbGV0ZVN0YXR1c1BhZ2VSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABIisKGERlbGV0ZVN0YXR1c1BhZ2VSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIu8BChpBZGRNb25pdG9yQ29tcG9uZW50UmVxdWVzdBIYCgdwYWdlX2lkGAEgASgJQge6SARyAhABEhsKCm1vbml0b3JfaWQYAiABKAlCB7pIBHICEAESGwoEbmFtZRgDIAEoCUIIukgFcgMYgAJIAIgBARIiCgtkZXNjcmlwdGlvbhgEIAEoCUIIukgFcgMYgAhIAYgBARISCgVvcmRlchgFIAEoBUgCiAEBEhUKCGdyb3VwX2lkGAYgASgJSAOIAQFCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9uQggKBl9vcmRlckILCglfZ3JvdXBfaWQiWgobQWRkTW9uaXRvckNvbXBvbmVudFJlc3BvbnNlEjsKCWNvbXBvbmVudBgBIAEoCzIoLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUGFnZUNvbXBvbmVudCLFAQoZQWRkU3RhdGljQ29tcG9uZW50UmVxdWVzdBIYCgdwYWdlX2lkGAEgASgJQge6SARyAhABEhgKBG5hbWUYAiABKAlCCrpIB3IFEAEYgAISIgoLZGVzY3JpcHRpb24YAyABKAlCCLpIBXIDGIAISACIAQESEgoFb3JkZXIYBCABKAVIAYgBARIVCghncm91cF9pZBgFIAEoCUgCiAEBQg4KDF9kZXNjcmlwdGlvbkIICgZfb3JkZXJCCwoJX2dyb3VwX2lkIlkKGkFkZFN0YXRpY0NvbXBvbmVudFJlc3BvbnNlEjsKCWNvbXBvbmVudBgBIAEoCzIoLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUGFnZUNvbXBvbmVudCItChZSZW1vdmVDb21wb25lbnRSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABIioKF1JlbW92ZUNvbXBvbmVudFJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgi8wEKFlVwZGF0ZUNvbXBvbmVudFJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAESGwoEbmFtZRgCIAEoCUIIukgFcgMYgAJIAIgBARIiCgtkZXNjcmlwdGlvbhgDIAEoCUIIukgFcgMYgAhIAYgBARISCgVvcmRlchgEIAEoBUgCiAEBEhUKCGdyb3VwX2lkGAUgASgJSAOIAQESGAoLZ3JvdXBfb3JkZXIYBiABKAVIBIgBAUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb25CCAoGX29yZGVyQgsKCV9ncm91cF9pZEIOCgxfZ3JvdXBfb3JkZXIiVgoXVXBkYXRlQ29tcG9uZW50UmVzcG9uc2USOwoJY29tcG9uZW50GAEgASgLMigub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlQ29tcG9uZW50In0KG0NyZWF0ZUNvbXBvbmVudEdyb3VwUmVxdWVzdBIYCgdwYWdlX2lkGAEgASgJQge6SARyAhABEhgKBG5hbWUYAiABKAlCCrpIB3IFEAEYgAISGQoMZGVmYXVsdF9vcGVuGAMgASgISACIAQFCDwoNX2RlZmF1bHRfb3BlbiJcChxDcmVhdGVDb21wb25lbnRHcm91cFJlc3BvbnNlEjwKBWdyb3VwGAEgASgLMi0ub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlQ29tcG9uZW50R3JvdXAiMgobRGVsZXRlQ29tcG9uZW50R3JvdXBSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABIi8KHERlbGV0ZUNvbXBvbmVudEdyb3VwUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCCKGAQobVXBkYXRlQ29tcG9uZW50R3JvdXBSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABEh0KBG5hbWUYAiABKAlCCrpIB3IFEAEYgAJIAIgBARIZCgxkZWZhdWx0X29wZW4YAyABKAhIAYgBAUIHCgVfbmFtZUIPCg1fZGVmYXVsdF9vcGVuIlwKHFVwZGF0ZUNvbXBvbmVudEdyb3VwUmVzcG9uc2USPAoFZ3JvdXAYASABKAsyLS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VDb21wb25lbnRHcm91cCJhChZTdWJzY3JpYmVUb1BhZ2VSZXF1ZXN0EhgKB3BhZ2VfaWQYASABKAlCB7pIBHICEAESLQoFZW1haWwYAiABKAlCHrpHFDoSEhB1c2VyQGV4YW1wbGUuY29tukgEcgJgASJYChdTdWJzY3JpYmVUb1BhZ2VSZXNwb25zZRI9CgpzdWJzY3JpYmVyGAEgASgLMikub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5QYWdlU3Vic2NyaWJlciImCgxFbWFpbENoYW5uZWwSFgoFZW1haWwYASABKAlCB7pIBHICYAEiOwoUV2ViaG9va0NoYW5uZWxIZWFkZXISFAoDa2V5GAEgASgJQge6SARyAhABEg0KBXZhbHVlGAIgASgJInYKDldlYmhvb2tDaGFubmVsEiIKC3dlYmhvb2tfdXJsGAEgASgJQg26SApyCBABGIAQiAEBEkAKB2hlYWRlcnMYAiADKAsyLy5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLldlYmhvb2tDaGFubmVsSGVhZGVyIpACCh1DcmVhdGVQYWdlU3Vic2NyaXB0aW9uUmVxdWVzdBIYCgdwYWdlX2lkGAEgASgJQge6SARyAhABEhsKBG5hbWUYAiABKAlCCLpIBXIDGP8BSAGIAQESFQoNY29tcG9uZW50X2lkcxgDIAMoCRJACg1lbWFpbF9jaGFubmVsGAogASgLMicub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5FbWFpbENoYW5uZWxIABJECg93ZWJob29rX2NoYW5uZWwYCyABKAsyKS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLldlYmhvb2tDaGFubmVsSABCEAoHY2hhbm5lbBIFukgCCAFCBwoFX25hbWUiXwoeQ3JlYXRlUGFnZVN1YnNjcmlwdGlvblJlc3BvbnNlEj0KCnN1YnNjcmliZXIYASABKAsyKS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VTdWJzY3JpYmVyImMKGlVuc3Vic2NyaWJlRnJvbVBhZ2VSZXF1ZXN0EhgKB3BhZ2VfaWQYASABKAlCB7pIBHICEAESDwoFZW1haWwYAiABKAlIABIMCgJpZBgDIAEoCUgAQgwKCmlkZW50aWZpZXIiLgobVW5zdWJzY3JpYmVGcm9tUGFnZVJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgiwAEKFkxpc3RTdWJzY3JpYmVyc1JlcXVlc3QSGAoHcGFnZV9pZBgBIAEoCUIHukgEcgIQARIdCgVsaW1pdBgCIAEoBUIJukgGGgQYZCgBSACIAQESHAoGb2Zmc2V0GAMgASgFQge6SAQaAigASAGIAQESIQoUaW5jbHVkZV91bnN1YnNjcmliZWQYBCABKAhIAogBAUIICgZfbGltaXRCCQoHX29mZnNldEIXChVfaW5jbHVkZV91bnN1YnNjcmliZWQibQoXTGlzdFN1YnNjcmliZXJzUmVzcG9uc2USPgoLc3Vic2NyaWJlcnMYASADKAsyKS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VTdWJzY3JpYmVyEhIKCnRvdGFsX3NpemUYAiABKAUiSQobR2V0U3RhdHVzUGFnZUNvbnRlbnRSZXF1ZXN0EgwKAmlkGAEgASgJSAASDgoEc2x1ZxgCIAEoCUgAQgwKCmlkZW50aWZpZXIi3wIKHEdldFN0YXR1c1BhZ2VDb250ZW50UmVzcG9uc2USOgoLc3RhdHVzX3BhZ2UYASABKAsyJS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlN0YXR1c1BhZ2USPAoKY29tcG9uZW50cxgCIAMoCzIoLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUGFnZUNvbXBvbmVudBI9CgZncm91cHMYAyADKAsyLS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlBhZ2VDb21wb25lbnRHcm91cBJBCg5zdGF0dXNfcmVwb3J0cxgEIAMoCzIpLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnQSQwoMbWFpbnRlbmFuY2VzGAUgAygLMi0ub3BlbnN0YXR1cy5tYWludGVuYW5jZS52MS5NYWludGVuYW5jZVN1bW1hcnkiRQoXR2V0T3ZlcmFsbFN0YXR1c1JlcXVlc3QSDAoCaWQYASABKAlIABIOCgRzbHVnGAIgASgJSABCDAoKaWRlbnRpZmllciJhCg9Db21wb25lbnRTdGF0dXMSFAoMY29tcG9uZW50X2lkGAEgASgJEjgKBnN0YXR1cxgCIAEoDjIoLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuT3ZlcmFsbFN0YXR1cyKkAQoYR2V0T3ZlcmFsbFN0YXR1c1Jlc3BvbnNlEkAKDm92ZXJhbGxfc3RhdHVzGAEgASgOMigub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5PdmVyYWxsU3RhdHVzEkYKEmNvbXBvbmVudF9zdGF0dXNlcxgCIAMoCzIqLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuQ29tcG9uZW50U3RhdHVzMtEeChFTdGF0dXNQYWdlU2VydmljZRJ7ChBDcmVhdGVTdGF0dXNQYWdlEjIub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5DcmVhdGVTdGF0dXNQYWdlUmVxdWVzdBozLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuQ3JlYXRlU3RhdHVzUGFnZVJlc3BvbnNlEncKDUdldFN0YXR1c1BhZ2USLy5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkdldFN0YXR1c1BhZ2VSZXF1ZXN0GjAub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5HZXRTdGF0dXNQYWdlUmVzcG9uc2UiA5ACARJ9Cg9MaXN0U3RhdHVzUGFnZXMSMS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkxpc3RTdGF0dXNQYWdlc1JlcXVlc3QaMi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkxpc3RTdGF0dXNQYWdlc1Jlc3BvbnNlIgOQAgESewoQVXBkYXRlU3RhdHVzUGFnZRIyLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuVXBkYXRlU3RhdHVzUGFnZVJlcXVlc3QaMy5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlVwZGF0ZVN0YXR1c1BhZ2VSZXNwb25zZRJ7ChBEZWxldGVTdGF0dXNQYWdlEjIub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5EZWxldGVTdGF0dXNQYWdlUmVxdWVzdBozLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuRGVsZXRlU3RhdHVzUGFnZVJlc3BvbnNlEoQBChNBZGRNb25pdG9yQ29tcG9uZW50EjUub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5BZGRNb25pdG9yQ29tcG9uZW50UmVxdWVzdBo2Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuQWRkTW9uaXRvckNvbXBvbmVudFJlc3BvbnNlEoEBChJBZGRTdGF0aWNDb21wb25lbnQSNC5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkFkZFN0YXRpY0NvbXBvbmVudFJlcXVlc3QaNS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkFkZFN0YXRpY0NvbXBvbmVudFJlc3BvbnNlEngKD1JlbW92ZUNvbXBvbmVudBIxLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUmVtb3ZlQ29tcG9uZW50UmVxdWVzdBoyLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuUmVtb3ZlQ29tcG9uZW50UmVzcG9uc2USeAoPVXBkYXRlQ29tcG9uZW50EjEub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5VcGRhdGVDb21wb25lbnRSZXF1ZXN0GjIub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5VcGRhdGVDb21wb25lbnRSZXNwb25zZRKHAQoUQ3JlYXRlQ29tcG9uZW50R3JvdXASNi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkNyZWF0ZUNvbXBvbmVudEdyb3VwUmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuQ3JlYXRlQ29tcG9uZW50R3JvdXBSZXNwb25zZRKHAQoURGVsZXRlQ29tcG9uZW50R3JvdXASNi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkRlbGV0ZUNvbXBvbmVudEdyb3VwUmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuRGVsZXRlQ29tcG9uZW50R3JvdXBSZXNwb25zZRKHAQoUVXBkYXRlQ29tcG9uZW50R3JvdXASNi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlVwZGF0ZUNvbXBvbmVudEdyb3VwUmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuVXBkYXRlQ29tcG9uZW50R3JvdXBSZXNwb25zZRK5BAoPU3Vic2NyaWJlVG9QYWdlEjEub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5TdWJzY3JpYmVUb1BhZ2VSZXF1ZXN0GjIub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5TdWJzY3JpYmVUb1BhZ2VSZXNwb25zZSK+A7pHugMatwNFbmQtdXNlciBlbWFpbCBzZWxmLXNpZ251cCB3aXRoIGRvdWJsZSBvcHQtaW4gdmVyaWZpY2F0aW9uLiBBIHZlcmlmaWNhdGlvbiBlbWFpbCBpcyBzZW50IGFuZCB0aGUgc3Vic2NyaXB0aW9uIGFjdGl2YXRlcyBvbmx5IGFmdGVyIHRoZSByZWNpcGllbnQgY29uZmlybXMuIElmIHRoZSBlbWFpbCB3YXMgcHJldmlvdXNseSB1bnN1YnNjcmliZWQsIHRoZSBleGlzdGluZyByb3cgaXMgcmVhY3RpdmF0ZWQgaW5zdGVhZCBvZiBhIGR1cGxpY2F0ZSBiZWluZyBjcmVhdGVkLiBVc2UgdGhpcyBmb3Igc3Vic2NyaWJlci1pbml0aWF0ZWQgc2lnbnVwcyBvbiB0aGUgcHVibGljIHN0YXR1cyBwYWdlOyB1c2UgQ3JlYXRlUGFnZVN1YnNjcmlwdGlvbiBmb3Igb3BlcmF0b3ItaW5pdGlhdGVkICh2ZW5kb3IpIHN1YnNjcmlwdGlvbnMgdGhhdCBzaG91bGQgc2tpcCB2ZXJpZmljYXRpb24uEv0EChZDcmVhdGVQYWdlU3Vic2NyaXB0aW9uEjgub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5DcmVhdGVQYWdlU3Vic2NyaXB0aW9uUmVxdWVzdBo5Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuQ3JlYXRlUGFnZVN1YnNjcmlwdGlvblJlc3BvbnNlIu0DukfpAxrmA09wZXJhdG9yLWFkZGVkIHN1YnNjcmliZXIgKGVtYWlsIG9yIHdlYmhvb2spIHdpdGggbm8gdmVyaWZpY2F0aW9uIGZsb3cg4oCUIHRoZSBwYXJ0bmVyIHN0YXJ0cyByZWNlaXZpbmcgbm90aWZpY2F0aW9ucyBpbW1lZGlhdGVseS4gU3VwcG9ydHMgU2xhY2sgYW5kIERpc2NvcmQgd2ViaG9vayBVUkxzIGluIGFkZGl0aW9uIHRvIGVtYWlsLiBBIG1hbmFnZW1lbnQgdG9rZW4gaXMgc3RpbGwgZ2VuZXJhdGVkIHNvIHRoZSBzdWJzY3JpYmVyIGNhbiBzZWxmLW1hbmFnZSAodXBkYXRlIHNjb3BlLCB1bnN1YnNjcmliZSkgd2l0aG91dCBvcGVyYXRvciBpbnZvbHZlbWVudC4gVXNlIHRoaXMgZm9yIHZlbmRvci9wYXJ0bmVyIGludGVncmF0aW9ucyB3aGVyZSBjb25zZW50IGlzIGVzdGFibGlzaGVkIG91dC1vZi1iYW5kOyB1c2UgU3Vic2NyaWJlVG9QYWdlIGZvciBzdWJzY3JpYmVyLWluaXRpYXRlZCBzaWdudXBzIHRoYXQgcmVxdWlyZSBkb3VibGUgb3B0LWluLhKEAQoTVW5zdWJzY3JpYmVGcm9tUGFnZRI1Lm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuVW5zdWJzY3JpYmVGcm9tUGFnZVJlcXVlc3QaNi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLlVuc3Vic2NyaWJlRnJvbVBhZ2VSZXNwb25zZRJ9Cg9MaXN0U3Vic2NyaWJlcnMSMS5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkxpc3RTdWJzY3JpYmVyc1JlcXVlc3QaMi5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkxpc3RTdWJzY3JpYmVyc1Jlc3BvbnNlIgOQAgESwAMKFEdldFN0YXR1c1BhZ2VDb250ZW50EjYub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5HZXRTdGF0dXNQYWdlQ29udGVudFJlcXVlc3QaNy5vcGVuc3RhdHVzLnN0YXR1c19wYWdlLnYxLkdldFN0YXR1c1BhZ2VDb250ZW50UmVzcG9uc2UitgKQAgG6R68CGqwCUmV0dXJucyB0aGUgZnVsbCBjb250ZW50IG9mIGEgc3RhdHVzIHBhZ2UgaW5jbHVkaW5nIGl0cyBjb21wb25lbnRzLCBjb21wb25lbnQgZ3JvdXBzLCBhY3RpdmUgc3RhdHVzIHJlcG9ydHMsIGFuZCBzY2hlZHVsZWQgbWFpbnRlbmFuY2VzLiBTdXBwb3J0cyB0d28gYWNjZXNzIHBhdGhzOiBieSBJRCAocmVxdWlyZXMgYXV0aGVudGljYXRpb24sIHdvcmtzcGFjZS1zY29wZWQpIG9yIGJ5IHNsdWcgKHB1YmxpYyBhY2Nlc3MsIHJlcXVpcmVzIHRoZSBwYWdlIHRvIGJlIHB1Ymxpc2hlZCB3aXRoIGFjY2Vzc190eXBlPVBVQkxJQykuEqoDChBHZXRPdmVyYWxsU3RhdHVzEjIub3BlbnN0YXR1cy5zdGF0dXNfcGFnZS52MS5HZXRPdmVyYWxsU3RhdHVzUmVxdWVzdBozLm9wZW5zdGF0dXMuc3RhdHVzX3BhZ2UudjEuR2V0T3ZlcmFsbFN0YXR1c1Jlc3BvbnNlIqwCkAIBukelAhqiAlJldHVybnMgdGhlIG92ZXJhbGwgc3RhdHVzIG9mIGEgc3RhdHVzIHBhZ2UgYWxvbmcgd2l0aCBpbmRpdmlkdWFsIGNvbXBvbmVudCBzdGF0dXNlcy4gVGhlIG92ZXJhbGwgc3RhdHVzIGlzIGNvbXB1dGVkIGZyb20gYWN0aXZlIHN0YXR1cyByZXBvcnRzIGFuZCBtYWludGVuYW5jZXMgd2l0aCB0aGUgZm9sbG93aW5nIHByaW9yaXR5OiBkZWdyYWRlZCAoZnJvbSBhY3RpdmUgc3RhdHVzIHJlcG9ydHMpID4gbWFpbnRlbmFuY2UgKGZyb20gYWN0aXZlIG1haW50ZW5hbmNlIHdpbmRvd3MpID4gb3BlcmF0aW9uYWwuQlpaWGdpdGh1Yi5jb20vb3BlbnN0YXR1c2hxL29wZW5zdGF0dXMvcGFja2FnZXMvcHJvdG8vb3BlbnN0YXR1cy9zdGF0dXNfcGFnZS92MTtzdGF0dXNwYWdldjFiBnByb3RvMw",
     [
       file_buf_validate_validate,
+      file_gnostic_openapi_v3_annotations,
       file_openstatus_maintenance_v1_maintenance,
       file_openstatus_status_page_v1_page_component,
       file_openstatus_status_page_v1_page_subscriber,
@@ -46,6 +51,8 @@ export const file_openstatus_status_page_v1_service: GenFile = /*@__PURE__*/
   );
 
 /**
+ * CreateStatusPageRequest is the request to create a new status page.
+ *
  * @generated from message openstatus.status_page.v1.CreateStatusPageRequest
  */
 export type CreateStatusPageRequest =
@@ -66,7 +73,7 @@ export type CreateStatusPageRequest =
     description?: string;
 
     /**
-     * URL-friendly slug for the status page (required).
+     * URL-friendly slug for the status page (required). Must be lowercase alphanumeric with hyphens.
      *
      * @generated from field: string slug = 3;
      */
@@ -85,6 +92,76 @@ export type CreateStatusPageRequest =
      * @generated from field: optional string contact_url = 5;
      */
     contactUrl?: string;
+
+    /**
+     * Default locale for the status page (optional, defaults to EN).
+     *
+     * @generated from field: optional openstatus.status_page.v1.Locale default_locale = 6;
+     */
+    defaultLocale?: Locale;
+
+    /**
+     * Enabled locales for the status page (optional).
+     *
+     * @generated from field: repeated openstatus.status_page.v1.Locale locales = 7;
+     */
+    locales: Locale[];
+
+    /**
+     * Icon URL for the status page (optional).
+     *
+     * @generated from field: optional string icon = 8;
+     */
+    icon?: string;
+
+    /**
+     * Custom domain for the status page (optional).
+     *
+     * @generated from field: optional string custom_domain = 9;
+     */
+    customDomain?: string;
+
+    /**
+     * Visual theme for the status page (optional, defaults to SYSTEM).
+     *
+     * @generated from field: optional openstatus.status_page.v1.PageTheme theme = 10;
+     */
+    theme?: PageTheme;
+
+    /**
+     * Access type for the status page (optional, defaults to PUBLIC).
+     *
+     * @generated from field: optional openstatus.status_page.v1.PageAccessType access_type = 11;
+     */
+    accessType?: PageAccessType;
+
+    /**
+     * Password for the status page (required when access_type is PASSWORD_PROTECTED).
+     *
+     * @generated from field: optional string password = 12;
+     */
+    password?: string;
+
+    /**
+     * Email domains allowed to access the page (used when access_type is AUTHENTICATED).
+     *
+     * @generated from field: repeated string auth_email_domains = 13;
+     */
+    authEmailDomains: string[];
+
+    /**
+     * Whether search engines are allowed to index this status page (optional, defaults to true).
+     *
+     * @generated from field: optional bool allow_index = 14;
+     */
+    allowIndex?: boolean;
+
+    /**
+     * Comma-separated IPv4 CIDR ranges (required when access_type is IP_RESTRICTED).
+     *
+     * @generated from field: optional string allowed_ip_ranges = 15;
+     */
+    allowedIpRanges?: string;
   };
 
 /**
@@ -97,6 +174,8 @@ export const CreateStatusPageRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 0);
 
 /**
+ * CreateStatusPageResponse is the response after creating a status page.
+ *
  * @generated from message openstatus.status_page.v1.CreateStatusPageResponse
  */
 export type CreateStatusPageResponse =
@@ -120,6 +199,8 @@ export const CreateStatusPageResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 1);
 
 /**
+ * GetStatusPageRequest is the request to get a status page by ID.
+ *
  * @generated from message openstatus.status_page.v1.GetStatusPageRequest
  */
 export type GetStatusPageRequest =
@@ -143,6 +224,8 @@ export const GetStatusPageRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 2);
 
 /**
+ * GetStatusPageResponse is the response containing the status page.
+ *
  * @generated from message openstatus.status_page.v1.GetStatusPageResponse
  */
 export type GetStatusPageResponse =
@@ -166,6 +249,8 @@ export const GetStatusPageResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 3);
 
 /**
+ * ListStatusPagesRequest is the request to list status pages.
+ *
  * @generated from message openstatus.status_page.v1.ListStatusPagesRequest
  */
 export type ListStatusPagesRequest =
@@ -196,6 +281,8 @@ export const ListStatusPagesRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 4);
 
 /**
+ * ListStatusPagesResponse is the response containing status page summaries.
+ *
  * @generated from message openstatus.status_page.v1.ListStatusPagesResponse
  */
 export type ListStatusPagesResponse =
@@ -226,6 +313,8 @@ export const ListStatusPagesResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 5);
 
 /**
+ * UpdateStatusPageRequest is the request to update a status page.
+ *
  * @generated from message openstatus.status_page.v1.UpdateStatusPageRequest
  */
 export type UpdateStatusPageRequest =
@@ -272,6 +361,76 @@ export type UpdateStatusPageRequest =
      * @generated from field: optional string contact_url = 6;
      */
     contactUrl?: string;
+
+    /**
+     * New default locale for the status page (optional).
+     *
+     * @generated from field: optional openstatus.status_page.v1.Locale default_locale = 7;
+     */
+    defaultLocale?: Locale;
+
+    /**
+     * New enabled locales for the status page (optional).
+     *
+     * @generated from field: repeated openstatus.status_page.v1.Locale locales = 8;
+     */
+    locales: Locale[];
+
+    /**
+     * New icon URL for the status page (optional).
+     *
+     * @generated from field: optional string icon = 9;
+     */
+    icon?: string;
+
+    /**
+     * New custom domain (optional).
+     *
+     * @generated from field: optional string custom_domain = 10;
+     */
+    customDomain?: string;
+
+    /**
+     * New visual theme (optional).
+     *
+     * @generated from field: optional openstatus.status_page.v1.PageTheme theme = 11;
+     */
+    theme?: PageTheme;
+
+    /**
+     * New access type (optional).
+     *
+     * @generated from field: optional openstatus.status_page.v1.PageAccessType access_type = 12;
+     */
+    accessType?: PageAccessType;
+
+    /**
+     * New password (optional, required when access_type is PASSWORD_PROTECTED).
+     *
+     * @generated from field: optional string password = 13;
+     */
+    password?: string;
+
+    /**
+     * New email domains (optional, required when access_type is AUTHENTICATED).
+     *
+     * @generated from field: repeated string auth_email_domains = 14;
+     */
+    authEmailDomains: string[];
+
+    /**
+     * Whether search engines are allowed to index this status page (optional).
+     *
+     * @generated from field: optional bool allow_index = 15;
+     */
+    allowIndex?: boolean;
+
+    /**
+     * Comma-separated IPv4 CIDR ranges (required when access_type is IP_RESTRICTED).
+     *
+     * @generated from field: optional string allowed_ip_ranges = 16;
+     */
+    allowedIpRanges?: string;
   };
 
 /**
@@ -284,6 +443,8 @@ export const UpdateStatusPageRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 6);
 
 /**
+ * UpdateStatusPageResponse is the response after updating a status page.
+ *
  * @generated from message openstatus.status_page.v1.UpdateStatusPageResponse
  */
 export type UpdateStatusPageResponse =
@@ -307,6 +468,8 @@ export const UpdateStatusPageResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 7);
 
 /**
+ * DeleteStatusPageRequest is the request to delete a status page.
+ *
  * @generated from message openstatus.status_page.v1.DeleteStatusPageRequest
  */
 export type DeleteStatusPageRequest =
@@ -330,6 +493,8 @@ export const DeleteStatusPageRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 8);
 
 /**
+ * DeleteStatusPageResponse is the response after deleting a status page.
+ *
  * @generated from message openstatus.status_page.v1.DeleteStatusPageResponse
  */
 export type DeleteStatusPageResponse =
@@ -353,6 +518,8 @@ export const DeleteStatusPageResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 9);
 
 /**
+ * AddMonitorComponentRequest is the request to add a monitor-based component to a status page.
+ *
  * @generated from message openstatus.status_page.v1.AddMonitorComponentRequest
  */
 export type AddMonitorComponentRequest =
@@ -411,6 +578,8 @@ export const AddMonitorComponentRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 10);
 
 /**
+ * AddMonitorComponentResponse is the response after adding a monitor component.
+ *
  * @generated from message openstatus.status_page.v1.AddMonitorComponentResponse
  */
 export type AddMonitorComponentResponse =
@@ -434,6 +603,8 @@ export const AddMonitorComponentResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 11);
 
 /**
+ * AddStaticComponentRequest is the request to add a static component to a status page.
+ *
  * @generated from message openstatus.status_page.v1.AddStaticComponentRequest
  */
 export type AddStaticComponentRequest =
@@ -485,6 +656,8 @@ export const AddStaticComponentRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 12);
 
 /**
+ * AddStaticComponentResponse is the response after adding a static component.
+ *
  * @generated from message openstatus.status_page.v1.AddStaticComponentResponse
  */
 export type AddStaticComponentResponse =
@@ -508,6 +681,8 @@ export const AddStaticComponentResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 13);
 
 /**
+ * RemoveComponentRequest is the request to remove a component from a status page.
+ *
  * @generated from message openstatus.status_page.v1.RemoveComponentRequest
  */
 export type RemoveComponentRequest =
@@ -531,6 +706,8 @@ export const RemoveComponentRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 14);
 
 /**
+ * RemoveComponentResponse is the response after removing a component.
+ *
  * @generated from message openstatus.status_page.v1.RemoveComponentResponse
  */
 export type RemoveComponentResponse =
@@ -554,6 +731,8 @@ export const RemoveComponentResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 15);
 
 /**
+ * UpdateComponentRequest is the request to update a component.
+ *
  * @generated from message openstatus.status_page.v1.UpdateComponentRequest
  */
 export type UpdateComponentRequest =
@@ -612,6 +791,8 @@ export const UpdateComponentRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 16);
 
 /**
+ * UpdateComponentResponse is the response after updating a component.
+ *
  * @generated from message openstatus.status_page.v1.UpdateComponentResponse
  */
 export type UpdateComponentResponse =
@@ -635,6 +816,8 @@ export const UpdateComponentResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 17);
 
 /**
+ * CreateComponentGroupRequest is the request to create a new component group.
+ *
  * @generated from message openstatus.status_page.v1.CreateComponentGroupRequest
  */
 export type CreateComponentGroupRequest =
@@ -653,6 +836,13 @@ export type CreateComponentGroupRequest =
      * @generated from field: string name = 2;
      */
     name: string;
+
+    /**
+     * Whether the group should be expanded by default on the status page (optional, defaults to false).
+     *
+     * @generated from field: optional bool default_open = 3;
+     */
+    defaultOpen?: boolean;
   };
 
 /**
@@ -665,6 +855,8 @@ export const CreateComponentGroupRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 18);
 
 /**
+ * CreateComponentGroupResponse is the response after creating a component group.
+ *
  * @generated from message openstatus.status_page.v1.CreateComponentGroupResponse
  */
 export type CreateComponentGroupResponse =
@@ -688,6 +880,8 @@ export const CreateComponentGroupResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 19);
 
 /**
+ * DeleteComponentGroupRequest is the request to delete a component group.
+ *
  * @generated from message openstatus.status_page.v1.DeleteComponentGroupRequest
  */
 export type DeleteComponentGroupRequest =
@@ -711,6 +905,8 @@ export const DeleteComponentGroupRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 20);
 
 /**
+ * DeleteComponentGroupResponse is the response after deleting a component group.
+ *
  * @generated from message openstatus.status_page.v1.DeleteComponentGroupResponse
  */
 export type DeleteComponentGroupResponse =
@@ -734,6 +930,8 @@ export const DeleteComponentGroupResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 21);
 
 /**
+ * UpdateComponentGroupRequest is the request to update a component group.
+ *
  * @generated from message openstatus.status_page.v1.UpdateComponentGroupRequest
  */
 export type UpdateComponentGroupRequest =
@@ -752,6 +950,13 @@ export type UpdateComponentGroupRequest =
      * @generated from field: optional string name = 2;
      */
     name?: string;
+
+    /**
+     * Whether the group should be expanded by default on the status page (optional).
+     *
+     * @generated from field: optional bool default_open = 3;
+     */
+    defaultOpen?: boolean;
   };
 
 /**
@@ -764,6 +969,8 @@ export const UpdateComponentGroupRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 22);
 
 /**
+ * UpdateComponentGroupResponse is the response after updating a component group.
+ *
  * @generated from message openstatus.status_page.v1.UpdateComponentGroupResponse
  */
 export type UpdateComponentGroupResponse =
@@ -787,6 +994,8 @@ export const UpdateComponentGroupResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 23);
 
 /**
+ * SubscribeToPageRequest is the request to subscribe an email to a status page.
+ *
  * @generated from message openstatus.status_page.v1.SubscribeToPageRequest
  */
 export type SubscribeToPageRequest =
@@ -817,6 +1026,8 @@ export const SubscribeToPageRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 24);
 
 /**
+ * SubscribeToPageResponse is the response after subscribing to a status page.
+ *
  * @generated from message openstatus.status_page.v1.SubscribeToPageResponse
  */
 export type SubscribeToPageResponse =
@@ -840,6 +1051,170 @@ export const SubscribeToPageResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_page_v1_service, 25);
 
 /**
+ * EmailChannel carries the email-channel fields for CreatePageSubscription.
+ *
+ * @generated from message openstatus.status_page.v1.EmailChannel
+ */
+export type EmailChannel = Message<"openstatus.status_page.v1.EmailChannel"> & {
+  /**
+   * Email address of the subscriber (required).
+   *
+   * @generated from field: string email = 1;
+   */
+  email: string;
+};
+
+/**
+ * Describes the message openstatus.status_page.v1.EmailChannel.
+ * Use `create(EmailChannelSchema)` to create a new message.
+ */
+export const EmailChannelSchema: GenMessage<EmailChannel> = /*@__PURE__*/
+  messageDesc(file_openstatus_status_page_v1_service, 26);
+
+/**
+ * WebhookChannelHeader is a single custom HTTP header.
+ *
+ * @generated from message openstatus.status_page.v1.WebhookChannelHeader
+ */
+export type WebhookChannelHeader =
+  & Message<"openstatus.status_page.v1.WebhookChannelHeader">
+  & {
+    /**
+     * @generated from field: string key = 1;
+     */
+    key: string;
+
+    /**
+     * @generated from field: string value = 2;
+     */
+    value: string;
+  };
+
+/**
+ * Describes the message openstatus.status_page.v1.WebhookChannelHeader.
+ * Use `create(WebhookChannelHeaderSchema)` to create a new message.
+ */
+export const WebhookChannelHeaderSchema: GenMessage<
+  WebhookChannelHeader
+> = /*@__PURE__*/
+  messageDesc(file_openstatus_status_page_v1_service, 27);
+
+/**
+ * WebhookChannel carries the webhook-channel fields for CreatePageSubscription.
+ *
+ * @generated from message openstatus.status_page.v1.WebhookChannel
+ */
+export type WebhookChannel =
+  & Message<"openstatus.status_page.v1.WebhookChannel">
+  & {
+    /**
+     * Webhook URL (required). Payload flavor (Slack / Discord / generic) is auto-detected from the URL prefix.
+     *
+     * @generated from field: string webhook_url = 1;
+     */
+    webhookUrl: string;
+
+    /**
+     * Optional custom HTTP headers attached to every dispatch.
+     *
+     * @generated from field: repeated openstatus.status_page.v1.WebhookChannelHeader headers = 2;
+     */
+    headers: WebhookChannelHeader[];
+  };
+
+/**
+ * Describes the message openstatus.status_page.v1.WebhookChannel.
+ * Use `create(WebhookChannelSchema)` to create a new message.
+ */
+export const WebhookChannelSchema: GenMessage<WebhookChannel> = /*@__PURE__*/
+  messageDesc(file_openstatus_status_page_v1_service, 28);
+
+/**
+ * CreatePageSubscriptionRequest is the request to add a vendor-managed subscriber to a status page.
+ *
+ * @generated from message openstatus.status_page.v1.CreatePageSubscriptionRequest
+ */
+export type CreatePageSubscriptionRequest =
+  & Message<"openstatus.status_page.v1.CreatePageSubscriptionRequest">
+  & {
+    /**
+     * ID of the status page (required).
+     *
+     * @generated from field: string page_id = 1;
+     */
+    pageId: string;
+
+    /**
+     * Optional human-readable label.
+     *
+     * @generated from field: optional string name = 2;
+     */
+    name?: string;
+
+    /**
+     * Component scope. Empty = entire page.
+     *
+     * @generated from field: repeated string component_ids = 3;
+     */
+    componentIds: string[];
+
+    /**
+     * Channel-specific fields (exactly one must be set).
+     *
+     * @generated from oneof openstatus.status_page.v1.CreatePageSubscriptionRequest.channel
+     */
+    channel: {
+      /**
+       * @generated from field: openstatus.status_page.v1.EmailChannel email_channel = 10;
+       */
+      value: EmailChannel;
+      case: "emailChannel";
+    } | {
+      /**
+       * @generated from field: openstatus.status_page.v1.WebhookChannel webhook_channel = 11;
+       */
+      value: WebhookChannel;
+      case: "webhookChannel";
+    } | { case: undefined; value?: undefined };
+  };
+
+/**
+ * Describes the message openstatus.status_page.v1.CreatePageSubscriptionRequest.
+ * Use `create(CreatePageSubscriptionRequestSchema)` to create a new message.
+ */
+export const CreatePageSubscriptionRequestSchema: GenMessage<
+  CreatePageSubscriptionRequest
+> = /*@__PURE__*/
+  messageDesc(file_openstatus_status_page_v1_service, 29);
+
+/**
+ * CreatePageSubscriptionResponse is the response after creating a vendor-managed subscription.
+ *
+ * @generated from message openstatus.status_page.v1.CreatePageSubscriptionResponse
+ */
+export type CreatePageSubscriptionResponse =
+  & Message<"openstatus.status_page.v1.CreatePageSubscriptionResponse">
+  & {
+    /**
+     * The created subscriber.
+     *
+     * @generated from field: openstatus.status_page.v1.PageSubscriber subscriber = 1;
+     */
+    subscriber?: PageSubscriber;
+  };
+
+/**
+ * Describes the message openstatus.status_page.v1.CreatePageSubscriptionResponse.
+ * Use `create(CreatePageSubscriptionResponseSchema)` to create a new message.
+ */
+export const CreatePageSubscriptionResponseSchema: GenMessage<
+  CreatePageSubscriptionResponse
+> = /*@__PURE__*/
+  messageDesc(file_openstatus_status_page_v1_service, 30);
+
+/**
+ * UnsubscribeFromPageRequest is the request to unsubscribe from a status page.
+ *
  * @generated from message openstatus.status_page.v1.UnsubscribeFromPageRequest
  */
 export type UnsubscribeFromPageRequest =
@@ -883,9 +1258,11 @@ export type UnsubscribeFromPageRequest =
 export const UnsubscribeFromPageRequestSchema: GenMessage<
   UnsubscribeFromPageRequest
 > = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 26);
+  messageDesc(file_openstatus_status_page_v1_service, 31);
 
 /**
+ * UnsubscribeFromPageResponse is the response after unsubscribing from a status page.
+ *
  * @generated from message openstatus.status_page.v1.UnsubscribeFromPageResponse
  */
 export type UnsubscribeFromPageResponse =
@@ -906,9 +1283,11 @@ export type UnsubscribeFromPageResponse =
 export const UnsubscribeFromPageResponseSchema: GenMessage<
   UnsubscribeFromPageResponse
 > = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 27);
+  messageDesc(file_openstatus_status_page_v1_service, 32);
 
 /**
+ * ListSubscribersRequest is the request to list subscribers of a status page.
+ *
  * @generated from message openstatus.status_page.v1.ListSubscribersRequest
  */
 export type ListSubscribersRequest =
@@ -950,9 +1329,11 @@ export type ListSubscribersRequest =
 export const ListSubscribersRequestSchema: GenMessage<
   ListSubscribersRequest
 > = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 28);
+  messageDesc(file_openstatus_status_page_v1_service, 33);
 
 /**
+ * ListSubscribersResponse is the response containing status page subscribers.
+ *
  * @generated from message openstatus.status_page.v1.ListSubscribersResponse
  */
 export type ListSubscribersResponse =
@@ -980,9 +1361,11 @@ export type ListSubscribersResponse =
 export const ListSubscribersResponseSchema: GenMessage<
   ListSubscribersResponse
 > = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 29);
+  messageDesc(file_openstatus_status_page_v1_service, 34);
 
 /**
+ * GetStatusPageContentRequest is the request to get the full content of a status page.
+ *
  * @generated from message openstatus.status_page.v1.GetStatusPageContentRequest
  */
 export type GetStatusPageContentRequest =
@@ -1019,9 +1402,11 @@ export type GetStatusPageContentRequest =
 export const GetStatusPageContentRequestSchema: GenMessage<
   GetStatusPageContentRequest
 > = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 30);
+  messageDesc(file_openstatus_status_page_v1_service, 35);
 
 /**
+ * GetStatusPageContentResponse is the response containing the full status page content.
+ *
  * @generated from message openstatus.status_page.v1.GetStatusPageContentResponse
  */
 export type GetStatusPageContentResponse =
@@ -1070,9 +1455,11 @@ export type GetStatusPageContentResponse =
 export const GetStatusPageContentResponseSchema: GenMessage<
   GetStatusPageContentResponse
 > = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 31);
+  messageDesc(file_openstatus_status_page_v1_service, 36);
 
 /**
+ * GetOverallStatusRequest is the request to get the overall status of a status page.
+ *
  * @generated from message openstatus.status_page.v1.GetOverallStatusRequest
  */
 export type GetOverallStatusRequest =
@@ -1109,7 +1496,7 @@ export type GetOverallStatusRequest =
 export const GetOverallStatusRequestSchema: GenMessage<
   GetOverallStatusRequest
 > = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 32);
+  messageDesc(file_openstatus_status_page_v1_service, 37);
 
 /**
  * ComponentStatus represents the status of a single component.
@@ -1139,9 +1526,11 @@ export type ComponentStatus =
  * Use `create(ComponentStatusSchema)` to create a new message.
  */
 export const ComponentStatusSchema: GenMessage<ComponentStatus> = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 33);
+  messageDesc(file_openstatus_status_page_v1_service, 38);
 
 /**
+ * GetOverallStatusResponse is the response containing the overall status and individual component statuses.
+ *
  * @generated from message openstatus.status_page.v1.GetOverallStatusResponse
  */
 export type GetOverallStatusResponse =
@@ -1169,12 +1558,11 @@ export type GetOverallStatusResponse =
 export const GetOverallStatusResponseSchema: GenMessage<
   GetOverallStatusResponse
 > = /*@__PURE__*/
-  messageDesc(file_openstatus_status_page_v1_service, 34);
+  messageDesc(file_openstatus_status_page_v1_service, 39);
 
 /**
- * StatusPageService provides CRUD and management operations for status pages.
- *
- * --- Page CRUD ---
+ * StatusPageService provides CRUD and management operations for status pages,
+ * including component management, component grouping, subscriber handling, and aggregated status queries.
  *
  * @generated from service openstatus.status_page.v1.StatusPageService
  */
@@ -1300,7 +1688,16 @@ export const StatusPageService: GenService<{
     output: typeof UpdateComponentGroupResponseSchema;
   };
   /**
-   * SubscribeToPage subscribes an email to a status page.
+   * SubscribeToPage: end-user email self-signup with double opt-in verification.
+   *
+   * Use this when an end-user enters their email on the public status page to
+   * subscribe themselves. A verification email is sent and the subscription is
+   * only activated once the recipient confirms. If the email was previously
+   * unsubscribed, the subscription is reactivated rather than duplicated.
+   *
+   * Pair with CreatePageSubscription (vendor-added, no verification) depending
+   * on who is initiating the subscription — the subscriber themselves, or an
+   * operator acting on their behalf.
    *
    * @generated from rpc openstatus.status_page.v1.StatusPageService.SubscribeToPage
    */
@@ -1308,6 +1705,25 @@ export const StatusPageService: GenService<{
     methodKind: "unary";
     input: typeof SubscribeToPageRequestSchema;
     output: typeof SubscribeToPageResponseSchema;
+  };
+  /**
+   * CreatePageSubscription: operator-added subscriber (email or webhook), no verification.
+   *
+   * Use this when an operator adds a subscriber on behalf of a partner — the
+   * caller has already established consent out-of-band, so no double opt-in is
+   * required and notifications begin immediately. Supports both email and
+   * webhook (Slack / Discord) channels. A management token is still generated
+   * so the partner can self-manage via /manage/{token} and /unsubscribe/{token}.
+   *
+   * Pair with SubscribeToPage (self-signup with verification) depending on who
+   * is initiating the subscription.
+   *
+   * @generated from rpc openstatus.status_page.v1.StatusPageService.CreatePageSubscription
+   */
+  createPageSubscription: {
+    methodKind: "unary";
+    input: typeof CreatePageSubscriptionRequestSchema;
+    output: typeof CreatePageSubscriptionResponseSchema;
   };
   /**
    * UnsubscribeFromPage removes a subscription from a status page.
@@ -1330,7 +1746,7 @@ export const StatusPageService: GenService<{
     output: typeof ListSubscribersResponseSchema;
   };
   /**
-   * GetStatusPageContent retrieves the full content of a status page including components and reports.
+   * GetStatusPageContent retrieves the full content of a status page including components, groups, active reports, and maintenances.
    *
    * @generated from rpc openstatus.status_page.v1.StatusPageService.GetStatusPageContent
    */
@@ -1340,7 +1756,7 @@ export const StatusPageService: GenService<{
     output: typeof GetStatusPageContentResponseSchema;
   };
   /**
-   * GetOverallStatus returns the aggregated status of a status page.
+   * GetOverallStatus returns the aggregated status of a status page and its individual components.
    *
    * @generated from rpc openstatus.status_page.v1.StatusPageService.GetOverallStatus
    */

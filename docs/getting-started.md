@@ -55,8 +55,8 @@ const { monitor } = await client.monitor.v1.MonitorService.createHTTPMonitor({
 console.log(`Monitor created: ${monitor?.id}`);
 
 // List all monitors
-const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } =
-  await client.monitor.v1.MonitorService.listMonitors({});
+const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } = await client
+  .monitor.v1.MonitorService.listMonitors({});
 
 console.log(`Found ${totalSize} monitors`);
 ```
@@ -64,14 +64,15 @@ console.log(`Found ${totalSize} monitors`);
 ## Runtime Support
 
 | Runtime | Version | Module Format |
-|---------|---------|---------------|
+| ------- | ------- | ------------- |
 | Node.js | >= 18   | ESM and CJS   |
 | Deno    | >= 2    | ESM (native)  |
 | Bun     | Latest  | ESM           |
 
 ## Full Workflow Example
 
-A complete example: create a monitor, set up a status page, add the monitor as a component, configure a Slack notification, and check overall status.
+A complete example: create a monitor, set up a status page, add the monitor as a
+component, configure a Slack notification, and check overall status.
 
 ```typescript
 import {

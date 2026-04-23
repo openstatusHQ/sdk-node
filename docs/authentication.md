@@ -4,7 +4,8 @@
 
 ## Recommended: createOpenStatusClient
 
-Create a client with your API key. The key is automatically included in all requests via an interceptor.
+Create a client with your API key. The key is automatically included in all
+requests via an interceptor.
 
 ```typescript
 import { createOpenStatusClient } from "@openstatus/sdk-node";
@@ -14,7 +15,9 @@ const client = createOpenStatusClient({
 });
 
 // No headers needed on individual calls
-const { httpMonitors } = await client.monitor.v1.MonitorService.listMonitors({});
+const { httpMonitors } = await client.monitor.v1.MonitorService.listMonitors(
+  {},
+);
 ```
 
 ## Alternative: Manual Headers
@@ -33,12 +36,13 @@ await openstatus.monitor.v1.MonitorService.listMonitors({}, { headers });
 
 ## Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
+| Variable             | Description             | Default                          |
+| -------------------- | ----------------------- | -------------------------------- |
 | `OPENSTATUS_API_KEY` | Your OpenStatus API key | Required for authenticated calls |
-| `OPENSTATUS_API_URL` | Custom API endpoint | `https://api.openstatus.dev/rpc` |
+| `OPENSTATUS_API_URL` | Custom API endpoint     | `https://api.openstatus.dev/rpc` |
 
-Get your API key from the [OpenStatus dashboard](https://www.openstatus.dev/app).
+Get your API key from the
+[OpenStatus dashboard](https://www.openstatus.dev/app).
 
 ## Custom Base URL
 
@@ -53,4 +57,5 @@ const client = createOpenStatusClient({
 });
 ```
 
-The `baseUrl` option takes precedence over the `OPENSTATUS_API_URL` environment variable.
+The `baseUrl` option takes precedence over the `OPENSTATUS_API_URL` environment
+variable.

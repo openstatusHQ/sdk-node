@@ -2,7 +2,9 @@
 
 # Monitor Service
 
-Manage HTTP, TCP, and DNS monitors. The Monitor Service provides 12 RPC methods for creating, updating, listing, triggering, deleting, and querying monitor status and metrics.
+Manage HTTP, TCP, and DNS monitors. The Monitor Service provides 12 RPC methods
+for creating, updating, listing, triggering, deleting, and querying monitor
+status and metrics.
 
 All examples assume you have created a client:
 
@@ -88,26 +90,26 @@ const { monitor } = await client.monitor.v1.MonitorService.updateHTTPMonitor({
 
 ### HTTP Monitor Options
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `name` | string | Yes | Monitor name (max 256 chars) |
-| `url` | string | Yes | URL to monitor (max 2048 chars) |
-| `periodicity` | Periodicity | Yes | Check interval |
-| `method` | HTTPMethod | No | HTTP method (default: GET) |
-| `body` | string | No | Request body |
-| `headers` | Headers[] | No | Custom headers `{ key, value }[]` |
-| `timeout` | bigint | No | Timeout in ms (default: 45000, max: 120000) |
-| `retry` | bigint | No | Retry attempts (default: 3, max: 10) |
-| `followRedirects` | boolean | No | Follow redirects (default: true) |
-| `regions` | Region[] | No | Regions for checks |
-| `active` | boolean | No | Enable monitoring (default: false) |
-| `public` | boolean | No | Public visibility (default: false) |
-| `degradedAt` | bigint | No | Latency threshold (ms) for degraded status |
-| `description` | string | No | Monitor description (max 1024 chars) |
-| `statusCodeAssertions` | StatusCodeAssertion[] | No | Status code assertions |
-| `bodyAssertions` | BodyAssertion[] | No | Body assertions |
-| `headerAssertions` | HeaderAssertion[] | No | Header assertions |
-| `openTelemetry` | OpenTelemetryConfig | No | OpenTelemetry export configuration |
+| Option                 | Type                  | Required | Description                                 |
+| ---------------------- | --------------------- | -------- | ------------------------------------------- |
+| `name`                 | string                | Yes      | Monitor name (max 256 chars)                |
+| `url`                  | string                | Yes      | URL to monitor (max 2048 chars)             |
+| `periodicity`          | Periodicity           | Yes      | Check interval                              |
+| `method`               | HTTPMethod            | No       | HTTP method (default: GET)                  |
+| `body`                 | string                | No       | Request body                                |
+| `headers`              | Headers[]             | No       | Custom headers `{ key, value }[]`           |
+| `timeout`              | bigint                | No       | Timeout in ms (default: 45000, max: 120000) |
+| `retry`                | bigint                | No       | Retry attempts (default: 3, max: 10)        |
+| `followRedirects`      | boolean               | No       | Follow redirects (default: true)            |
+| `regions`              | Region[]              | No       | Regions for checks                          |
+| `active`               | boolean               | No       | Enable monitoring (default: false)          |
+| `public`               | boolean               | No       | Public visibility (default: false)          |
+| `degradedAt`           | bigint                | No       | Latency threshold (ms) for degraded status  |
+| `description`          | string                | No       | Monitor description (max 1024 chars)        |
+| `statusCodeAssertions` | StatusCodeAssertion[] | No       | Status code assertions                      |
+| `bodyAssertions`       | BodyAssertion[]       | No       | Body assertions                             |
+| `headerAssertions`     | HeaderAssertion[]     | No       | Header assertions                           |
+| `openTelemetry`        | OpenTelemetryConfig   | No       | OpenTelemetry export configuration          |
 
 ## TCP Monitors
 
@@ -148,19 +150,19 @@ const { monitor } = await client.monitor.v1.MonitorService.updateTCPMonitor({
 
 ### TCP Monitor Options
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `name` | string | Yes | Monitor name (max 256 chars) |
-| `uri` | string | Yes | `host:port` to monitor (max 2048 chars) |
-| `periodicity` | Periodicity | Yes | Check interval |
-| `timeout` | bigint | No | Timeout in ms (default: 45000, max: 120000) |
-| `retry` | bigint | No | Retry attempts (default: 3, max: 10) |
-| `regions` | Region[] | No | Regions for checks |
-| `active` | boolean | No | Enable monitoring (default: false) |
-| `public` | boolean | No | Public visibility (default: false) |
-| `degradedAt` | bigint | No | Latency threshold (ms) for degraded status |
-| `description` | string | No | Monitor description (max 1024 chars) |
-| `openTelemetry` | OpenTelemetryConfig | No | OpenTelemetry export configuration |
+| Option          | Type                | Required | Description                                 |
+| --------------- | ------------------- | -------- | ------------------------------------------- |
+| `name`          | string              | Yes      | Monitor name (max 256 chars)                |
+| `uri`           | string              | Yes      | `host:port` to monitor (max 2048 chars)     |
+| `periodicity`   | Periodicity         | Yes      | Check interval                              |
+| `timeout`       | bigint              | No       | Timeout in ms (default: 45000, max: 120000) |
+| `retry`         | bigint              | No       | Retry attempts (default: 3, max: 10)        |
+| `regions`       | Region[]            | No       | Regions for checks                          |
+| `active`        | boolean             | No       | Enable monitoring (default: false)          |
+| `public`        | boolean             | No       | Public visibility (default: false)          |
+| `degradedAt`    | bigint              | No       | Latency threshold (ms) for degraded status  |
+| `description`   | string              | No       | Monitor description (max 1024 chars)        |
+| `openTelemetry` | OpenTelemetryConfig | No       | OpenTelemetry export configuration          |
 
 ## DNS Monitors
 
@@ -214,28 +216,29 @@ const { monitor } = await client.monitor.v1.MonitorService.updateDNSMonitor({
 
 ### DNS Monitor Options
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `name` | string | Yes | Monitor name (max 256 chars) |
-| `uri` | string | Yes | Domain to resolve (max 2048 chars) |
-| `periodicity` | Periodicity | Yes | Check interval |
-| `timeout` | bigint | No | Timeout in ms (default: 45000, max: 120000) |
-| `retry` | bigint | No | Retry attempts (default: 3, max: 10) |
-| `regions` | Region[] | No | Regions for checks |
-| `active` | boolean | No | Enable monitoring (default: false) |
-| `public` | boolean | No | Public visibility (default: false) |
-| `degradedAt` | bigint | No | Latency threshold (ms) for degraded status |
-| `description` | string | No | Monitor description (max 1024 chars) |
-| `recordAssertions` | RecordAssertion[] | No | DNS record assertions |
-| `openTelemetry` | OpenTelemetryConfig | No | OpenTelemetry export configuration |
+| Option             | Type                | Required | Description                                 |
+| ------------------ | ------------------- | -------- | ------------------------------------------- |
+| `name`             | string              | Yes      | Monitor name (max 256 chars)                |
+| `uri`              | string              | Yes      | Domain to resolve (max 2048 chars)          |
+| `periodicity`      | Periodicity         | Yes      | Check interval                              |
+| `timeout`          | bigint              | No       | Timeout in ms (default: 45000, max: 120000) |
+| `retry`            | bigint              | No       | Retry attempts (default: 3, max: 10)        |
+| `regions`          | Region[]            | No       | Regions for checks                          |
+| `active`           | boolean             | No       | Enable monitoring (default: false)          |
+| `public`           | boolean             | No       | Public visibility (default: false)          |
+| `degradedAt`       | bigint              | No       | Latency threshold (ms) for degraded status  |
+| `description`      | string              | No       | Monitor description (max 1024 chars)        |
+| `recordAssertions` | RecordAssertion[]   | No       | DNS record assertions                       |
+| `openTelemetry`    | OpenTelemetryConfig | No       | OpenTelemetry export configuration          |
 
 ## List Monitors
 
-List all monitors with offset-based pagination. Returns monitors grouped by type.
+List all monitors with offset-based pagination. Returns monitors grouped by
+type.
 
 ```typescript
-const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } =
-  await client.monitor.v1.MonitorService.listMonitors({
+const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } = await client
+  .monitor.v1.MonitorService.listMonitors({
     limit: 10,
     offset: 0,
   });
@@ -248,14 +251,15 @@ console.log(`DNS: ${dnsMonitors.length}`);
 
 Pagination parameters:
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `limit` | number (optional) | Max results to return (1–100, default 50) |
-| `offset` | number (optional) | Number of results to skip (default 0) |
+| Parameter | Type              | Description                               |
+| --------- | ----------------- | ----------------------------------------- |
+| `limit`   | number (optional) | Max results to return (1–100, default 50) |
+| `offset`  | number (optional) | Number of results to skip (default 0)     |
 
 ## Get Monitor
 
-Get a single monitor by ID. The response uses a `MonitorConfig` oneof type that contains one of HTTP, TCP, or DNS configuration.
+Get a single monitor by ID. The response uses a `MonitorConfig` oneof type that
+contains one of HTTP, TCP, or DNS configuration.
 
 ```typescript
 const { monitor } = await client.monitor.v1.MonitorService.getMonitor({
@@ -263,11 +267,17 @@ const { monitor } = await client.monitor.v1.MonitorService.getMonitor({
 });
 
 if (monitor?.config.case === "http") {
-  console.log(`HTTP Monitor: ${monitor.config.value.name} — ${monitor.config.value.url}`);
+  console.log(
+    `HTTP Monitor: ${monitor.config.value.name} — ${monitor.config.value.url}`,
+  );
 } else if (monitor?.config.case === "tcp") {
-  console.log(`TCP Monitor: ${monitor.config.value.name} — ${monitor.config.value.uri}`);
+  console.log(
+    `TCP Monitor: ${monitor.config.value.name} — ${monitor.config.value.uri}`,
+  );
 } else if (monitor?.config.case === "dns") {
-  console.log(`DNS Monitor: ${monitor.config.value.name} — ${monitor.config.value.uri}`);
+  console.log(
+    `DNS Monitor: ${monitor.config.value.name} — ${monitor.config.value.uri}`,
+  );
 }
 ```
 
@@ -343,4 +353,7 @@ console.log(`P95: ${summary.p95}ms`);
 console.log(`P99: ${summary.p99}ms`);
 ```
 
-The latency fields (`p50`, `p75`, `p90`, `p95`, `p99`) and count fields (`totalSuccessful`, `totalDegraded`, `totalFailed`) are `bigint` values. The `regions` parameter is optional — pass an empty array to get metrics across all regions.
+The latency fields (`p50`, `p75`, `p90`, `p95`, `p99`) and count fields
+(`totalSuccessful`, `totalDegraded`, `totalFailed`) are `bigint` values. The
+`regions` parameter is optional — pass an empty array to get metrics across all
+regions.

@@ -13,6 +13,7 @@ import {
   serviceDesc,
 } from "@bufbuild/protobuf/codegenv2";
 import { file_buf_validate_validate } from "../../../buf/validate/validate_pb.ts";
+import { file_gnostic_openapi_v3_annotations } from "../../../gnostic/openapi/v3/annotations_pb.ts";
 import type {
   StatusReport,
   StatusReportStatus,
@@ -26,14 +27,17 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export const file_openstatus_status_report_v1_service: GenFile = /*@__PURE__*/
   fileDesc(
-    "CilvcGVuc3RhdHVzL3N0YXR1c19yZXBvcnQvdjEvc2VydmljZS5wcm90bxIbb3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxIskCChlDcmVhdGVTdGF0dXNSZXBvcnRSZXF1ZXN0EhYKBXRpdGxlGAEgASgJQge6SARyAhABEkkKBnN0YXR1cxgCIAEoDjIvLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnRTdGF0dXNCCLpIBYIBAhABEhgKB21lc3NhZ2UYAyABKAlCB7pIBHICEAESWQoEZGF0ZRgEIAEoCUJLukhIckYyRF5cZHs0fS1cZHsyfS1cZHsyfVRcZHsyfTpcZHsyfTpcZHsyfShcLlxkezEsOX0pPyhafFsrLV1cZHsyfTpcZHsyfSkkEhgKB3BhZ2VfaWQYBSABKAlCB7pIBHICEAESGgoScGFnZV9jb21wb25lbnRfaWRzGAYgAygJEhMKBm5vdGlmeRgHIAEoCEgAiAEBQgkKB19ub3RpZnkiXgoaQ3JlYXRlU3RhdHVzUmVwb3J0UmVzcG9uc2USQAoNc3RhdHVzX3JlcG9ydBgBIAEoCzIpLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnQiLQoWR2V0U3RhdHVzUmVwb3J0UmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASJbChdHZXRTdGF0dXNSZXBvcnRSZXNwb25zZRJACg1zdGF0dXNfcmVwb3J0GAEgASgLMikub3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxLlN0YXR1c1JlcG9ydCKvAQoYTGlzdFN0YXR1c1JlcG9ydHNSZXF1ZXN0Eh0KBWxpbWl0GAEgASgFQgm6SAYaBBhkKAFIAIgBARIcCgZvZmZzZXQYAiABKAVCB7pIBBoCKABIAYgBARJBCghzdGF0dXNlcxgDIAMoDjIvLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnRTdGF0dXNCCAoGX2xpbWl0QgkKB19vZmZzZXQieQoZTGlzdFN0YXR1c1JlcG9ydHNSZXNwb25zZRJICg5zdGF0dXNfcmVwb3J0cxgBIAMoCzIwLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnRTdW1tYXJ5EhIKCnRvdGFsX3NpemUYAiABKAUiagoZVXBkYXRlU3RhdHVzUmVwb3J0UmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQARISCgV0aXRsZRgCIAEoCUgAiAEBEhoKEnBhZ2VfY29tcG9uZW50X2lkcxgDIAMoCUIICgZfdGl0bGUiXgoaVXBkYXRlU3RhdHVzUmVwb3J0UmVzcG9uc2USQAoNc3RhdHVzX3JlcG9ydBgBIAEoCzIpLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnQiMAoZRGVsZXRlU3RhdHVzUmVwb3J0UmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASItChpEZWxldGVTdGF0dXNSZXBvcnRSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIq8CChxBZGRTdGF0dXNSZXBvcnRVcGRhdGVSZXF1ZXN0EiEKEHN0YXR1c19yZXBvcnRfaWQYASABKAlCB7pIBHICEAESSQoGc3RhdHVzGAIgASgOMi8ub3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxLlN0YXR1c1JlcG9ydFN0YXR1c0IIukgFggECEAESGAoHbWVzc2FnZRgDIAEoCUIHukgEcgIQARJeCgRkYXRlGAQgASgJQku6SEhyRjJEXlxkezR9LVxkezJ9LVxkezJ9VFxkezJ9OlxkezJ9OlxkezJ9KFwuXGR7MSw5fSk/KFp8WystXVxkezJ9OlxkezJ9KSRIAIgBARITCgZub3RpZnkYBSABKAhIAYgBAUIHCgVfZGF0ZUIJCgdfbm90aWZ5ImEKHUFkZFN0YXR1c1JlcG9ydFVwZGF0ZVJlc3BvbnNlEkAKDXN0YXR1c19yZXBvcnQYASABKAsyKS5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuU3RhdHVzUmVwb3J0MsEGChNTdGF0dXNSZXBvcnRTZXJ2aWNlEoUBChJDcmVhdGVTdGF0dXNSZXBvcnQSNi5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuQ3JlYXRlU3RhdHVzUmVwb3J0UmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5DcmVhdGVTdGF0dXNSZXBvcnRSZXNwb25zZRJ8Cg9HZXRTdGF0dXNSZXBvcnQSMy5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuR2V0U3RhdHVzUmVwb3J0UmVxdWVzdBo0Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5HZXRTdGF0dXNSZXBvcnRSZXNwb25zZRKCAQoRTGlzdFN0YXR1c1JlcG9ydHMSNS5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuTGlzdFN0YXR1c1JlcG9ydHNSZXF1ZXN0GjYub3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxLkxpc3RTdGF0dXNSZXBvcnRzUmVzcG9uc2UShQEKElVwZGF0ZVN0YXR1c1JlcG9ydBI2Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5VcGRhdGVTdGF0dXNSZXBvcnRSZXF1ZXN0Gjcub3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxLlVwZGF0ZVN0YXR1c1JlcG9ydFJlc3BvbnNlEoUBChJEZWxldGVTdGF0dXNSZXBvcnQSNi5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuRGVsZXRlU3RhdHVzUmVwb3J0UmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5EZWxldGVTdGF0dXNSZXBvcnRSZXNwb25zZRKOAQoVQWRkU3RhdHVzUmVwb3J0VXBkYXRlEjkub3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxLkFkZFN0YXR1c1JlcG9ydFVwZGF0ZVJlcXVlc3QaOi5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuQWRkU3RhdHVzUmVwb3J0VXBkYXRlUmVzcG9uc2VCXlpcZ2l0aHViLmNvbS9vcGVuc3RhdHVzaHEvb3BlbnN0YXR1cy9wYWNrYWdlcy9wcm90by9vcGVuc3RhdHVzL3N0YXR1c19yZXBvcnQvdjE7c3RhdHVzcmVwb3J0djFiBnByb3RvMw",
+    "CilvcGVuc3RhdHVzL3N0YXR1c19yZXBvcnQvdjEvc2VydmljZS5wcm90bxIbb3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxIsUDChlDcmVhdGVTdGF0dXNSZXBvcnRSZXF1ZXN0EjoKBXRpdGxlGAEgASgJQiu6RyE6HxIdQVBJIERlZ3JhZGF0aW9uIEludmVzdGlnYXRpb266SARyAhABEkkKBnN0YXR1cxgCIAEoDjIvLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnRTdGF0dXNCCLpIBYIBAhABElUKB21lc3NhZ2UYAyABKAlCRLpHOjo4EjZXZSBhcmUgaW52ZXN0aWdhdGluZyByZXBvcnRzIG9mIGluY3JlYXNlZCBBUEkgbGF0ZW5jeS66SARyAhABEnQKBGRhdGUYBCABKAlCZrpHGDoWEhQyMDI0LTAzLTE1VDEwOjMwOjAwWrpISHJGMkReXGR7NH0tXGR7Mn0tXGR7Mn1UXGR7Mn06XGR7Mn06XGR7Mn0oXC5cZHsxLDl9KT8oWnxbKy1dXGR7Mn06XGR7Mn0pJBIYCgdwYWdlX2lkGAUgASgJQge6SARyAhABEhoKEnBhZ2VfY29tcG9uZW50X2lkcxgGIAMoCRITCgZub3RpZnkYByABKAhIAIgBAUIJCgdfbm90aWZ5Il4KGkNyZWF0ZVN0YXR1c1JlcG9ydFJlc3BvbnNlEkAKDXN0YXR1c19yZXBvcnQYASABKAsyKS5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuU3RhdHVzUmVwb3J0Ii0KFkdldFN0YXR1c1JlcG9ydFJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAEiWwoXR2V0U3RhdHVzUmVwb3J0UmVzcG9uc2USQAoNc3RhdHVzX3JlcG9ydBgBIAEoCzIpLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnQirwEKGExpc3RTdGF0dXNSZXBvcnRzUmVxdWVzdBIdCgVsaW1pdBgBIAEoBUIJukgGGgQYZCgBSACIAQESHAoGb2Zmc2V0GAIgASgFQge6SAQaAigASAGIAQESQQoIc3RhdHVzZXMYAyADKA4yLy5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuU3RhdHVzUmVwb3J0U3RhdHVzQggKBl9saW1pdEIJCgdfb2Zmc2V0InkKGUxpc3RTdGF0dXNSZXBvcnRzUmVzcG9uc2USSAoOc3RhdHVzX3JlcG9ydHMYASADKAsyMC5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuU3RhdHVzUmVwb3J0U3VtbWFyeRISCgp0b3RhbF9zaXplGAIgASgFIrABChlVcGRhdGVTdGF0dXNSZXBvcnRSZXF1ZXN0EhMKAmlkGAEgASgJQge6SARyAhABEhIKBXRpdGxlGAIgASgJSACIAQESGgoScGFnZV9jb21wb25lbnRfaWRzGAMgAygJEiYKGXVwZGF0ZV9wYWdlX2NvbXBvbmVudF9pZHMYBCABKAhIAYgBAUIICgZfdGl0bGVCHAoaX3VwZGF0ZV9wYWdlX2NvbXBvbmVudF9pZHMiXgoaVXBkYXRlU3RhdHVzUmVwb3J0UmVzcG9uc2USQAoNc3RhdHVzX3JlcG9ydBgBIAEoCzIpLm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5TdGF0dXNSZXBvcnQiMAoZRGVsZXRlU3RhdHVzUmVwb3J0UmVxdWVzdBITCgJpZBgBIAEoCUIHukgEcgIQASItChpEZWxldGVTdGF0dXNSZXBvcnRSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIq8CChxBZGRTdGF0dXNSZXBvcnRVcGRhdGVSZXF1ZXN0EiEKEHN0YXR1c19yZXBvcnRfaWQYASABKAlCB7pIBHICEAESSQoGc3RhdHVzGAIgASgOMi8ub3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxLlN0YXR1c1JlcG9ydFN0YXR1c0IIukgFggECEAESGAoHbWVzc2FnZRgDIAEoCUIHukgEcgIQARJeCgRkYXRlGAQgASgJQku6SEhyRjJEXlxkezR9LVxkezJ9LVxkezJ9VFxkezJ9OlxkezJ9OlxkezJ9KFwuXGR7MSw5fSk/KFp8WystXVxkezJ9OlxkezJ9KSRIAIgBARITCgZub3RpZnkYBSABKAhIAYgBAUIHCgVfZGF0ZUIJCgdfbm90aWZ5ImEKHUFkZFN0YXR1c1JlcG9ydFVwZGF0ZVJlc3BvbnNlEkAKDXN0YXR1c19yZXBvcnQYASABKAsyKS5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuU3RhdHVzUmVwb3J0Mr8LChNTdGF0dXNSZXBvcnRTZXJ2aWNlEs4DChJDcmVhdGVTdGF0dXNSZXBvcnQSNi5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuQ3JlYXRlU3RhdHVzUmVwb3J0UmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5DcmVhdGVTdGF0dXNSZXBvcnRSZXNwb25zZSLGArpHwgIavwJDcmVhdGVzIGEgbmV3IHN0YXR1cyByZXBvcnQgd2l0aCBhbiBpbml0aWFsIHVwZGF0ZSBlbnRyeS4gVGhlIHJlcG9ydCBpcyBhc3NvY2lhdGVkIHdpdGggYSBzdGF0dXMgcGFnZSBhbmQgb3B0aW9uYWxseSBzcGVjaWZpYyBwYWdlIGNvbXBvbmVudHMuIEFuIGluaXRpYWwgU3RhdHVzUmVwb3J0VXBkYXRlIGlzIGNyZWF0ZWQgYXV0b21hdGljYWxseSB3aXRoIHRoZSBwcm92aWRlZCBzdGF0dXMsIG1lc3NhZ2UsIGFuZCBkYXRlLiBJZiBub3RpZnkgaXMgdHJ1ZSwgc3Vic2NyaWJlcnMgb2YgdGhlIGFzc29jaWF0ZWQgcGFnZSBhcmUgbm90aWZpZWQgYnkgZW1haWwuEoEBCg9HZXRTdGF0dXNSZXBvcnQSMy5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuR2V0U3RhdHVzUmVwb3J0UmVxdWVzdBo0Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5HZXRTdGF0dXNSZXBvcnRSZXNwb25zZSIDkAIBEocBChFMaXN0U3RhdHVzUmVwb3J0cxI1Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5MaXN0U3RhdHVzUmVwb3J0c1JlcXVlc3QaNi5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuTGlzdFN0YXR1c1JlcG9ydHNSZXNwb25zZSIDkAIBEoUBChJVcGRhdGVTdGF0dXNSZXBvcnQSNi5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuVXBkYXRlU3RhdHVzUmVwb3J0UmVxdWVzdBo3Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5VcGRhdGVTdGF0dXNSZXBvcnRSZXNwb25zZRKFAQoSRGVsZXRlU3RhdHVzUmVwb3J0EjYub3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxLkRlbGV0ZVN0YXR1c1JlcG9ydFJlcXVlc3QaNy5vcGVuc3RhdHVzLnN0YXR1c19yZXBvcnQudjEuRGVsZXRlU3RhdHVzUmVwb3J0UmVzcG9uc2USuAMKFUFkZFN0YXR1c1JlcG9ydFVwZGF0ZRI5Lm9wZW5zdGF0dXMuc3RhdHVzX3JlcG9ydC52MS5BZGRTdGF0dXNSZXBvcnRVcGRhdGVSZXF1ZXN0Gjoub3BlbnN0YXR1cy5zdGF0dXNfcmVwb3J0LnYxLkFkZFN0YXR1c1JlcG9ydFVwZGF0ZVJlc3BvbnNlIqcCukejAhqgAkFkZHMgYSBuZXcgdXBkYXRlIGVudHJ5IHRvIGFuIGV4aXN0aW5nIHN0YXR1cyByZXBvcnQgYW5kIHRyYW5zaXRpb25zIHRoZSByZXBvcnQgdG8gdGhlIHNwZWNpZmllZCBzdGF0dXMuIFN0YXR1cyByZXBvcnRzIGZvbGxvdyBhIGxpZmVjeWNsZTogaW52ZXN0aWdhdGluZyAtPiBpZGVudGlmaWVkIC0+IG1vbml0b3JpbmcgLT4gcmVzb2x2ZWQuIElmIG5vdGlmeSBpcyB0cnVlLCBzdWJzY3JpYmVycyBvZiB0aGUgYXNzb2NpYXRlZCBwYWdlIGFyZSBub3RpZmllZCBieSBlbWFpbCBhYm91dCB0aGUgdXBkYXRlLkJeWlxnaXRodWIuY29tL29wZW5zdGF0dXNocS9vcGVuc3RhdHVzL3BhY2thZ2VzL3Byb3RvL29wZW5zdGF0dXMvc3RhdHVzX3JlcG9ydC92MTtzdGF0dXNyZXBvcnR2MWIGcHJvdG8z",
     [
       file_buf_validate_validate,
+      file_gnostic_openapi_v3_annotations,
       file_openstatus_status_report_v1_status_report,
     ],
   );
 
 /**
+ * CreateStatusReportRequest is the request to create a new status report.
+ *
  * @generated from message openstatus.status_report.v1.CreateStatusReportRequest
  */
 export type CreateStatusReportRequest =
@@ -99,6 +103,8 @@ export const CreateStatusReportRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 0);
 
 /**
+ * CreateStatusReportResponse is the response after creating a status report.
+ *
  * @generated from message openstatus.status_report.v1.CreateStatusReportResponse
  */
 export type CreateStatusReportResponse =
@@ -122,6 +128,8 @@ export const CreateStatusReportResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 1);
 
 /**
+ * GetStatusReportRequest is the request to get a status report by ID.
+ *
  * @generated from message openstatus.status_report.v1.GetStatusReportRequest
  */
 export type GetStatusReportRequest =
@@ -145,6 +153,8 @@ export const GetStatusReportRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 2);
 
 /**
+ * GetStatusReportResponse is the response containing the status report with its full update timeline.
+ *
  * @generated from message openstatus.status_report.v1.GetStatusReportResponse
  */
 export type GetStatusReportResponse =
@@ -168,6 +178,8 @@ export const GetStatusReportResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 3);
 
 /**
+ * ListStatusReportsRequest is the request to list status reports.
+ *
  * @generated from message openstatus.status_report.v1.ListStatusReportsRequest
  */
 export type ListStatusReportsRequest =
@@ -205,6 +217,8 @@ export const ListStatusReportsRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 4);
 
 /**
+ * ListStatusReportsResponse is the response containing status report summaries.
+ *
  * @generated from message openstatus.status_report.v1.ListStatusReportsResponse
  */
 export type ListStatusReportsResponse =
@@ -235,6 +249,8 @@ export const ListStatusReportsResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 5);
 
 /**
+ * UpdateStatusReportRequest is the request to update a status report's metadata.
+ *
  * @generated from message openstatus.status_report.v1.UpdateStatusReportRequest
  */
 export type UpdateStatusReportRequest =
@@ -260,6 +276,15 @@ export type UpdateStatusReportRequest =
      * @generated from field: repeated string page_component_ids = 3;
      */
     pageComponentIds: string[];
+
+    /**
+     * Set to true to update page component associations.
+     * When true, page_component_ids replaces the existing list (empty clears all).
+     * When false or unset, page_component_ids is ignored and existing associations are preserved.
+     *
+     * @generated from field: optional bool update_page_component_ids = 4;
+     */
+    updatePageComponentIds?: boolean;
   };
 
 /**
@@ -272,6 +297,8 @@ export const UpdateStatusReportRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 6);
 
 /**
+ * UpdateStatusReportResponse is the response after updating a status report.
+ *
  * @generated from message openstatus.status_report.v1.UpdateStatusReportResponse
  */
 export type UpdateStatusReportResponse =
@@ -295,6 +322,8 @@ export const UpdateStatusReportResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 7);
 
 /**
+ * DeleteStatusReportRequest is the request to delete a status report.
+ *
  * @generated from message openstatus.status_report.v1.DeleteStatusReportRequest
  */
 export type DeleteStatusReportRequest =
@@ -318,6 +347,8 @@ export const DeleteStatusReportRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 8);
 
 /**
+ * DeleteStatusReportResponse is the response after deleting a status report.
+ *
  * @generated from message openstatus.status_report.v1.DeleteStatusReportResponse
  */
 export type DeleteStatusReportResponse =
@@ -341,6 +372,8 @@ export const DeleteStatusReportResponseSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 9);
 
 /**
+ * AddStatusReportUpdateRequest is the request to add a new update to a status report.
+ *
  * @generated from message openstatus.status_report.v1.AddStatusReportUpdateRequest
  */
 export type AddStatusReportUpdateRequest =
@@ -392,6 +425,8 @@ export const AddStatusReportUpdateRequestSchema: GenMessage<
   messageDesc(file_openstatus_status_report_v1_service, 10);
 
 /**
+ * AddStatusReportUpdateResponse is the response after adding an update to a status report.
+ *
  * @generated from message openstatus.status_report.v1.AddStatusReportUpdateResponse
  */
 export type AddStatusReportUpdateResponse =
@@ -421,7 +456,7 @@ export const AddStatusReportUpdateResponseSchema: GenMessage<
  */
 export const StatusReportService: GenService<{
   /**
-   * CreateStatusReport creates a new status report.
+   * CreateStatusReport creates a new status report with an initial update entry and optionally notifies subscribers.
    *
    * @generated from rpc openstatus.status_report.v1.StatusReportService.CreateStatusReport
    */
@@ -471,7 +506,7 @@ export const StatusReportService: GenService<{
     output: typeof DeleteStatusReportResponseSchema;
   };
   /**
-   * AddStatusReportUpdate adds a new update to an existing status report timeline.
+   * AddStatusReportUpdate adds a new update to an existing status report timeline and transitions the report status.
    *
    * @generated from rpc openstatus.status_report.v1.StatusReportService.AddStatusReportUpdate
    */

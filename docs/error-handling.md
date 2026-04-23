@@ -2,7 +2,8 @@
 
 # Error Handling
 
-The SDK uses ConnectRPC. Errors are thrown as `ConnectError` instances from the `@connectrpc/connect` package.
+The SDK uses ConnectRPC. Errors are thrown as `ConnectError` instances from the
+`@connectrpc/connect` package.
 
 ```typescript
 import { ConnectError } from "@connectrpc/connect";
@@ -19,17 +20,18 @@ try {
 
 ## Common Error Codes
 
-| Code | Description |
-|------|-------------|
-| `unauthenticated` | Missing or invalid API key |
-| `not_found` | Resource does not exist |
-| `invalid_argument` | Validation failure (e.g., missing required field, value out of range) |
-| `permission_denied` | No access to this workspace or resource |
-| `already_exists` | Duplicate resource (e.g., slug already taken) |
+| Code                | Description                                                           |
+| ------------------- | --------------------------------------------------------------------- |
+| `unauthenticated`   | Missing or invalid API key                                            |
+| `not_found`         | Resource does not exist                                               |
+| `invalid_argument`  | Validation failure (e.g., missing required field, value out of range) |
+| `permission_denied` | No access to this workspace or resource                               |
+| `already_exists`    | Duplicate resource (e.g., slug already taken)                         |
 
 ## Retry Strategy
 
-ConnectRPC does not retry by default. For transient failures (`unavailable`, `deadline_exceeded`), implement your own retry logic:
+ConnectRPC does not retry by default. For transient failures (`unavailable`,
+`deadline_exceeded`), implement your own retry logic:
 
 ```typescript
 import { ConnectError } from "@connectrpc/connect";
@@ -44,7 +46,9 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
         (error.code === "unavailable" || error.code === "deadline_exceeded") &&
         attempt < maxRetries
       ) {
-        await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** attempt));
+        await new Promise((resolve) =>
+          setTimeout(resolve, 1000 * 2 ** attempt)
+        );
         continue;
       }
       throw error;

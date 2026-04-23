@@ -2,7 +2,8 @@
 
 # Status Report Service
 
-Manage incident reports with update timelines. The Status Report Service provides 6 RPC methods.
+Manage incident reports with update timelines. The Status Report Service
+provides 6 RPC methods.
 
 ## Create Status Report
 
@@ -80,7 +81,11 @@ console.log(`Title: ${statusReport?.title}`);
 console.log(`Status: ${StatusReportStatus[statusReport?.status ?? 0]}`);
 
 for (const update of statusReport?.updates ?? []) {
-  console.log(`  ${update.date}: [${StatusReportStatus[update.status]}] ${update.message}`);
+  console.log(
+    `  ${update.date}: [${
+      StatusReportStatus[update.status]
+    }] ${update.message}`,
+  );
 }
 ```
 

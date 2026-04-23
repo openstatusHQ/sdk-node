@@ -281,8 +281,8 @@ const { monitor } = await client.monitor.v1.MonitorService.updateDNSMonitor({
 List all monitors with pagination. Returns monitors grouped by type.
 
 ```typescript
-const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } =
-  await client.monitor.v1.MonitorService.listMonitors({
+const { httpMonitors, tcpMonitors, dnsMonitors, totalSize } = await client
+  .monitor.v1.MonitorService.listMonitors({
     limit: 10,
     offset: 0,
   });
