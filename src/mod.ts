@@ -92,10 +92,18 @@ export type {
   CreateTCPMonitorResponse,
   DeleteMonitorRequest,
   DeleteMonitorResponse,
+  GetMonitorHTTPResponseLogRequest,
+  GetMonitorHTTPResponseLogResponse,
   GetMonitorStatusRequest,
   GetMonitorStatusResponse,
   GetMonitorSummaryRequest,
   GetMonitorSummaryResponse,
+  HTTPResponseLogDetail,
+  HTTPResponseLogListItem,
+  HTTPResponseLogPagination,
+  HTTPResponseLogTiming,
+  ListMonitorHTTPResponseLogsRequest,
+  ListMonitorHTTPResponseLogsResponse,
   ListMonitorsRequest,
   ListMonitorsResponse,
   RegionStatus,
@@ -109,7 +117,11 @@ export type {
   UpdateTCPMonitorResponse,
 } from "./gen/openstatus/monitor/v1/service_pb.ts";
 
-export { TimeRange } from "./gen/openstatus/monitor/v1/service_pb.ts";
+export {
+  HTTPResponseLogRequestStatus,
+  HTTPResponseLogTrigger,
+  TimeRange,
+} from "./gen/openstatus/monitor/v1/service_pb.ts";
 
 // Re-export health types
 export type {
@@ -347,6 +359,8 @@ export interface OpenStatusClient {
        * - `deleteMonitor` - Delete a monitor
        * - `getMonitorStatus` - Get status of all regions for a monitor
        * - `getMonitorSummary` - Get aggregated metrics for a monitor
+       * - `listMonitorHTTPResponseLogs` - List HTTP response logs for a monitor
+       * - `getMonitorHTTPResponseLog` - Get a single HTTP response log with full details
        */
       MonitorService: Client<typeof MonitorService>;
     };

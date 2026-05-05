@@ -365,6 +365,52 @@ console.log(`P95 latency: ${summary.p95}ms`);
 console.log(`P99 latency: ${summary.p99}ms`);
 ```
 
+#### `listMonitorHTTPResponseLogs(request)`
+
+List HTTP response logs for a monitor within the 14-day retention window.
+Supports time range filtering and offset pagination.
+
+```typescript
+const { logs, pagination } = await client.monitor.v1.MonitorService
+  .listMonitorHTTPResponseLogs({
+    id: "mon_123",
+    fromTimestamp: BigInt(Date.now() - 24 * 60 * 60 * 1000), // last 24h
+    toTimestamp: BigInt(Date.now()),
+    limit: 25,
+    offset: 0,
+  });
+
+for (const log of logs) {
+  console.log(`${log.timestamp}: ${log.statusCode} (${log.latency}ms)`);
+}
+
+if (pagination?.hasMore) {
+  console.log(`Next offset: ${pagination.nextOffset}`);
+}
+```
+
+#### `getMonitorHTTPResponseLog(request)`
+
+Get a single HTTP response log with full debugging details (URL, headers,
+assertions, error message).
+
+```typescript
+const { log } = await client.monitor.v1.MonitorService
+  .getMonitorHTTPResponseLog({
+    id: "mon_123",
+    logId: "log_456",
+  });
+
+console.log(`URL: ${log?.url}`);
+console.log(`Errored: ${log?.error}`);
+console.log(`Message: ${log?.message ?? "n/a"}`);
+console.log(`Status code: ${log?.log?.statusCode}`);
+
+for (const [key, value] of Object.entries(log?.headers ?? {})) {
+  console.log(`  ${key}: ${value}`);
+}
+```
+
 ---
 
 ### Health Service
@@ -1367,6 +1413,21 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 | `TIME_RANGE_1D`  | Last 1 day   |
 | `TIME_RANGE_7D`  | Last 7 days  |
 | `TIME_RANGE_14D` | Last 14 days |
+
+#### HTTPResponseLogRequestStatus
+
+| Value                                       | Description                        |
+| ------------------------------------------- | ---------------------------------- |
+| `HTTP_RESPONSE_LOG_REQUEST_STATUS_SUCCESS`  | Response satisfied assertions      |
+| `HTTP_RESPONSE_LOG_REQUEST_STATUS_ERROR`    | Response failed its assertions     |
+| `HTTP_RESPONSE_LOG_REQUEST_STATUS_DEGRADED` | Response slower than the threshold |
+
+#### HTTPResponseLogTrigger
+
+| Value                            | Description               |
+| -------------------------------- | ------------------------- |
+| `HTTP_RESPONSE_LOG_TRIGGER_CRON` | Scheduled monitor run     |
+| `HTTP_RESPONSE_LOG_TRIGGER_API`  | API-triggered monitor run |
 
 #### StatusReportStatus
 

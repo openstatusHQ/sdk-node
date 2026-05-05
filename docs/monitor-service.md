@@ -2,9 +2,9 @@
 
 # Monitor Service
 
-Manage HTTP, TCP, and DNS monitors. The Monitor Service provides 12 RPC methods
-for creating, updating, listing, triggering, deleting, and querying monitor
-status and metrics.
+Manage HTTP, TCP, and DNS monitors. The Monitor Service provides 14 RPC methods
+for creating, updating, listing, triggering, deleting, querying monitor status
+and metrics, and inspecting HTTP response logs.
 
 All examples assume you have created a client:
 
@@ -357,3 +357,85 @@ The latency fields (`p50`, `p75`, `p90`, `p95`, `p99`) and count fields
 (`totalSuccessful`, `totalDegraded`, `totalFailed`) are `bigint` values. The
 `regions` parameter is optional — pass an empty array to get metrics across all
 regions.
+
+## List Monitor HTTP Response Logs
+
+List HTTP response logs for a monitor within the 14-day retention window.
+Supports time-window filtering and offset-based pagination.
+
+```typescript
+import {
+  createOpenStatusClient,
+  HTTPResponseLogRequestStatus,
+  HTTPResponseLogTrigger,
+  Region,
+} from "@openstatus/sdk-node";
+
+const client = createOpenStatusClient({
+  apiKey: process.env.OPENSTATUS_API_KEY,
+});
+
+const { logs, pagination } = await client.monitor.v1.MonitorService
+  .listMonitorHTTPResponseLogs({
+    id: "mon_123",
+    fromTimestamp: BigInt(Date.now() - 24 * 60 * 60 * 1000),
+    toTimestamp: BigInt(Date.now()),
+    limit: 25,
+    offset: 0,
+  });
+
+for (const log of logs) {
+  console.log(
+    `[${Region[log.region]}] ${log.timestamp}: ` +
+      `${log.statusCode ?? "n/a"} (${log.latency}ms) ` +
+      `status=${HTTPResponseLogRequestStatus[log.requestStatus]} ` +
+      `trigger=${HTTPResponseLogTrigger[log.trigger]}`,
+  );
+}
+
+if (pagination?.hasMore) {
+  console.log(`Next offset: ${pagination.nextOffset}`);
+}
+```
+
+Request parameters:
+
+| Parameter       | Type              | Description                                     |
+| --------------- | ----------------- | ----------------------------------------------- |
+| `id`            | string            | Monitor ID (required)                           |
+| `fromTimestamp` | bigint (optional) | Window start, Unix milliseconds (14d retention) |
+| `toTimestamp`   | bigint (optional) | Window end, Unix milliseconds                   |
+| `limit`         | number (optional) | Max results to return (1–100, default 25)       |
+| `offset`        | number (optional) | Number of results to skip (default 0)           |
+
+Each `HTTPResponseLogListItem` includes `id`, `latency`, `statusCode`,
+`monitorId`, `requestStatus`, `region`, `cronTimestamp`, `trigger`, `timestamp`,
+and an optional `timing` breakdown (`dns`, `connect`, `tls`, `ttfb`,
+`transfer`).
+
+## Get Monitor HTTP Response Log
+
+Get full debugging details for a single response log: the requested URL,
+redacted response headers, error message, and serialized assertions.
+
+```typescript
+const { log } = await client.monitor.v1.MonitorService
+  .getMonitorHTTPResponseLog({
+    id: "mon_123",
+    logId: "log_456",
+  });
+
+console.log(`URL: ${log?.url}`);
+console.log(`Errored: ${log?.error}`);
+console.log(`Message: ${log?.message ?? "n/a"}`);
+console.log(`Status code: ${log?.log?.statusCode}`);
+console.log(`Assertions: ${log?.assertions ?? "n/a"}`);
+
+for (const [key, value] of Object.entries(log?.headers ?? {})) {
+  console.log(`  ${key}: ${value}`);
+}
+```
+
+The `log.log` field embeds the same `HTTPResponseLogListItem` returned by
+`listMonitorHTTPResponseLogs`, so timing and classification fields are available
+alongside the detail fields.
