@@ -10,6 +10,7 @@ provides 6 RPC methods.
 ```typescript
 import {
   createOpenStatusClient,
+  PageComponentImpact,
   StatusReportStatus,
 } from "@openstatus/sdk-node";
 
@@ -26,17 +27,29 @@ const { statusReport } = await client.statusReport.v1.StatusReportService
     pageId: "page_123",
     pageComponentIds: ["comp_456"],
     notify: true,
+    componentImpacts: [
+      {
+        pageComponentId: "comp_456",
+        impact: PageComponentImpact.DEGRADED_PERFORMANCE,
+      },
+    ],
   });
 
 console.log(`Status report created: ${statusReport?.id}`);
 ```
 
+The optional `componentImpacts` field sets a per-component impact
+(`OPERATIONAL`, `DEGRADED_PERFORMANCE`, `PARTIAL_OUTAGE`, or `MAJOR_OUTAGE`)
+for the initial update. Omitting it creates a report without impact tracking.
+
 ## Add Status Report Update
 
-Add a new entry to a status report's timeline.
+Add a new entry to a status report's timeline. Components named in
+`componentImpacts` are added to the report's affected set; omitted components
+keep their prior impact.
 
 ```typescript
-import { StatusReportStatus } from "@openstatus/sdk-node";
+import { PageComponentImpact, StatusReportStatus } from "@openstatus/sdk-node";
 
 const { statusReport } = await client.statusReport.v1.StatusReportService
   .addStatusReportUpdate({
@@ -45,6 +58,12 @@ const { statusReport } = await client.statusReport.v1.StatusReportService
     message: "The issue has been identified as a database connection problem.",
     date: "2024-01-15T11:00:00Z",
     notify: true,
+    componentImpacts: [
+      {
+        pageComponentId: "comp_456",
+        impact: PageComponentImpact.PARTIAL_OUTAGE,
+      },
+    ],
   });
 ```
 

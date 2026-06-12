@@ -49,8 +49,8 @@ For comprehensive documentation, see [docs/index.md](docs/index.md).
 
 ### Notifications
 
-- **12 Providers** - Slack, Discord, Email, PagerDuty, Opsgenie, Telegram, and
-  more
+- **13 Providers** - Slack, Discord, Email, PagerDuty, Opsgenie, Microsoft
+  Teams, and more
 - **Webhook Support** - Custom webhooks with headers for any integration
 - **Monitor Alerts** - Get notified when monitors go down or recover
 
@@ -435,7 +435,7 @@ Manage incident reports with update timelines.
 Create a new status report.
 
 ```typescript
-import { StatusReportStatus } from "@openstatus/sdk-node";
+import { PageComponentImpact, StatusReportStatus } from "@openstatus/sdk-node";
 
 const { statusReport } = await client.statusReport.v1.StatusReportService
   .createStatusReport({
@@ -446,6 +446,13 @@ const { statusReport } = await client.statusReport.v1.StatusReportService
     pageId: "page_123",
     pageComponentIds: ["comp_456"],
     notify: true,
+    // Optionally set per-component impacts
+    componentImpacts: [
+      {
+        pageComponentId: "comp_456",
+        impact: PageComponentImpact.DEGRADED_PERFORMANCE,
+      },
+    ],
   });
 
 console.log(`Status report created: ${statusReport?.id}`);
@@ -514,10 +521,12 @@ const { success } = await client.statusReport.v1.StatusReportService
 
 #### `addStatusReportUpdate(request)`
 
-Add a new update to an existing status report timeline.
+Add a new update to an existing status report timeline. Components named in
+`componentImpacts` are added to the report's affected set; omitted components
+keep their prior impact.
 
 ```typescript
-import { StatusReportStatus } from "@openstatus/sdk-node";
+import { PageComponentImpact, StatusReportStatus } from "@openstatus/sdk-node";
 
 const { statusReport } = await client.statusReport.v1.StatusReportService
   .addStatusReportUpdate({
@@ -526,6 +535,9 @@ const { statusReport } = await client.statusReport.v1.StatusReportService
     message: "The issue has been identified as a database connection problem.",
     date: "2024-01-15T11:00:00Z", // optional, defaults to current time
     notify: true,
+    componentImpacts: [
+      { pageComponentId: "comp_456", impact: PageComponentImpact.PARTIAL_OUTAGE },
+    ],
   });
 ```
 
@@ -848,8 +860,8 @@ const { success } = await client.maintenance.v1.MaintenanceService
 
 ### Notification Service
 
-Manage notification channels for monitor alerts. Supports 12 providers including
-Slack, Discord, Email, PagerDuty, and custom webhooks.
+Manage notification channels for monitor alerts. Supports 13 providers including
+Slack, Discord, Email, PagerDuty, Microsoft Teams, and custom webhooks.
 
 #### `createNotification(request)`
 
@@ -1157,6 +1169,23 @@ import { OpsgenieRegion } from "@openstatus/sdk-node";
 </details>
 
 <details>
+<summary><strong>Microsoft Teams</strong></summary>
+
+```typescript
+{
+  provider: NotificationProvider.MS_TEAMS,
+  data: {
+    data: {
+      case: "msTeams",
+      value: { webhookUrl: "https://prod-00.westeurope.logic.azure.com:443/workflows/..." }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
 <summary><strong>Custom Webhook</strong></summary>
 
 ```typescript
@@ -1438,6 +1467,16 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 | `MONITORING`    | Fix deployed, monitoring         |
 | `RESOLVED`      | Issue fully resolved             |
 
+#### PageComponentImpact
+
+| Value                  | Description                            |
+| ---------------------- | -------------------------------------- |
+| `UNSPECIFIED`          | No impact set (legacy reports)         |
+| `OPERATIONAL`          | Component is operational               |
+| `DEGRADED_PERFORMANCE` | Component performance is degraded      |
+| `PARTIAL_OUTAGE`       | Component is partially down            |
+| `MAJOR_OUTAGE`         | Component is down                      |
+
 #### OverallStatus
 
 | Value            | Description                 |
@@ -1457,6 +1496,7 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 | `EMAIL`          | Email notification  |
 | `GOOGLE_CHAT`    | Google Chat webhook |
 | `GRAFANA_ONCALL` | Grafana OnCall      |
+| `MS_TEAMS`       | Microsoft Teams     |
 | `NTFY`           | Ntfy push service   |
 | `PAGERDUTY`      | PagerDuty           |
 | `OPSGENIE`       | Opsgenie            |
