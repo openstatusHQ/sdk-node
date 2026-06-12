@@ -54,6 +54,16 @@
 | `MONITORING`    | Fix deployed, monitoring         |
 | `RESOLVED`      | Issue fully resolved             |
 
+### PageComponentImpact
+
+| Value                  | Description                       |
+| ---------------------- | --------------------------------- |
+| `UNSPECIFIED`          | No impact set (legacy reports)    |
+| `OPERATIONAL`          | Component is operational          |
+| `DEGRADED_PERFORMANCE` | Component performance is degraded |
+| `PARTIAL_OUTAGE`       | Component is partially down       |
+| `MAJOR_OUTAGE`         | Component is down                 |
+
 ### OverallStatus
 
 | Value            | Description                 |
@@ -73,6 +83,7 @@
 | `EMAIL`          | Email notification  |
 | `GOOGLE_CHAT`    | Google Chat webhook |
 | `GRAFANA_ONCALL` | Grafana OnCall      |
+| `MS_TEAMS`       | Microsoft Teams     |
 | `NTFY`           | Ntfy push service   |
 | `PAGERDUTY`      | PagerDuty           |
 | `OPSGENIE`       | Opsgenie            |
@@ -313,7 +324,8 @@ All types and enums exported from `@openstatus/sdk-node`:
 
 ### Status Report Types
 
-- `StatusReport`, `StatusReportSummary`, `StatusReportUpdate`
+- `StatusReport`, `StatusReportSummary`, `StatusReportUpdate`,
+  `ComponentImpact`
 - `CreateStatusReportRequest`, `CreateStatusReportResponse`
 - `GetStatusReportRequest`, `GetStatusReportResponse`
 - `ListStatusReportsRequest`, `ListStatusReportsResponse`
@@ -321,6 +333,7 @@ All types and enums exported from `@openstatus/sdk-node`:
 - `DeleteStatusReportRequest`, `DeleteStatusReportResponse`
 - `AddStatusReportUpdateRequest`, `AddStatusReportUpdateResponse`
 - `StatusReportStatus` — investigating / identified / monitoring / resolved
+- `PageComponentImpact` — per-component impact set by a status report update
 
 ### Status Page Types
 
@@ -359,9 +372,9 @@ All types and enums exported from `@openstatus/sdk-node`:
 
 - `Notification`, `NotificationSummary`
 - `NotificationData`
-- `DiscordData`, `EmailData`, `GoogleChatData`, `GrafanaOncallData`, `NtfyData`,
-  `OpsgenieData`, `PagerDutyData`, `SlackData`, `SmsData`, `TelegramData`,
-  `WebhookData`, `WebhookHeader`, `WhatsappData`
+- `DiscordData`, `EmailData`, `GoogleChatData`, `GrafanaOncallData`,
+  `MsTeamsData`, `NtfyData`, `OpsgenieData`, `PagerDutyData`, `SlackData`,
+  `SmsData`, `TelegramData`, `WebhookData`, `WebhookHeader`, `WhatsappData`
 - `CreateNotificationRequest`, `CreateNotificationResponse`
 - `GetNotificationRequest`, `GetNotificationResponse`
 - `ListNotificationsRequest`, `ListNotificationsResponse`

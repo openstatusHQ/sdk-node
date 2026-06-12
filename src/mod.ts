@@ -133,12 +133,16 @@ export { CheckResponse_ServingStatus as ServingStatus } from "./gen/openstatus/h
 
 // Re-export status report types
 export type {
+  ComponentImpact,
   StatusReport,
   StatusReportSummary,
   StatusReportUpdate,
 } from "./gen/openstatus/status_report/v1/status_report_pb.ts";
 
-export { StatusReportStatus } from "./gen/openstatus/status_report/v1/status_report_pb.ts";
+export {
+  PageComponentImpact,
+  StatusReportStatus,
+} from "./gen/openstatus/status_report/v1/status_report_pb.ts";
 
 // Re-export status report request/response types
 export type {
@@ -250,6 +254,7 @@ export type {
   EmailData,
   GoogleChatData,
   GrafanaOncallData,
+  MsTeamsData,
   NotificationData,
   NtfyData,
   OpsgenieData,

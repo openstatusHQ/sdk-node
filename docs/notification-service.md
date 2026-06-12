@@ -2,7 +2,7 @@
 
 # Notification Service
 
-Manage notification channels for monitor alerts. Supports 12 providers. The
+Manage notification channels for monitor alerts. Supports 13 providers. The
 Notification Service provides 7 RPC methods.
 
 ## Create Notification
@@ -229,6 +229,28 @@ const { notification } = await client.notification.v1.NotificationService
       data: {
         case: "whatsapp",
         value: { phoneNumber: "+1234567890" },
+      },
+    },
+    monitorIds: ["mon_123"],
+  });
+```
+
+### Microsoft Teams
+
+Uses a Power Automate Workflows webhook URL.
+
+```typescript
+const { notification } = await client.notification.v1.NotificationService
+  .createNotification({
+    name: "Teams Alerts",
+    provider: NotificationProvider.MS_TEAMS,
+    data: {
+      data: {
+        case: "msTeams",
+        value: {
+          webhookUrl:
+            "https://prod-00.westeurope.logic.azure.com:443/workflows/...",
+        },
       },
     },
     monitorIds: ["mon_123"],

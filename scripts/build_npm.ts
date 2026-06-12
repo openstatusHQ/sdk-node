@@ -12,7 +12,7 @@ await build({
   package: {
     // package.json properties
     name: "@openstatus/sdk-node",
-    version: "0.1.6",
+    version: "0.1.7",
     description: "SDK for openstatus.",
     license: "MIT",
     repository: {
