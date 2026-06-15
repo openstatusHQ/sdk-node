@@ -39,7 +39,7 @@
  * ```
  */
 
-import type { Client, Interceptor } from "@connectrpc/connect";
+import type { Client, Interceptor, Transport } from "@connectrpc/connect";
 import { createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-node";
 import { MonitorService } from "./gen/openstatus/monitor/v1/service_pb.ts";
@@ -48,6 +48,19 @@ import { StatusReportService } from "./gen/openstatus/status_report/v1/service_p
 import { StatusPageService } from "./gen/openstatus/status_page/v1/service_pb.ts";
 import { MaintenanceService } from "./gen/openstatus/maintenance/v1/service_pb.ts";
 import { NotificationService } from "./gen/openstatus/notification/v1/service_pb.ts";
+
+// Re-export the generated service descriptors and Connect transport types so
+// non-Node runtimes (Cloudflare Workers, browsers) can build their own
+// transport — e.g. `createClient(MonitorService, ownTransport)`.
+export type { Client, Interceptor, Transport } from "@connectrpc/connect";
+export {
+  HealthService,
+  MaintenanceService,
+  MonitorService,
+  NotificationService,
+  StatusPageService,
+  StatusReportService,
+};
 
 // Re-export monitor types
 export type {
@@ -308,12 +321,24 @@ export interface OpenStatusClientOptions {
    * Custom API base URL. Defaults to the OpenStatus production API.
    */
   baseUrl?: string;
+  /**
+   * HTTP version for the default `@connectrpc/connect-node` transport.
+   * Defaults to `"2"`. Ignored when `transport` is provided.
+   */
+  httpVersion?: "1.1" | "2";
+  /**
+   * Bring your own Connect transport — e.g. a `@connectrpc/connect-web`
+   * transport for Cloudflare Workers / browsers, where `node:http2` is
+   * unavailable. When set, `baseUrl`, `apiKey`, and `httpVersion` are ignored;
+   * configure auth on the transport via `createAuthInterceptor`.
+   */
+  transport?: Transport;
 }
 
 /**
  * Creates an interceptor that adds the API key header to all requests.
  */
-function createAuthInterceptor(apiKey: string): Interceptor {
+export function createAuthInterceptor(apiKey: string): Interceptor {
   return (next) => (req) => {
     req.header.set("x-openstatus-key", `${apiKey}`);
     return next(req);
@@ -322,8 +347,13 @@ function createAuthInterceptor(apiKey: string): Interceptor {
 
 /**
  * Creates a Connect RPC transport configured for the OpenStatus API.
+ * Returns `options.transport` verbatim when one is provided.
  */
-function createTransport(options?: OpenStatusClientOptions) {
+export function createOpenStatusTransport(
+  options?: OpenStatusClientOptions,
+): Transport {
+  if (options?.transport) return options.transport;
+
   const interceptors: Interceptor[] = [];
 
   if (options?.apiKey) {
@@ -333,7 +363,7 @@ function createTransport(options?: OpenStatusClientOptions) {
   return createConnectTransport({
     baseUrl: options?.baseUrl ?? process.env.OPENSTATUS_API_URL ??
       DEFAULT_API_URL,
-    httpVersion: "2",
+    httpVersion: options?.httpVersion ?? "2",
     interceptors,
   });
 }
@@ -364,6 +394,7 @@ export interface OpenStatusClient {
        * - `deleteMonitor` - Delete a monitor
        * - `getMonitorStatus` - Get status of all regions for a monitor
        * - `getMonitorSummary` - Get aggregated metrics for a monitor
+       * - `getMonitorDailySummary` - Get per-day status buckets per monitor (status bars)
        * - `listMonitorHTTPResponseLogs` - List HTTP response logs for a monitor
        * - `getMonitorHTTPResponseLog` - Get a single HTTP response log with full details
        */
@@ -505,7 +536,7 @@ export interface OpenStatusClient {
 export function createOpenStatusClient(
   options?: OpenStatusClientOptions,
 ): OpenStatusClient {
-  const transport = createTransport(options);
+  const transport = createOpenStatusTransport(options);
 
   return {
     monitor: {

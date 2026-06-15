@@ -34,7 +34,7 @@ Reading bigint values:
 
 ```typescript
 const summary = await client.monitor.v1.MonitorService.getMonitorSummary({
-  id: "mon_123",
+  id: "123456",
   timeRange: TimeRange.TIME_RANGE_7D,
   regions: [],
 });
@@ -57,7 +57,7 @@ in TypeScript.
 
 ```typescript
 const { monitor } = await client.monitor.v1.MonitorService.getMonitor({
-  id: "mon_123",
+  id: "123456",
 });
 
 switch (monitor?.config.case) {

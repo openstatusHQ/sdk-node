@@ -27,7 +27,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { webhookUrl: "https://hooks.slack.com/services/..." },
       },
     },
-    monitorIds: ["mon_123", "mon_456"],
+    monitorIds: ["123456", "123457"],
   });
 
 console.log(`Notification created: ${notification?.id}`);
@@ -55,7 +55,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { webhookUrl: "https://hooks.slack.com/services/..." },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -72,7 +72,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { webhookUrl: "https://discord.com/api/webhooks/..." },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -89,7 +89,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { email: "alerts@example.com" },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -106,7 +106,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { integrationKey: "your-integration-key" },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -125,7 +125,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { apiKey: "your-api-key", region: OpsgenieRegion.US },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -142,7 +142,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { chatId: "123456789" },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -159,7 +159,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { webhookUrl: "https://chat.googleapis.com/v1/spaces/..." },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -176,7 +176,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { webhookUrl: "https://oncall.example.com/..." },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -197,7 +197,7 @@ const { notification } = await client.notification.v1.NotificationService
         },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -214,7 +214,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { phoneNumber: "+1234567890" },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -231,7 +231,7 @@ const { notification } = await client.notification.v1.NotificationService
         value: { phoneNumber: "+1234567890" },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -253,7 +253,7 @@ const { notification } = await client.notification.v1.NotificationService
         },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -276,7 +276,7 @@ const { notification } = await client.notification.v1.NotificationService
         },
       },
     },
-    monitorIds: ["mon_123"],
+    monitorIds: ["123456"],
   });
 ```
 
@@ -349,7 +349,7 @@ const { notification } = await client.notification.v1.NotificationService
   .updateNotification({
     id: "notif_123",
     name: "Updated Slack Alerts",
-    monitorIds: ["mon_123", "mon_456", "mon_789"],
+    monitorIds: ["123456", "123457", "123458"],
   });
 ```
 

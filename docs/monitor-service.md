@@ -2,7 +2,7 @@
 
 # Monitor Service
 
-Manage HTTP, TCP, and DNS monitors. The Monitor Service provides 14 RPC methods
+Manage HTTP, TCP, and DNS monitors. The Monitor Service provides 15 RPC methods
 for creating, updating, listing, triggering, deleting, querying monitor status
 and metrics, and inspecting HTTP response logs.
 
@@ -80,7 +80,7 @@ Updates are partial — only include the fields you want to change.
 
 ```typescript
 const { monitor } = await client.monitor.v1.MonitorService.updateHTTPMonitor({
-  id: "mon_123",
+  id: "123456",
   monitor: {
     name: "Updated API Monitor",
     active: false,
@@ -141,7 +141,7 @@ const { monitor } = await client.monitor.v1.MonitorService.createTCPMonitor({
 
 ```typescript
 const { monitor } = await client.monitor.v1.MonitorService.updateTCPMonitor({
-  id: "mon_123",
+  id: "123456",
   monitor: {
     name: "Updated Database Monitor",
   },
@@ -207,7 +207,7 @@ const { monitor } = await client.monitor.v1.MonitorService.createDNSMonitor({
 
 ```typescript
 const { monitor } = await client.monitor.v1.MonitorService.updateDNSMonitor({
-  id: "mon_123",
+  id: "123456",
   monitor: {
     name: "Updated DNS Check",
   },
@@ -263,7 +263,7 @@ contains one of HTTP, TCP, or DNS configuration.
 
 ```typescript
 const { monitor } = await client.monitor.v1.MonitorService.getMonitor({
-  id: "mon_123",
+  id: "123456",
 });
 
 if (monitor?.config.case === "http") {
@@ -287,7 +287,7 @@ Trigger an immediate check for a monitor.
 
 ```typescript
 const { success } = await client.monitor.v1.MonitorService.triggerMonitor({
-  id: "mon_123",
+  id: "123456",
 });
 
 console.log(`Trigger successful: ${success}`);
@@ -297,7 +297,7 @@ console.log(`Trigger successful: ${success}`);
 
 ```typescript
 const { success } = await client.monitor.v1.MonitorService.deleteMonitor({
-  id: "mon_123",
+  id: "123456",
 });
 ```
 
@@ -317,7 +317,7 @@ const client = createOpenStatusClient({
 });
 
 const { id, regions } = await client.monitor.v1.MonitorService.getMonitorStatus(
-  { id: "mon_123" },
+  { id: "123456" },
 );
 
 for (const { region, status } of regions) {
@@ -337,7 +337,7 @@ const client = createOpenStatusClient({
 });
 
 const summary = await client.monitor.v1.MonitorService.getMonitorSummary({
-  id: "mon_123",
+  id: "123456",
   timeRange: TimeRange.TIME_RANGE_7D,
   regions: [],
 });
@@ -358,10 +358,60 @@ The latency fields (`p50`, `p75`, `p90`, `p95`, `p99`) and count fields
 `regions` parameter is optional — pass an empty array to get metrics across all
 regions.
 
+`getMonitorSummary` returns a single aggregate over the window and `TimeRange`
+caps at 14 days. For a per-day series (e.g. to render status bars), use
+`getMonitorDailySummary` below.
+
+## Get Monitor Daily Summary
+
+Get per-day status buckets for one or more monitors over the last N days (max
+45). Each bucket is tagged with its `monitorId`, so you can render a status bar
+per monitor.
+
+```typescript
+import { createOpenStatusClient } from "@openstatus/sdk-node";
+
+const client = createOpenStatusClient({
+  apiKey: process.env.OPENSTATUS_API_KEY,
+});
+
+const { dailyStats } = await client.monitor.v1.MonitorService
+  .getMonitorDailySummary({
+    monitorIds: ["123456", "123457"],
+    days: 45,
+  });
+
+for (const stat of dailyStats) {
+  console.log(
+    `[${stat.monitorId}] ${stat.day}: ` +
+      `${stat.ok}/${stat.count} ok, ${stat.degraded} degraded, ${stat.error} error`,
+  );
+}
+```
+
+Request parameters:
+
+| Parameter    | Type              | Description                                          |
+| ------------ | ----------------- | ---------------------------------------------------- |
+| `monitorIds` | string[]          | One or more monitor IDs (1–50, required)             |
+| `days`       | number (optional) | Days to return (1–45, default 45; values >45 reject) |
+
+Each `MonitorDailyStat` has `monitorId`, `day` (RFC 3339, UTC midnight), and the
+`bigint` counts `count`, `ok`, `degraded`, `error`. Days with no checks are
+omitted — fill gaps client-side. Daily data is retained for 45 days.
+
+> The REST endpoint `GET /v1/monitor/{id}/summary` also returns a daily series,
+> but only `{ ok, count, day }` for a single monitor. Prefer
+> `getMonitorDailySummary` — it is multi-monitor and includes
+> `degraded`/`error`.
+
 ## List Monitor HTTP Response Logs
 
 List HTTP response logs for a monitor within the 14-day retention window.
 Supports time-window filtering and offset-based pagination.
+
+> Response logs are a paid feature. On the free plan these methods return
+> `permission_denied` ("Upgrade for response logs").
 
 ```typescript
 import {
@@ -377,7 +427,7 @@ const client = createOpenStatusClient({
 
 const { logs, pagination } = await client.monitor.v1.MonitorService
   .listMonitorHTTPResponseLogs({
-    id: "mon_123",
+    id: "123456",
     fromTimestamp: BigInt(Date.now() - 24 * 60 * 60 * 1000),
     toTimestamp: BigInt(Date.now()),
     limit: 25,
@@ -421,7 +471,7 @@ redacted response headers, error message, and serialized assertions.
 ```typescript
 const { log } = await client.monitor.v1.MonitorService
   .getMonitorHTTPResponseLog({
-    id: "mon_123",
+    id: "123456",
     logId: "log_456",
   });
 
