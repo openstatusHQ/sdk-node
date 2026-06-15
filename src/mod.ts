@@ -41,7 +41,7 @@
 
 import type { Client, Interceptor, Transport } from "@connectrpc/connect";
 import { createClient } from "@connectrpc/connect";
-import { createConnectTransport } from "@connectrpc/connect-node";
+import { createConnectTransport } from "@connectrpc/connect-web";
 import { MonitorService } from "./gen/openstatus/monitor/v1/service_pb.ts";
 import { HealthService } from "./gen/openstatus/health/v1/health_pb.ts";
 import { StatusReportService } from "./gen/openstatus/status_report/v1/service_pb.ts";
@@ -322,15 +322,10 @@ export interface OpenStatusClientOptions {
    */
   baseUrl?: string;
   /**
-   * HTTP version for the default `@connectrpc/connect-node` transport.
-   * Defaults to `"2"`. Ignored when `transport` is provided.
-   */
-  httpVersion?: "1.1" | "2";
-  /**
    * Bring your own Connect transport — e.g. a `@connectrpc/connect-web`
-   * transport for Cloudflare Workers / browsers, where `node:http2` is
-   * unavailable. When set, `baseUrl`, `apiKey`, and `httpVersion` are ignored;
-   * configure auth on the transport via `createAuthInterceptor`.
+   * transport with a custom `fetch` (Cloudflare Workers need one that
+   * tolerates `redirect: "error"`). When set, `baseUrl` and `apiKey` are
+   * ignored; configure auth on the transport via `createAuthInterceptor`.
    */
   transport?: Transport;
 }
@@ -346,7 +341,8 @@ export function createAuthInterceptor(apiKey: string): Interceptor {
 }
 
 /**
- * Creates a Connect RPC transport configured for the OpenStatus API.
+ * Creates a fetch-based Connect transport for the OpenStatus API. Works on any
+ * runtime with a global `fetch` (Node 18+, Deno, Bun, edge/Workers).
  * Returns `options.transport` verbatim when one is provided.
  */
 export function createOpenStatusTransport(
@@ -363,7 +359,6 @@ export function createOpenStatusTransport(
   return createConnectTransport({
     baseUrl: options?.baseUrl ?? process.env.OPENSTATUS_API_URL ??
       DEFAULT_API_URL,
-    httpVersion: options?.httpVersion ?? "2",
     interceptors,
   });
 }

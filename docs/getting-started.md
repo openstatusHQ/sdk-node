@@ -63,23 +63,25 @@ console.log(`Found ${totalSize} monitors`);
 
 ## Runtime Support
 
-| Runtime | Version | Module Format |
-| ------- | ------- | ------------- |
-| Node.js | >= 18   | ESM and CJS   |
-| Deno    | >= 2    | ESM (native)  |
-| Bun     | Latest  | ESM           |
+The SDK talks to the API over a fetch-based Connect transport
+(`@connectrpc/connect-web`), so it runs on any runtime with a global `fetch` —
+no HTTP/2 or `node:*` modules required:
+
+| Runtime            | Version | Module Format |
+| ------------------ | ------- | ------------- |
+| Node.js            | >= 18   | ESM and CJS   |
+| Deno               | >= 2    | ESM (native)  |
+| Bun                | Latest  | ESM           |
+| Cloudflare Workers | —       | ESM (edge)    |
 
 ### Cloudflare Workers and edge runtimes
 
-The default client uses `@connectrpc/connect-node`, which connects over HTTP/2
-via `node:http2`. That module is a non-functional stub on Cloudflare Workers
-(`workerd`), so the default client throws
-`The http2.connect method is not implemented` there.
-
-To run on Workers, bring your own fetch-based transport with
-`@connectrpc/connect-web` and pass it through the `transport` option. The SDK
-re-exports the service descriptors and `createAuthInterceptor` so you can wire
-auth onto your transport:
+The default client works on the edge as-is. The one caveat is that
+`@connectrpc/connect-web` issues requests with `redirect: "error"`, which
+`workerd` doesn't implement. If you hit
+`The redirect mode 'error' is not supported`, pass a transport with a
+redirect-tolerant `fetch` (the SDK re-exports `createAuthInterceptor` and the
+service descriptors for this):
 
 ```typescript
 import { createConnectTransport } from "@connectrpc/connect-web";
@@ -92,7 +94,7 @@ const client = createOpenStatusClient({
   transport: createConnectTransport({
     baseUrl: "https://api.openstatus.dev/rpc",
     interceptors: [createAuthInterceptor(env.OPENSTATUS_API_KEY)],
-    // workerd does not implement fetch's `redirect: "error"`; normalise it.
+    // workerd doesn't implement fetch's `redirect: "error"`; normalise it.
     fetch: (input, init) =>
       fetch(
         input,
@@ -102,11 +104,8 @@ const client = createOpenStatusClient({
 });
 ```
 
-When you pass a `transport`, the `apiKey`, `baseUrl`, and `httpVersion` options
-are ignored — configure authentication on the transport via
-`createAuthInterceptor`. For full control, import the raw service descriptors
-(`MonitorService`, `StatusPageService`, …) and call
-`createClient(MonitorService, transport)` from `@connectrpc/connect`.
+When you pass a `transport`, the `apiKey` and `baseUrl` options are ignored —
+configure authentication on the transport via `createAuthInterceptor`.
 
 ## Full Workflow Example
 
