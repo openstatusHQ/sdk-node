@@ -67,7 +67,7 @@ a monitor (automatically reflects monitor status) or static (manually managed).
 const { component } = await client.statusPage.v1.StatusPageService
   .addMonitorComponent({
     pageId: "page_123",
-    monitorId: "mon_456",
+    monitorId: "123457",
     name: "API Server",
     description: "Main API endpoint",
     order: 1,
