@@ -359,51 +359,7 @@ The latency fields (`p50`, `p75`, `p90`, `p95`, `p99`) and count fields
 regions.
 
 `getMonitorSummary` returns a single aggregate over the window and `TimeRange`
-caps at 14 days. For a per-day series (e.g. to render status bars), use
-`getMonitorDailySummary` below.
-
-## Get Monitor Daily Summary
-
-Get per-day status buckets for one or more monitors over the last N days (max
-45). Each bucket is tagged with its `monitorId`, so you can render a status bar
-per monitor.
-
-```typescript
-import { createOpenStatusClient } from "@openstatus/sdk-node";
-
-const client = createOpenStatusClient({
-  apiKey: process.env.OPENSTATUS_API_KEY,
-});
-
-const { dailyStats } = await client.monitor.v1.MonitorService
-  .getMonitorDailySummary({
-    monitorIds: ["123456", "123457"],
-    days: 45,
-  });
-
-for (const stat of dailyStats) {
-  console.log(
-    `[${stat.monitorId}] ${stat.day}: ` +
-      `${stat.ok}/${stat.count} ok, ${stat.degraded} degraded, ${stat.error} error`,
-  );
-}
-```
-
-Request parameters:
-
-| Parameter    | Type              | Description                                          |
-| ------------ | ----------------- | ---------------------------------------------------- |
-| `monitorIds` | string[]          | One or more monitor IDs (1–50, required)             |
-| `days`       | number (optional) | Days to return (1–45, default 45; values >45 reject) |
-
-Each `MonitorDailyStat` has `monitorId`, `day` (RFC 3339, UTC midnight), and the
-`bigint` counts `count`, `ok`, `degraded`, `error`. Days with no checks are
-omitted — fill gaps client-side. Daily data is retained for 45 days.
-
-> The REST endpoint `GET /v1/monitor/{id}/summary` also returns a daily series,
-> but only `{ ok, count, day }` for a single monitor. Prefer
-> `getMonitorDailySummary` — it is multi-monitor and includes
-> `degraded`/`error`.
+caps at 14 days.
 
 ## List Monitor HTTP Response Logs
 

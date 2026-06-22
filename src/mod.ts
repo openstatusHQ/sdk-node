@@ -107,6 +107,8 @@ export type {
   DeleteMonitorResponse,
   GetMonitorHTTPResponseLogRequest,
   GetMonitorHTTPResponseLogResponse,
+  GetMonitorRequest,
+  GetMonitorResponse,
   GetMonitorStatusRequest,
   GetMonitorStatusResponse,
   GetMonitorSummaryRequest,
@@ -119,6 +121,7 @@ export type {
   ListMonitorHTTPResponseLogsResponse,
   ListMonitorsRequest,
   ListMonitorsResponse,
+  MonitorConfig,
   RegionStatus,
   TriggerMonitorRequest,
   TriggerMonitorResponse,
@@ -180,6 +183,7 @@ export type {
 } from "./gen/openstatus/status_page/v1/status_page_pb.ts";
 
 export {
+  Locale,
   OverallStatus,
   PageAccessType,
   PageTheme,
@@ -196,23 +200,32 @@ export { PageComponentType } from "./gen/openstatus/status_page/v1/page_componen
 // Re-export page subscriber types
 export type { PageSubscriber } from "./gen/openstatus/status_page/v1/page_subscriber_pb.ts";
 
+export { SubscriberSource } from "./gen/openstatus/status_page/v1/page_subscriber_pb.ts";
+
 // Re-export status page request/response types
 export type {
   AddMonitorComponentRequest,
   AddMonitorComponentResponse,
   AddStaticComponentRequest,
   AddStaticComponentResponse,
+  ComponentDayBucket,
+  ComponentEvent,
   ComponentStatus,
   CreateComponentGroupRequest,
   CreateComponentGroupResponse,
+  CreatePageSubscriptionRequest,
+  CreatePageSubscriptionResponse,
   CreateStatusPageRequest,
   CreateStatusPageResponse,
   DeleteComponentGroupRequest,
   DeleteComponentGroupResponse,
   DeleteStatusPageRequest,
   DeleteStatusPageResponse,
+  EmailChannel,
   GetOverallStatusRequest,
   GetOverallStatusResponse,
+  GetPageComponentDailySummaryRequest,
+  GetPageComponentDailySummaryResponse,
   GetStatusPageContentRequest,
   GetStatusPageContentResponse,
   GetStatusPageRequest,
@@ -221,6 +234,7 @@ export type {
   ListStatusPagesResponse,
   ListSubscribersRequest,
   ListSubscribersResponse,
+  PageComponentDailySummary,
   RemoveComponentRequest,
   RemoveComponentResponse,
   SubscribeToPageRequest,
@@ -233,6 +247,14 @@ export type {
   UpdateComponentResponse,
   UpdateStatusPageRequest,
   UpdateStatusPageResponse,
+  WebhookChannel,
+  WebhookChannelHeader,
+} from "./gen/openstatus/status_page/v1/service_pb.ts";
+
+export {
+  ComponentDayStatus,
+  ComponentEventStatus,
+  ComponentEventType,
 } from "./gen/openstatus/status_page/v1/service_pb.ts";
 
 // Re-export maintenance types
@@ -385,11 +407,11 @@ export interface OpenStatusClient {
        * - `updateTCPMonitor` - Update an existing TCP monitor
        * - `updateDNSMonitor` - Update an existing DNS monitor
        * - `listMonitors` - List all monitors
+       * - `getMonitor` - Get a single monitor by ID
        * - `triggerMonitor` - Trigger an immediate check
        * - `deleteMonitor` - Delete a monitor
        * - `getMonitorStatus` - Get status of all regions for a monitor
        * - `getMonitorSummary` - Get aggregated metrics for a monitor
-       * - `getMonitorDailySummary` - Get per-day status buckets per monitor (status bars)
        * - `listMonitorHTTPResponseLogs` - List HTTP response logs for a monitor
        * - `getMonitorHTTPResponseLog` - Get a single HTTP response log with full details
        */
@@ -450,11 +472,13 @@ export interface OpenStatusClient {
        * - `createComponentGroup` - Create a component group
        * - `deleteComponentGroup` - Delete a component group
        * - `updateComponentGroup` - Update a component group
-       * - `subscribeToPage` - Subscribe an email to a status page
+       * - `subscribeToPage` - Subscribe an email to a status page (double opt-in)
+       * - `createPageSubscription` - Add a vendor-managed subscriber (email or webhook, no verification)
        * - `unsubscribeFromPage` - Unsubscribe from a status page
        * - `listSubscribers` - List all subscribers
        * - `getStatusPageContent` - Get full status page content
        * - `getOverallStatus` - Get aggregated status
+       * - `getPageComponentDailySummary` - Get per-component daily status buckets (status bars)
        */
       StatusPageService: Client<typeof StatusPageService>;
     };

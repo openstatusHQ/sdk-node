@@ -141,15 +141,49 @@ const { success } = await client.statusPage.v1.StatusPageService
 
 ## Subscribers
 
-Manage email subscriptions to status page updates.
+Manage email and webhook subscriptions to status page updates.
 
 ### Subscribe to Page
+
+Self-signup with double opt-in: a verification email is sent and the
+subscription activates only after the recipient confirms.
 
 ```typescript
 const { subscriber } = await client.statusPage.v1.StatusPageService
   .subscribeToPage({
     pageId: "page_123",
     email: "user@example.com",
+  });
+```
+
+### Create Page Subscription
+
+Operator-added subscriber (email or webhook) with no verification flow — use it
+when consent is established out-of-band. Set exactly one channel via the
+`channel` oneof. Webhook payload flavor (Slack / Discord / generic) is
+auto-detected from the URL.
+
+```typescript
+// Email channel
+const { subscriber } = await client.statusPage.v1.StatusPageService
+  .createPageSubscription({
+    pageId: "page_123",
+    name: "Partner #incidents", // optional label
+    componentIds: ["comp_456"], // optional scope, empty = entire page
+    channel: { case: "emailChannel", value: { email: "partner@example.com" } },
+  });
+
+// Webhook channel
+const { subscriber: webhookSub } = await client.statusPage.v1.StatusPageService
+  .createPageSubscription({
+    pageId: "page_123",
+    channel: {
+      case: "webhookChannel",
+      value: {
+        webhookUrl: "https://hooks.slack.com/services/...",
+        headers: [{ key: "Authorization", value: "Bearer token" }], // optional
+      },
+    },
   });
 ```
 
@@ -224,3 +258,53 @@ for (const { componentId, status } of componentStatuses) {
   console.log(`  ${componentId}: ${OverallStatus[status]}`);
 }
 ```
+
+## Get Page Component Daily Summary
+
+Per-component daily status buckets (`ok`/`degraded`/`error`/`count` plus a
+resolved `status`) merged with the incident, maintenance, and status-report
+timeline over the last N days (max 45). This is the single source of truth for
+rendering status bars and uptime calendars. Identify the page by ID
+(authenticated) or slug (public, requires a published `PUBLIC` page).
+
+```typescript
+import {
+  ComponentDayStatus,
+  createOpenStatusClient,
+} from "@openstatus/sdk-node";
+
+const client = createOpenStatusClient({
+  apiKey: process.env.OPENSTATUS_API_KEY,
+});
+
+const { components } = await client.statusPage.v1.StatusPageService
+  .getPageComponentDailySummary({
+    identifier: { case: "id", value: "page_123" },
+    componentIds: [], // optional, empty = all components
+    days: 45, // optional, 1–45, defaults to 45
+  });
+
+for (const component of components) {
+  console.log(`${component.name} (${component.componentId})`);
+  for (const bucket of component.buckets) {
+    console.log(
+      `  ${bucket.day}: ${bucket.ok}/${bucket.count} ok, ` +
+        `${bucket.degraded} degraded, ${bucket.error} error ` +
+        `[${ComponentDayStatus[bucket.status]}]`,
+    );
+  }
+  for (const event of component.events) {
+    console.log(
+      `  event: ${event.name} (${event.from} → ${event.to ?? "ongoing"})`,
+    );
+  }
+}
+```
+
+Each `PageComponentDailySummary` has `componentId`, `type`
+(`PageComponentType`), optional `monitorId`, `name`, `buckets[]`, and
+`events[]`. Each `ComponentDayBucket` has `day` (RFC 3339, UTC midnight), the
+`bigint` counts `count`/`ok`/`degraded`/`error`, a resolved `status`
+(`ComponentDayStatus`), and an optional `impact` (`PageComponentImpact`). Each
+`ComponentEvent` has `id`, `name`, `type` (`ComponentEventType`), `status`
+(`ComponentEventStatus`), `from`, optional `to`, and optional `impact`.

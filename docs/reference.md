@@ -123,6 +123,57 @@
 | `MONITOR` | Linked to a monitor       |
 | `STATIC`  | Static component (manual) |
 
+### Locale
+
+| Value         | Description   |
+| ------------- | ------------- |
+| `UNSPECIFIED` | No locale set |
+| `EN`          | English       |
+| `FR`          | French        |
+| `DE`          | German        |
+
+### SubscriberSource
+
+| Value         | Description                                      |
+| ------------- | ------------------------------------------------ |
+| `UNSPECIFIED` | Source not set                                   |
+| `SELF_SIGNUP` | Created by the user via the subscribe form       |
+| `VENDOR`      | Added by an operator, skipping verification      |
+| `IMPORT`      | Imported from a third-party status-page provider |
+
+### ComponentDayStatus
+
+Resolved status of a component on a given day (returned by
+`getPageComponentDailySummary`).
+
+| Value         | Description          |
+| ------------- | -------------------- |
+| `UNSPECIFIED` | No status            |
+| `OPERATIONAL` | Operational          |
+| `DEGRADED`    | Degraded performance |
+| `DOWN`        | Down                 |
+| `MAINTENANCE` | Under maintenance    |
+| `EMPTY`       | No data for the day  |
+
+### ComponentEventType
+
+| Value         | Description        |
+| ------------- | ------------------ |
+| `UNSPECIFIED` | No type            |
+| `MAINTENANCE` | Maintenance window |
+| `INCIDENT`    | Incident           |
+| `REPORT`      | Status report      |
+
+### ComponentEventStatus
+
+| Value         | Description          |
+| ------------- | -------------------- |
+| `UNSPECIFIED` | No status            |
+| `OPERATIONAL` | Operational          |
+| `DEGRADED`    | Degraded performance |
+| `DOWN`        | Down                 |
+| `MAINTENANCE` | Under maintenance    |
+
 ### NumberComparator
 
 | Value                   | Description           |
@@ -306,6 +357,11 @@ All types and enums exported from `@openstatus/sdk-node`:
 - `TriggerMonitorRequest`, `TriggerMonitorResponse`
 - `GetMonitorStatusRequest`, `GetMonitorStatusResponse`, `RegionStatus`
 - `GetMonitorSummaryRequest`, `GetMonitorSummaryResponse`
+- `GetMonitorRequest`, `GetMonitorResponse`, `MonitorConfig`
+- `ListMonitorHTTPResponseLogsRequest`, `ListMonitorHTTPResponseLogsResponse`
+- `GetMonitorHTTPResponseLogRequest`, `GetMonitorHTTPResponseLogResponse`
+- `HTTPResponseLogListItem`, `HTTPResponseLogDetail`, `HTTPResponseLogTiming`,
+  `HTTPResponseLogPagination`
 
 ### Monitor Enums
 
@@ -314,6 +370,8 @@ All types and enums exported from `@openstatus/sdk-node`:
 - `MonitorStatus` — active / degraded / error
 - `HTTPMethod` — HTTP methods
 - `TimeRange` — metrics time range
+- `HTTPResponseLogRequestStatus`, `HTTPResponseLogTrigger` — HTTP response log
+  filters
 - `NumberComparator`, `StringComparator`, `RecordComparator` — assertion
   comparators
 
@@ -324,8 +382,7 @@ All types and enums exported from `@openstatus/sdk-node`:
 
 ### Status Report Types
 
-- `StatusReport`, `StatusReportSummary`, `StatusReportUpdate`,
-  `ComponentImpact`
+- `StatusReport`, `StatusReportSummary`, `StatusReportUpdate`, `ComponentImpact`
 - `CreateStatusReportRequest`, `CreateStatusReportResponse`
 - `GetStatusReportRequest`, `GetStatusReportResponse`
 - `ListStatusReportsRequest`, `ListStatusReportsResponse`
@@ -340,6 +397,7 @@ All types and enums exported from `@openstatus/sdk-node`:
 - `StatusPage`, `StatusPageSummary`
 - `PageComponent`, `PageComponentGroup`
 - `PageSubscriber`
+- `EmailChannel`, `WebhookChannel`, `WebhookChannelHeader`
 - `CreateStatusPageRequest`, `CreateStatusPageResponse`
 - `GetStatusPageRequest`, `GetStatusPageResponse`
 - `ListStatusPagesRequest`, `ListStatusPagesResponse`
@@ -353,11 +411,16 @@ All types and enums exported from `@openstatus/sdk-node`:
 - `DeleteComponentGroupRequest`, `DeleteComponentGroupResponse`
 - `UpdateComponentGroupRequest`, `UpdateComponentGroupResponse`
 - `SubscribeToPageRequest`, `SubscribeToPageResponse`
+- `CreatePageSubscriptionRequest`, `CreatePageSubscriptionResponse`
 - `UnsubscribeFromPageRequest`, `UnsubscribeFromPageResponse`
 - `ListSubscribersRequest`, `ListSubscribersResponse`
 - `GetStatusPageContentRequest`, `GetStatusPageContentResponse`
 - `GetOverallStatusRequest`, `GetOverallStatusResponse`, `ComponentStatus`
-- `OverallStatus`, `PageAccessType`, `PageTheme`, `PageComponentType`
+- `GetPageComponentDailySummaryRequest`, `GetPageComponentDailySummaryResponse`,
+  `PageComponentDailySummary`, `ComponentDayBucket`, `ComponentEvent`
+- `OverallStatus`, `PageAccessType`, `PageTheme`, `PageComponentType`, `Locale`,
+  `SubscriberSource`, `ComponentDayStatus`, `ComponentEventType`,
+  `ComponentEventStatus`
 
 ### Maintenance Types
 

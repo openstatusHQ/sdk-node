@@ -39,8 +39,8 @@ console.log(`Status report created: ${statusReport?.id}`);
 ```
 
 The optional `componentImpacts` field sets a per-component impact
-(`OPERATIONAL`, `DEGRADED_PERFORMANCE`, `PARTIAL_OUTAGE`, or `MAJOR_OUTAGE`)
-for the initial update. Omitting it creates a report without impact tracking.
+(`OPERATIONAL`, `DEGRADED_PERFORMANCE`, `PARTIAL_OUTAGE`, or `MAJOR_OUTAGE`) for
+the initial update. Omitting it creates a report without impact tracking.
 
 ## Add Status Report Update
 

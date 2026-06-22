@@ -536,7 +536,10 @@ const { statusReport } = await client.statusReport.v1.StatusReportService
     date: "2024-01-15T11:00:00Z", // optional, defaults to current time
     notify: true,
     componentImpacts: [
-      { pageComponentId: "comp_456", impact: PageComponentImpact.PARTIAL_OUTAGE },
+      {
+        pageComponentId: "comp_456",
+        impact: PageComponentImpact.PARTIAL_OUTAGE,
+      },
     ],
   });
 ```
@@ -700,13 +703,49 @@ const { success } = await client.statusPage.v1.StatusPageService
 
 #### `subscribeToPage(request)`
 
-Subscribe an email to status page updates.
+Subscribe an email to status page updates. Self-signup flow: a verification
+email is sent and the subscription activates only once the recipient confirms
+(double opt-in).
 
 ```typescript
 const { subscriber } = await client.statusPage.v1.StatusPageService
   .subscribeToPage({
     pageId: "page_123",
     email: "user@example.com",
+  });
+```
+
+#### `createPageSubscription(request)`
+
+Add a vendor-managed subscriber (email or webhook) with no verification flow.
+Use this when an operator adds a subscriber on behalf of a partner and consent
+is already established out-of-band. Set exactly one channel via the `channel`
+oneof.
+
+```typescript
+// Email channel
+const { subscriber } = await client.statusPage.v1.StatusPageService
+  .createPageSubscription({
+    pageId: "page_123",
+    name: "Partner #incidents", // optional label
+    componentIds: ["comp_456"], // optional scope, empty = entire page
+    channel: {
+      case: "emailChannel",
+      value: { email: "partner@example.com" },
+    },
+  });
+
+// Webhook channel (Slack / Discord / generic auto-detected from the URL)
+const { subscriber: webhookSub } = await client.statusPage.v1.StatusPageService
+  .createPageSubscription({
+    pageId: "page_123",
+    channel: {
+      case: "webhookChannel",
+      value: {
+        webhookUrl: "https://hooks.slack.com/services/...",
+        headers: [{ key: "Authorization", value: "Bearer token" }], // optional
+      },
+    },
   });
 ```
 
@@ -774,6 +813,34 @@ const { overallStatus, componentStatuses } = await client.statusPage.v1
 console.log(`Overall: ${OverallStatus[overallStatus]}`);
 for (const { componentId, status } of componentStatuses) {
   console.log(`  ${componentId}: ${OverallStatus[status]}`);
+}
+```
+
+#### `getPageComponentDailySummary(request)`
+
+Get per-component daily status buckets (`ok`/`degraded`/`error`/`count` plus a
+resolved `status`) merged with the incident, maintenance, and status-report
+timeline over the last N days (max 45). Use it to render status bars and uptime
+calendars. Identify the page by ID (authenticated) or slug (public).
+
+```typescript
+import { ComponentDayStatus } from "@openstatus/sdk-node";
+
+const { components } = await client.statusPage.v1.StatusPageService
+  .getPageComponentDailySummary({
+    identifier: { case: "id", value: "page_123" },
+    componentIds: [], // optional, empty = all components
+    days: 45, // optional, 1–45, defaults to 45
+  });
+
+for (const component of components) {
+  console.log(`${component.name} (${component.componentId})`);
+  for (const bucket of component.buckets) {
+    console.log(
+      `  ${bucket.day}: ${bucket.ok}/${bucket.count} ok ` +
+        `[${ComponentDayStatus[bucket.status]}]`,
+    );
+  }
 }
 ```
 
@@ -1469,13 +1536,13 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 
 #### PageComponentImpact
 
-| Value                  | Description                            |
-| ---------------------- | -------------------------------------- |
-| `UNSPECIFIED`          | No impact set (legacy reports)         |
-| `OPERATIONAL`          | Component is operational               |
-| `DEGRADED_PERFORMANCE` | Component performance is degraded      |
-| `PARTIAL_OUTAGE`       | Component is partially down            |
-| `MAJOR_OUTAGE`         | Component is down                      |
+| Value                  | Description                       |
+| ---------------------- | --------------------------------- |
+| `UNSPECIFIED`          | No impact set (legacy reports)    |
+| `OPERATIONAL`          | Component is operational          |
+| `DEGRADED_PERFORMANCE` | Component performance is degraded |
+| `PARTIAL_OUTAGE`       | Component is partially down       |
+| `MAJOR_OUTAGE`         | Component is down                 |
 
 #### OverallStatus
 
@@ -1535,6 +1602,57 @@ regions: [Region.FLY_AMS, Region.FLY_IAD, Region.KOYEB_FRA];
 | --------- | ------------------------- |
 | `MONITOR` | Linked to a monitor       |
 | `STATIC`  | Static component (manual) |
+
+#### Locale
+
+| Value         | Description   |
+| ------------- | ------------- |
+| `UNSPECIFIED` | No locale set |
+| `EN`          | English       |
+| `FR`          | French        |
+| `DE`          | German        |
+
+#### SubscriberSource
+
+| Value         | Description                                      |
+| ------------- | ------------------------------------------------ |
+| `UNSPECIFIED` | Source not set                                   |
+| `SELF_SIGNUP` | Created by the user via the subscribe form       |
+| `VENDOR`      | Added by an operator, skipping verification      |
+| `IMPORT`      | Imported from a third-party status-page provider |
+
+#### ComponentDayStatus
+
+Resolved status of a component on a given day (from
+`getPageComponentDailySummary`).
+
+| Value         | Description          |
+| ------------- | -------------------- |
+| `UNSPECIFIED` | No status            |
+| `OPERATIONAL` | Operational          |
+| `DEGRADED`    | Degraded performance |
+| `DOWN`        | Down                 |
+| `MAINTENANCE` | Under maintenance    |
+| `EMPTY`       | No data for the day  |
+
+#### ComponentEventType
+
+| Value         | Description        |
+| ------------- | ------------------ |
+| `UNSPECIFIED` | No type            |
+| `MAINTENANCE` | Maintenance window |
+| `INCIDENT`    | Incident           |
+| `REPORT`      | Status report      |
+
+#### ComponentEventStatus
+
+| Value         | Description          |
+| ------------- | -------------------- |
+| `UNSPECIFIED` | No status            |
+| `OPERATIONAL` | Operational          |
+| `DEGRADED`    | Degraded performance |
+| `DOWN`        | Down                 |
+| `MAINTENANCE` | Under maintenance    |
 
 #### NumberComparator
 
